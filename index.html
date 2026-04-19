@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0a0a0a; color: #e5e5e5; }
-   .card { background-color: #171717; border: 1px solid #262626; }
-   .tab-active { border-bottom: 2px solid #3b82f6; color: #fff; }
-   .tab-inactive { color: #9ca3af; }
-   .progress-bar { transition: width 0.3s ease; }
+ .card { background-color: #171717; border: 1px solid #262626; }
+ .tab-active { border-bottom: 2px solid #3b82f6; color: #fff; }
+ .tab-inactive { color: #9ca3af; }
+ .progress-bar { transition: width 0.3s ease; }
     </style>
 </head>
 <body class="font-sans">
@@ -33,13 +33,13 @@
             <div class="card rounded-lg p-6 mb-6">
                 <h2 class="text-xl font-bold text-white mb-4">สร้างวิดีโอจากรูปด้วย Meta AI</h2>
 
-                <!-- ขั้นตอนที่ 1: อัปโหลด -->
-                <label class="block mb-2 text-sm font-medium text-gray-300">1. อัปโหลดรูปสินค้า 1-5 รูป</label>
+                <label class="block mb-2 text-sm font-medium text-gray-300">1. อัปโหลดรูปสินค้า <span class="text-yellow-400">แนะนำ 1-5 รูป</span></label>
                 <input type="file" id="imageUpload" accept="image/*" multiple class="block w-full text-sm text-gray-400 mb-2 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700">
-                <p id="fileCount" class="text-xs text-gray-500 mb-4">ยังไม่ได้เลือกรูป</p>
-                <div id="preview" class="grid grid-cols-5 gap-2 mb-4"></div>
+                <!-- แก้ตรงนี้: แสดงจำนวนจริง + เตือนถ้าเกิน 5 -->
+                <p id="fileCount" class="text-xs text-gray-500 mb-1">ยังไม่ได้เลือกรูป</p>
+                <p id="fileWarning" class="text-xs text-yellow-500 mb-4 hidden">⚠️ Meta AI ใช้ได้ดีสุด 1-5 รูป ถ้าเกินจะใช้แค่ 5 รูปแรก</p>
+                <div id="preview" class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4"></div>
 
-                <!-- ขั้นตอนที่ 2: ผลวิเคราะห์รูป ใหม่ -->
                 <div id="analysisCard" class="hidden bg-blue-950 border border-blue-800 rounded-lg p-4 mb-4">
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-sm font-bold text-blue-300">🔍 ผลวิเคราะห์จากรูปภาพ</h3>
@@ -48,9 +48,9 @@
                     <div id="analysisResult" class="text-sm text-white mb-3">
                         <div>สินค้า: <span id="detectedName" class="font-bold">-</span></div>
                         <div>หมวดหมู่: <span id="detectedCategory" class="font-bold">-</span></div>
+                        <div>จำนวนรูปที่ใช้: <span id="usedImageCount" class="font-bold text-green-400">-</span></div>
                     </div>
 
-                    <!-- ฟอร์มแก้ไขเอง ซ่อนไว้ก่อน -->
                     <div id="manualEditForm" class="hidden border-t border-blue-800 pt-3 mt-3">
                         <label class="block text-xs text-gray-400 mb-1">ชื่อสินค้า</label>
                         <input type="text" id="manualName" class="w-full bg-gray-900 text-white text-sm rounded px-2 py-1 mb-2 border border-gray-700" placeholder="เช่น Nike Air Jordan 1">
@@ -156,23 +156,35 @@
             });
         }
 
-        // ใหม่: วิเคราะห์รูปทันทีที่อัปโหลด
+        // แก้ตรงนี้: นับจำนวนจริง ไม่ตัดที่ 5 แต่เตือนถ้าเกิน
         document.getElementById('imageUpload').onchange = function(e) {
             const preview = document.getElementById('preview');
             const fileCount = document.getElementById('fileCount');
+            const fileWarning = document.getElementById('fileWarning');
             preview.innerHTML = '';
-            uploadedFiles = Array.from(e.target.files || []).slice(0, 5);
+            uploadedFiles = Array.from(e.target.files || []); // เอามาทั้งหมด ไม่ slice
 
             if (uploadedFiles.length === 0) {
                 fileCount.innerText = 'ยังไม่ได้เลือกรูป';
+                fileWarning.classList.add('hidden');
                 document.getElementById('analysisCard').classList.add('hidden');
                 updateStatus('', true);
                 return;
             }
 
+            // แสดงจำนวนจริง
             fileCount.innerText = `เลือกแล้ว ${uploadedFiles.length} รูป`;
+
+            // เตือนถ้าเกิน 5 แต่ไม่บล็อค
+            if (uploadedFiles.length > 5) {
+                fileWarning.classList.remove('hidden');
+            } else {
+                fileWarning.classList.add('hidden');
+            }
+
             updateStatus(`กำลังวิเคราะห์รูป...`, false);
 
+            // พรีวิวทุกรูปที่เลือก
             uploadedFiles.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -181,7 +193,6 @@
                 reader.readAsDataURL(file);
             });
 
-            // วิเคราะห์ทันทีหลังเลือกไฟล์
             setTimeout(() => {
                 analyzeProduct();
                 document.getElementById('analysisCard').classList.remove('hidden');
@@ -212,6 +223,9 @@
             detectedProduct = { name, category };
             document.getElementById('detectedName').innerText = name;
             document.getElementById('detectedCategory').innerText = categoryNames[category];
+            // แสดงจำนวนรูปที่จะใช้จริง: สูงสุด 5 รูปแรก
+            const usedCount = Math.min(uploadedFiles.length, 5);
+            document.getElementById('usedImageCount').innerText = `${usedCount} รูป ${uploadedFiles.length > 5? '(จาก ' + uploadedFiles.length + ' รูป)' : ''}`;
             document.getElementById('manualName').value = name;
             document.getElementById('manualCategory').value = category;
         }
@@ -279,8 +293,9 @@
         function showResults() {
             const { name, category } = detectedProduct;
             const keywords = hashtagDB[category];
+            const usedCount = Math.min(uploadedFiles.length, 5);
 
-            const promptText = `Create a 5-second cinematic product video. Subject: ${name}, Category: ${categoryNames[category]}. Camera slowly orbits 360 degrees around product, then zoom in on key detail. Studio lighting, 4k, smooth motion, premium commercial style.`;
+            const promptText = `Create a 5-second cinematic product video using ${usedCount} images. Subject: ${name}, Category: ${categoryNames[category]}. Camera slowly orbits 360 degrees around product, then zoom in on key detail. Studio lighting, 4k, smooth motion, premium commercial style.`;
             document.getElementById('promptOutput').innerText = promptText;
 
             const tiktokText = `เจอของดี ${categoryNames[category]}! ${name} ตัวนี้คือที่สุด 📸✨\nใครโดนป้ายยาแล้ว เม้น "โดน" มาหน่อย\n.\n#${name.replace(/\s/g,'')} ${keywords.join(' ')}`;
