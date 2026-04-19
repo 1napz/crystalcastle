@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0a0a0a; color: #e5e5e5; }
-     .card { background-color: #171717; border: 1px solid #262626; }
-     .tab-active { border-bottom: 2px solid #3b82f6; color: #fff; }
-     .tab-inactive { color: #9ca3af; }
-     .progress-bar { transition: width 0.3s ease; }
+    .card { background-color: #171717; border: 1px solid #262626; }
+    .tab-active { border-bottom: 2px solid #3b82f6; color: #fff; }
+    .tab-inactive { color: #9ca3af; }
+    .progress-bar { transition: width 0.3s ease; }
     </style>
 </head>
 <body class="font-sans">
@@ -39,15 +39,12 @@
 
                 <div id="preview" class="grid grid-cols-5 gap-2 mb-4"></div>
 
-                <!-- ปุ่มเปลี่ยนชื่อแล้ว -->
                 <button onclick="generateVideo()" id="genBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded disabled:bg-gray-600 disabled:cursor-not-allowed">
                     Generate
                 </button>
 
-                <!-- ช่องแสดงสถานะใหม่ -->
                 <div id="statusBox" class="hidden mt-3 text-sm text-center p-2 rounded bg-gray-800 text-yellow-400"></div>
 
-                <!-- หลอดความคืบหน้า -->
                 <div id="progressWrapper" class="hidden mt-4">
                     <div class="flex justify-between mb-1">
                         <span class="text-sm text-gray-400">กำลังสร้าง...</span>
@@ -60,16 +57,26 @@
             </div>
 
             <div id="result" class="hidden">
+                <!-- เพิ่มกล่องแสดงผลวิเคราะห์สินค้า -->
+                <div class="card rounded-lg p-4 mb-6 bg-blue-950 border-blue-800">
+                    <h3 class="text-sm font-bold text-blue-300 mb-2">🔍 ผลวิเคราะห์สินค้า</h3>
+                    <div class="text-sm text-white" id="analysisOutput">กำลังวิเคราะห์...</div>
+                </div>
+
                 <div class="grid md:grid-cols-2 gap-6">
                     <div class="card rounded-lg p-6">
-                        <h3 class="text-lg font-bold text-white mb-3">Prompt สำหรับ Meta AI</h3>
-                        <div class="bg-black rounded p-3 text-sm text-green-400 mb-3 font-mono whitespace-pre-wrap" id="promptOutput"></div>
-                        <button onclick="copyPrompt()" class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded">Copy Prompt</button>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-bold text-white">Prompt สำหรับ Meta AI</h3>
+                            <button onclick="copyPrompt()" class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded">Copy</button>
+                        </div>
+                        <div class="bg-black rounded p-3 text-sm text-green-400 font-mono whitespace-pre-wrap" id="promptOutput"></div>
                     </div>
                     <div class="card rounded-lg p-6">
-                        <h3 class="text-lg font-bold text-white mb-3">แคปชั่น TikTok + 5 Hashtags</h3>
-                        <div class="bg-black rounded p-3 text-sm text-white mb-3 whitespace-pre-wrap" id="tiktokOutput"></div>
-                        <button onclick="copyTiktok()" class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded">Copy Caption</button>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-bold text-white">แคปชั่น TikTok + 5 Hashtags</h3>
+                            <button onclick="copyTiktok()" class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded">Copy</button>
+                        </div>
+                        <div class="bg-black rounded p-3 text-sm text-white whitespace-pre-wrap" id="tiktokOutput"></div>
                     </div>
                 </div>
                 <div class="card rounded-lg p-6 mt-6">
@@ -92,6 +99,18 @@
         ];
 
         let uploadedFiles = [];
+        let detectedProduct = { name: 'สินค้า', category: 'general', keywords: [] };
+
+        // Database แฮชแท็กแยกตามหมวดหมู่
+        const hashtagDB = {
+            shoes: ['#รองเท้า', '#sneakerhead', '#outfit', '#สตรีทแฟชั่น', '#ของมันต้องมี'],
+            headphones: ['#หูฟัง', '#gadget', '#เพลง', '#เกมมิ่ง', '#unbox'],
+            watch: ['#นาฬิกา', '#accessory', '#luxury', '#tech', '#outfit'],
+            camera: ['#กล้อง', '#ถ่ายรูป', '#vlog', '#contentcreator', '#photography'],
+            fashion: ['#แฟชั่น', '#outfit', '#แต่งตัว', '#ป้ายยา', '#ของดีบอกต่อ'],
+            beauty: ['#สกินแคร์', '#เครื่องสำอาง', '#รีวิวบิวตี้', '#howto', '#glowup'],
+            general: ['#TikTokMadeMeBuyIt', '#ป้ายยา', '#รีวิวของดี', '#ของมันต้องมี', '#ถูกและดี']
+        };
 
         function switchTab(tab) {
             document.getElementById('tab-image').className = tab === 'image'? 'pb-3 tab-active' : 'pb-3 tab-inactive';
@@ -123,7 +142,6 @@
 
             fileCount.innerText = `เลือกแล้ว ${uploadedFiles.length} รูป พร้อม Generate`;
             updateStatus(`เลือกรูปเสร็จแล้ว ${uploadedFiles.length} รูป`, false);
-            if (uploadedFiles.length > 5) alert('อัปโหลดได้สูงสุด 5 รูป ระบบจะใช้แค่ 5 รูปแรก');
 
             uploadedFiles.forEach(file => {
                 const reader = new FileReader();
@@ -134,7 +152,6 @@
             });
         };
 
-        // ฟังก์ชันใหม่: อัปเดทกล่องสถานะ
         function updateStatus(msg, hide = false) {
             const box = document.getElementById('statusBox');
             if (hide || msg === '') {
@@ -143,6 +160,28 @@
                 box.innerText = msg;
                 box.classList.remove('hidden');
             }
+        }
+
+        // ฟังก์ชันใหม่: วิเคราะห์รูปจากชื่อไฟล์
+        function analyzeProduct() {
+            const fileName = uploadedFiles[0].name.toLowerCase();
+            let category = 'general';
+            let name = uploadedFiles[0].name.split('.')[0];
+
+            if (fileName.includes('shoe') || fileName.includes('nike') || fileName.includes('adidas') || fileName.includes('รองเท้า')) {
+                category = 'shoes'; name = 'รองเท้าแฟชั่น';
+            } else if (fileName.includes('headphone') || fileName.includes('sony') || fileName.includes('หูฟัง')) {
+                category = 'headphones'; name = 'หูฟังไร้สาย';
+            } else if (fileName.includes('watch') || fileName.includes('นาฬิกา')) {
+                category = 'watch'; name = 'นาฬิกา Smart Watch';
+            } else if (fileName.includes('camera') || fileName.includes('กล้อง')) {
+                category = 'camera'; name = 'กล้องถ่ายรูป';
+            } else if (fileName.includes('cream') || fileName.includes('serum') || fileName.includes('ครีม')) {
+                category = 'beauty'; name = 'สกินแคร์';
+            }
+
+            detectedProduct = { name, category, keywords: hashtagDB[category] };
+            return `ตรวจพบ: ${name} | หมวดหมู่: ${category.toUpperCase()} | จะใช้แฮชแท็กเฉพาะทางให้`;
         }
 
         function generateVideo() {
@@ -154,22 +193,27 @@
             document.getElementById('genBtn').disabled = true;
             document.getElementById('progressWrapper').classList.remove('hidden');
             document.getElementById('result').classList.add('hidden');
-            updateStatus('เริ่มสร้าง Prompt...', false);
 
             let progress = 0;
             const steps = [
-                'กำลังวิเคราะห์รูปที่ 1...',
-                'กำลังสร้าง Prompt สำหรับ Meta AI...',
-                'กำลังเขียนแคปชั่น TikTok...',
-                'กำลังคำนวณ Hashtag...',
-                'เสร็จสิ้น!'
+                '1/5 กำลังอัปโหลดรูป...',
+                '2/5 กำลังวิเคราะห์สินค้าในรูป...',
+                '3/5 กำลังสร้าง Prompt ที่เหมาะกับสินค้า...',
+                '4/5 กำลังเขียนแคปชั่น + เลือก 5 Hashtags...',
+                '5/5 เสร็จสิ้น!'
             ];
 
             const interval = setInterval(() => {
-                progress += 25;
+                progress += 20;
                 document.getElementById('progressBar').style.width = progress + '%';
                 document.getElementById('progressText').innerText = progress + '%';
-                updateStatus(steps[progress/25 - 1], false);
+                updateStatus(steps[progress/20 - 1], false);
+
+                // รันวิเคราะห์ตอนขั้นตอนที่ 2
+                if (progress === 40) {
+                    const analysisText = analyzeProduct();
+                    document.getElementById('analysisOutput').innerText = analysisText;
+                }
 
                 if (progress >= 100) {
                     clearInterval(interval);
@@ -178,15 +222,16 @@
                     updateStatus('สร้างเสร็จแล้ว คัดลอกไปใช้ได้เลย', false);
                     setTimeout(() => updateStatus('', true), 3000);
                 }
-            }, 400);
+            }, 600);
         }
 
         function showResults() {
-            const productName = uploadedFiles[0].name.split('.')[0].replace(/[^a-zA-Z0-9ก-๙]/g, '') || 'สินค้าใหม่';
-            const promptText = `Create a 5-second cinematic product video from the uploaded images. Camera slowly zooms in, ${productName} rotates 360 degrees. Studio lighting, 4k, smooth motion, shallow depth of field. End with product name text overlay.`;
+            const { name, category, keywords } = detectedProduct;
+
+            const promptText = `Create a 5-second cinematic product video. Subject: ${name}. Camera slowly orbits 360 degrees around product, then zoom in on key detail. Studio lighting, 4k, smooth motion, shallow depth of field. Premium commercial style.`;
             document.getElementById('promptOutput').innerText = promptText;
 
-            const tiktokText = `วิดีโอใหม่มาแล้ว! ${productName} มุมไหนก็ปัง 📸✨\nใครโดนตกแล้ว เม้นเลย\n.\n#${productName} #TikTokMadeMeBuyIt #ป้ายยา #รีวิวของดี #MetaAI`;
+            const tiktokText = `เจอของดีอีกแล้ว! ${name} ตัวนี้คือที่สุด 📸✨\nใครโดนป้ายยาแล้ว เม้น "โดน" มาหน่อย\n.\n#${name.replace(/\s/g,'')} ${keywords.join(' ')}`;
             document.getElementById('tiktokOutput').innerText = tiktokText;
 
             document.getElementById('labelViews').innerText = Math.floor(Math.random() * 1000 + 100);
