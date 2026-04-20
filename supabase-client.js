@@ -1,4 +1,3 @@
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 
 export async function uploadImageToStorage(file) {
     const filePath = `pika/${Date.now()}-${file.name}`;
