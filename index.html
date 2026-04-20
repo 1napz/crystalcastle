@@ -282,16 +282,19 @@ function analyzeProduct() {
             form.classList.toggle('hidden');
             document.getElementById('editBtn').innerText = form.classList.contains('hidden')? 'แก้ไขเอง' : 'ยกเลิก';
         }
+function saveManualEdit() {
+    detectedProduct.name = document.getElementById('manualName').value || 'สินค้า';
+    detectedProduct.category = document.getElementById('manualCategory').value;
+    document.getElementById('detectedName').innerText = detectedProduct.name;
+    document.getElementById('detectedCategory').innerText = categoryNames[detectedProduct.category];
+    toggleManualEdit();
 
-        function saveManualEdit() {
-            detectedProduct.name = document.getElementById('manualName').value || 'สินค้า';
-            detectedProduct.category = document.getElementById('manualCategory').value;
-            document.getElementById('detectedName').innerText = detectedProduct.name;
-            document.getElementById('detectedCategory').innerText = categoryNames[detectedProduct.category];
-            toggleManualEdit();
-            updateStatus('บันทึกแล้ว', false);
-            setTimeout(() => updateStatus('', true), 2000);
-        }
+    // เพิ่มบรรทัดนี้: ให้มัน Gen Prompt ใหม่ทันทีหลังบันทึก
+    showResults();
+
+    updateStatus('บันทึกแล้ว + อัปเดต Prompt แล้ว', false);
+    setTimeout(() => updateStatus('', true), 2000);
+}
 
         function updateStatus(msg, hide = false) {
             const box = document.getElementById('statusBox');
