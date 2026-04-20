@@ -1,10 +1,16 @@
-import { createClient } from '@supabase/supabase-js'
+// supabase-client.js = สายโทรศัพท์หา DB เวอร์ชัน HTML ธรรมดา
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// 1. ที่อยู่ฐานข้อมูล - ก็อปมาจาก Supabase > Settings > API > Project URL
+const SUPABASE_URL = 'https://1napzfwrdmsgnwpmctzv.supabase.co'
 
+// 2. กุญแจคนทั่วไป - ก็อปมาจาก Supabase > Settings > API > anon public
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' 
+
+// 3. สร้างตัวเชื่อม DB ให้ไฟล์ app.js ใช้
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
+// --- ฟังก์ชันที่เหลือใช้เหมือนเดิมได้เลย ---
 export async function uploadImageToStorage(file) {
   const filePath = `pika/${Date.now()}-${file.name}`;
   const res = await fetch(`${SUPABASE_URL}/storage/v1/object/vaulted/${filePath}`, {
@@ -40,11 +46,4 @@ export async function getPikaCredits() {
   });
   const data = await res.json();
   return data.credits || '-';
-}
-
-export async function fetchLogs() {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/pika_logs?select=*&order=created_at.desc`, {
-    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-  });
-  return await res.json();
 }
