@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     if (!imgRes.ok) throw new Error('Failed to fetch image from Blob');
     const imgBuffer = await imgRes.arrayBuffer();
 
-    // 2. เรียก Hugging Face Stable Video Diffusion - ส่งเป็นไฟล์รูปตรงๆ
+    // 2. เรียก Hugging Face - ส่งรูปเป็น binary ตรงๆ
     const hfRes = await fetch(
       'https://api-inference.huggingface.co/models/stabilityai/stable-video-diffusion-img2vid-xt',
       {
@@ -38,10 +38,11 @@ export default async function handler(req, res) {
       if (hfRes.status === 503) {
         return res.status(503).json({ error: 'Model is loading, try again in 20s' });
       }
-      throw new Error(`HF Error ${hfRes.status}: ${errText}`);
+      // ถ้า HF พัง ให้ส่ง Error กลับเป็น JSON
+      return res.status(hfRes.status).json({ error: `HF Error: ${errText}` });
     }
 
-    // 3. HF คืนวิดีโอมาเป็น binary อัพกลับเข้า Blob
+    // 3. อัพวิดีโอกลับเข้า Blob
     const videoBuffer = await hfRes.arrayBuffer();
     const videoFilename = `${filename || 'hf'}-${Date.now()}.mp4`;
     
@@ -57,6 +58,7 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
+    // สำคัญ: ต้อง return JSON เสมอ ห้าม crash
     return res.status(500).json({ error: error.message });
   }
 }
