@@ -1,14 +1,16 @@
 import { put } from '@vercel/blob';
 
 export default async function handler(req, res) {
-  if (req.method!== 'POST') return res.status(405).end();
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-  const { image_url, prompt } = req.body;
+  const { image_url, filename } = req.body;
   const HF_TOKEN = process.env.HF_TOKEN;
 
   if (!HF_TOKEN) {
-    return res.status(500).json({ 
-      error: 'HF_TOKEN not set. Get free token at huggingface.co/settings/tokens' 
+    return res.status(500).json({
+      error: 'HF_TOKEN not set. Get free token at huggingface.co/settings/tokens'
     });
   }
 
@@ -18,24 +20,16 @@ export default async function handler(req, res) {
     if (!imgRes.ok) throw new Error('Failed to fetch image from Blob');
     const imgBuffer = await imgRes.arrayBuffer();
 
-    // 2. เรียก Hugging Face Stable Video Diffusion ฟรี
+    // 2. เรียก Hugging Face Stable Video Diffusion - ส่งเป็นไฟล์รูปตรงๆ
     const hfRes = await fetch(
       'https://api-inference.huggingface.co/models/stabilityai/stable-video-diffusion-img2vid-xt',
       {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${HF_TOKEN}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'image/jpeg'
         },
-        body: JSON.stringify({
-          inputs: Array.from(new Uint8Array(imgBuffer)),
-          parameters: {
-            num_frames: 25, // 3 วินาที
-            fps: 7,
-            motion_bucket_id: 127, // ความแรงของการเคลื่อนไหว
-            noise_aug_strength: 0.02
-          }
-        })
+        body: imgBuffer
       }
     );
 
@@ -49,13 +43,14 @@ export default async function handler(req, res) {
 
     // 3. HF คืนวิดีโอมาเป็น binary อัพกลับเข้า Blob
     const videoBuffer = await hfRes.arrayBuffer();
-    const filename = `hf-${Date.now()}.mp4`;
-    const videoBlob = await put(filename, videoBuffer, {
+    const videoFilename = `${filename || 'hf'}-${Date.now()}.mp4`;
+    
+    const videoBlob = await put(videoFilename, videoBuffer, {
       access: 'public',
       contentType: 'video/mp4'
     });
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       video_url: videoBlob.url,
       engine: 'HuggingFace',
       message: 'Generated free with HF - 3s video'
