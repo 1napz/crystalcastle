@@ -8,7 +8,46 @@ const inputBrand = document.getElementById('input-brand');
 const inputFilename = document.getElementById('input-filename');
 const productList = document.getElementById('product-list');
 const clearBtn = document.getElementById('clear-btn');
+// วางต่อจาก const ตัวอื่นๆ
+const promptInput = document.getElementById('promptInput');
+const genPromptBtn = document.getElementById('genPromptBtn');
+const filenameInput = document.getElementById('filenameInput');
 
+// Template Prompt ตาม Category
+const promptTemplates = {
+  'Menswear': 'A male model confidently walking on a fashion runway, wearing this {item}, cinematic lighting, 4k, high fashion, smooth fabric movement',
+  'Womenswear': 'A female model strutting on a catwalk, wearing this {item}, elegant pose, studio lighting, 4k, vogue style, fabric flowing naturally',
+  'Accessories': 'Close-up product shot of this {item} on rotating platform, luxury studio lighting, 4k, slow motion, detailed texture',
+  'Shoes': 'Model walking in this {item}, focus on footwear, runway floor reflection, 4k, dynamic camera movement',
+  'default': 'A professional model showcasing this {item}, clean studio background, 4k, commercial photography style'
+};
+
+// กดปุ่ม Gen Prompt
+genPromptBtn.addEventListener('click', () => {
+  const filename = filenameInput.value.trim();
+
+  if (!filename) {
+    alert('ใส่ชื่อไฟล์ก่อนนะ จะได้รู้ว่าเป็นสินค้าอะไร');
+    return;
+  }
+
+  // แยก Category จากชื่อไฟล์ 20260422-Menswear-Brand
+  const parts = filename.split('-');
+  const category = parts[1] || 'default';
+  const brand = parts[2] || 'item';
+
+  // เลือก Template
+  let template = promptTemplates[category] || promptTemplates['default'];
+  template = template.replace('{item}', brand.toLowerCase());
+
+  // ใส่ในช่อง + เอฟเฟกต์
+  promptInput.value = template;
+  promptInput.classList.add('ring-2', 'ring-green-400');
+  setTimeout(() => promptInput.classList.remove('ring-2', 'ring-green-400'), 1000);
+
+  genPromptBtn.textContent = '✅ Gen แล้ว!';
+  setTimeout(() => genPromptBtn.textContent = '✨ Gen Prompt', 2000);
+});
 let currentImageHash = null;
 let currentFileExt = '.jpg';
 
