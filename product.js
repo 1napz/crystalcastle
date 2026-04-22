@@ -65,14 +65,18 @@ fileInput?.addEventListener('change', (e) => {
     reader.readAsDataURL(file);
 });
 
-// Prompt Templates
 const promptTemplates = {
-    'Menswear': 'A confident male model walking powerfully on a luxury fashion runway, wearing this {item}, dynamic tracking shot, smooth fabric movement, dramatic cinematic lighting, sharp shadows, 4K, high-end commercial video',
-    'Womenswear': 'Elegant female model strutting on a high-end catwalk, wearing this {item}, flowing fabric in slow motion, cinematic side pan camera, soft dramatic lighting with highlights, 4K, vogue fashion film style',
-    'Accessories': 'Close-up luxury product shot of this {item} on a glossy rotating platform, sparkling details, slow smooth 360 orbit camera, premium studio lighting with beautiful reflections, 4K, high-end commercial',
-    'Shoes': 'Dynamic shot of model walking in this {item}, sharp focus on foot movement and sole detail, runway reflection, smooth tracking camera, cinematic lighting, 4K, luxury fashion video',
-    'Bags': 'Luxury handbag showcase, this {item} on a marble pedestal with elegant hand interaction, slow cinematic camera orbit, rich leather texture close-up, soft dramatic lighting, 4K, premium product commercial',
-    'default': 'Professional luxury product showcase of this {item}, clean modern studio, dynamic camera movement, smooth motion, premium cinematic lighting, 4K, high-end commercial video style'
+  'Menswear': 'Professional fashion video of {brand} menswear. Slow cinematic pan around male model, sharp focus on fabric texture and fit. Clean white studio background, soft natural lighting, slight fabric movement. 4K quality, premium commercial style.',
+  
+  'Womenswear': 'Elegant fashion video of {brand} womenswear. Female model walking gracefully, flowy fabric movement in slow motion. Soft dramatic lighting, warm tone, minimalist studio backdrop. Cinematic side tracking shot, luxury brand aesthetic.',
+  
+  'Accessories': 'Luxury product video of {brand} accessory. 360-degree slow rotation on smooth marble surface. Close-up macro shots highlighting details and craftsmanship. Premium studio lighting with soft reflections. High-end commercial.',
+  
+  'Shoes': 'Dynamic product showcase of {brand} shoes. Model walking on reflective runway surface. Focus on sole detail and material texture. Smooth tracking camera, dramatic shadows, cinematic lighting. 4K fashion video.',
+  
+  'Bags': 'Luxury handbag video of {brand} bag. Elegant hand interaction, slow orbit camera on clean pedestal. Rich leather texture close-up, soft studio lighting with highlights. Premium commercial quality.',
+  
+  'default': 'Professional product video of {brand}. Clean studio background, 360-degree slow rotation, sharp focus on product details. Soft even lighting, smooth motion, premium commercial quality. 4K resolution.'
 };
 
 let lastOriginalPrompt = '';
