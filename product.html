@@ -8,7 +8,7 @@
   <style>
     body { font-family: 'Sarabun', sans-serif; }
     @keyframes spin { to { transform: rotate(360deg); } }
- .spin { animation: spin 1s linear infinite; }
+   .spin { animation: spin 1s linear infinite; }
   </style>
 </head>
 <body class="bg-gradient-to-br from-purple-50 to-pink-50 min-h-screen">
@@ -24,6 +24,22 @@
       <div class="space-y-2">
         <label class="block text-sm font-semibold text-gray-700">1. เลือกรูปสินค้า</label>
         <input type="file" id="fileInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-lg file:border-0 file:bg-purple-100 file:text-purple-700 file:font-medium hover:file:bg-purple-200 cursor-pointer">
+
+        <!-- เพิ่ม TikTok Import -->
+        <div class="relative my-4">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+          <div class="relative flex justify-center"><span class="px-3 bg-white text-xs text-gray-500">หรือ</span></div>
+        </div>
+
+        <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-4 border border-pink-200">
+          <label class="block text-xs font-semibold text-gray-700 mb-2">🔗 ดึงรูปจาก TikTok (ไม่ต้องซื้อของ)</label>
+          <div class="flex gap-2">
+            <input id="tiktokUrl" type="text" placeholder="วางลิงก์ TikTok สินค้า..." class="flex-1 px-3 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500">
+            <button id="tiktokBtn" onclick="importTikTok()" class="px-4 py-2.5 bg-[#ff0050] text-white rounded-lg text-sm font-medium hover:opacity-90 whitespace-nowrap">ดึงรูป</button>
+          </div>
+          <div id="tiktokPreview" class="grid grid-cols-3 gap-2 mt-3"></div>
+        </div>
+
         <img id="imagePreview" class="hidden w-full mt-3 rounded-lg border-2 border-purple-200">
       </div>
 
@@ -38,14 +54,12 @@
         <input id="filenameInput" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-sm bg-gray-50">
       </div>
 
-      <!-- 3. Prompt - แก้แล้ว -->
+      <!-- 3. Prompt -->
       <div class="space-y-2">
         <label class="block text-sm font-semibold text-gray-700">3. Prompt สำหรับเจนคลิป</label>
         <div class="flex flex-col sm:flex-row gap-2">
           <textarea id="promptInput" rows="4" placeholder="กดปุ่มด้านล่างให้ AI ช่วยคิด" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 resize-none text-sm leading-relaxed"></textarea>
-          <button id="genPromptBtn" class="w-full sm:w-[140px] sm:shrink-0 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:opacity-90 transition shadow-md">
-            ✨ Gen Prompt
-          </button>
+          <button id="genPromptBtn" class="w-full sm:w-[140px] sm:shrink-0 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:opacity-90 transition shadow-md">✨ Gen Prompt</button>
         </div>
         <div class="flex items-center justify-between text-xs px-1">
           <span id="promptStatus" class="text-gray-500">พร้อมให้ AI แต่ง prompt</span>
@@ -77,8 +91,57 @@
       </div>
     </section>
 
-    <footer class="text-center mt-8 text-xs text-gray-500">Crystal Castle Lite v1.3 | Fixed Mobile UI</footer>
+    <footer class="text-center mt-8 text-xs text-gray-500">Crystal Castle Lite v1.4 | TikTok Import</footer>
   </div>
+
+  <script>
+  // TikTok Import - ใส่ก่อน product.js
+  async function importTikTok() {
+    const url = document.getElementById('tiktokUrl').value.trim();
+    const preview = document.getElementById('tiktokPreview');
+    const btn = document.getElementById('tiktokBtn');
+
+    if (!url.includes('tiktok.com')) {
+      alert('กรุณาวางลิงก์ TikTok');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'กำลังดึง...';
+    preview.innerHTML = '';
+
+    try {
+      const res = await fetch('/api/tiktok-scrape?url=' + encodeURIComponent(url));
+      const data = await res.json();
+
+      if (data.images && data.images.length > 0) {
+        preview.innerHTML = data.images.slice(0,6).map((img, i) => `
+          <div onclick="selectTikTokImage('${img}')" class="cursor-pointer group">
+            <img src="${img}" class="w-full aspect-square object-cover rounded-lg border-2 border-transparent group-hover:border-pink-500 transition">
+            <p class="text-[10px] text-center text-gray-500 mt-1">รูป ${i+1}</p>
+          </div>
+        `).join('');
+      } else {
+        preview.innerHTML = '<p class="text-xs text-red-500 col-span-3">ไม่พบรูป</p>';
+      }
+    } catch(e) {
+      preview.innerHTML = '<p class="text-xs text-red-500 col-span-3">ดึงไม่ได้ ลองใหม่</p>';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'ดึงรูป';
+  }
+
+  function selectTikTokImage(imgUrl) {
+    const preview = document.getElementById('imagePreview');
+    preview.src = imgUrl;
+    preview.classList.remove('hidden');
+    preview.dataset.tiktokUrl = imgUrl;
+
+    // เลื่อนไปขั้นต่อไปอัตโนมัติ
+    document.getElementById('brandInput').focus();
+  }
+  </script>
   <script src="product.js"></script>
 </body>
 </html>
