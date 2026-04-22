@@ -47,12 +47,11 @@ function saveFilename(name) {
   }
 }
 
-// พรีวิวรูป - เวอร์ชั่นปลอดภัย ไม่มี Alert ไม่มี Leak
+// พรีวิวรูป
 fileInput?.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file ||!imagePreview) return;
 
-  // เช็คว่าเป็นรูปจริงไหม
   if (!file.type.startsWith('image/')) {
     alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
     fileInput.value = '';
@@ -60,17 +59,12 @@ fileInput?.addEventListener('change', (e) => {
   }
 
   const reader = new FileReader();
-
   reader.onload = (event) => {
-    imagePreview.src = event.target.result; // ได้ data:image/jpeg;base64,xxxxx
+    imagePreview.src = event.target.result;
     imagePreview.classList.remove('hidden');
   };
-
-  reader.onerror = () => {
-    alert('อ่านไฟล์รูปไม่ได้');
-  };
-
-  reader.readAsDataURL(file); // แปลงไฟล์เป็น Base64
+  reader.onerror = () => alert('อ่านไฟล์รูปไม่ได้');
+  reader.readAsDataURL(file);
 });
 
 // Template Prompt ตาม Category
@@ -83,8 +77,8 @@ const promptTemplates = {
   'default': 'A professional model showcasing this {item}, clean studio background, 4k, commercial photography style'
 };
 
-// กดปุ่ม Gen Prompt
-genPromptBtn?.addEventListener('click', () => {
+// === ใหม่: กดปุ่ม Gen Prompt ใช้ Groq ===
+genPromptBtn?.addEventListener('click', async () => {
   const filename = filenameInput.value.trim();
   if (!filename) {
     alert('ใส่ชื่อไฟล์ก่อนนะ จะได้รู้ว่าเป็นสินค้าอะไร');
@@ -95,18 +89,50 @@ genPromptBtn?.addEventListener('click', () => {
   const category = parts[1] || 'default';
   const brand = parts[2] || 'item';
 
-  let template = promptTemplates[category] || promptTemplates['default'];
-  template = template.replace('{item}', brand.toLowerCase());
+  let baseTemplate = promptTemplates[category] || promptTemplates['default'];
+  baseTemplate = baseTemplate.replace('{item}', brand.toLowerCase());
 
-  promptInput.value = template;
-  promptInput.classList.add('ring-2', 'ring-green-400');
-  setTimeout(() => promptInput.classList.remove('ring-2', 'ring-green-400'), 1000);
+  // UI loading
+  genPromptBtn.disabled = true;
+  const originalText = genPromptBtn.textContent;
+  genPromptBtn.textContent = '🤖 Groq กำลังแต่ง...';
+  promptInput.classList.add('ring-2', 'ring-purple-400');
 
-  genPromptBtn.textContent = '✅ Gen แล้ว!';
-  setTimeout(() => genPromptBtn.textContent = '✨ Gen Prompt', 2000);
+  try {
+    // เรียก Groq
+    const res = await fetch('/api/ai/prompt/groq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        user_prompt: baseTemplate,
+        category: category
+      })
+    });
+
+    const data = await res.json();
+    
+    if (res.ok && data.enhanced_prompt) {
+      promptInput.value = data.enhanced_prompt;
+      genPromptBtn.textContent = '✅ AI แต่งเสร็จ!';
+    } else {
+      // fallback ใช้ template เดิม
+      throw new Error(data.error || 'Groq failed');
+    }
+
+  } catch (err) {
+    console.warn('Groq error, using template:', err.message);
+    promptInput.value = baseTemplate;
+    genPromptBtn.textContent = '⚠️ ใช้ template';
+  } finally {
+    setTimeout(() => {
+      promptInput.classList.remove('ring-2', 'ring-purple-400');
+      genPromptBtn.textContent = originalText;
+      genPromptBtn.disabled = false;
+    }, 1500);
+  }
 });
 
-// ฟังก์ชันหลักเจนวิดีโอ
+// ฟังก์ชันหลักเจนวิดีโอ (ยังใช้ของเดิมก่อน)
 async function generateVideo(engine) {
   const file = fileInput.files[0];
   const customFilename = filenameInput.value.trim();
@@ -121,14 +147,12 @@ async function generateVideo(engine) {
     if (!confirm(`ชื่อ ${customFilename} เคยใช้แล้ว จะเจนทับไหม?`)) return;
   }
 
-  // Disable ปุ่ม + แสดงสถานะ
   genFALBtn.disabled = true;
   genHFBtn.disabled = true;
   statusText.classList.remove('hidden');
   statusText.textContent = engine === 'FAL' ? '🚀 กำลังส่งไป FAL...' : '🆓 กำลังส่งไป Hugging Face อาจนาน 3-10 นาที...';
 
   try {
-    // 1. อัพรูปเข้า Vercel Blob
     const fileExt = file.name.split('.').pop();
     const finalFilename = `${customFilename}.${fileExt}`;
 
@@ -149,7 +173,6 @@ async function generateVideo(engine) {
 
     statusText.textContent = engine === 'FAL' ? '⚡️ FAL กำลังเจนคลิป 1-2 นาที...' : '⏳ HF กำลังเจน อาจนานถึง 10 นาที รอหน่อยนะ...';
 
-    // 2. เลือก API ตาม Engine
     const apiUrl = engine === 'FAL' ? '/api/generate' : '/api/HuggingFace';
     const genRes = await fetch(apiUrl, {
       method: 'POST',
@@ -160,7 +183,6 @@ async function generateVideo(engine) {
     const data = await genRes.json();
     if (!genRes.ok) throw new Error(data.error || 'Generate failed');
 
-    // 3. โหลดคลิป
     statusText.textContent = '✅ เจนเสร็จ กำลังโหลด...';
     const a = document.createElement('a');
     a.href = data.video_url;
