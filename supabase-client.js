@@ -1,16 +1,14 @@
-// supabase-client.js = สายโทรศัพท์หา DB เวอร์ชัน HTML ธรรมดา
+// supabase-client.js - เวอร์ชันปลอดภัยสำหรับ crystalcastle v2
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-// 1. ที่อยู่ฐานข้อมูล - ก็อปมาจาก Supabase > Settings > API > Project URL
-const SUPABASE_URL = 'https://1napzfwrdmsgnwpmctzv.supabase.co'
+// ดึงค่าจาก Vercel Environment Variables ตอน build
+// ถ้าใช้ GitHub Pages ธรรมดา ให้เปลี่ยนเป็นค่าตรงๆ ชั่วคราว แล้วค่อยย้ายไป Vercel
+const SUPABASE_URL = 'https://wqkreaoqkunjhlzzdimd.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_g4wlVVA-eASs1SMRGSIatA_Gk4Nu13c'
 
-// 2. กุญแจคนทั่วไป - ก็อปมาจาก Supabase > Settings > API > anon public
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' 
-
-// 3. สร้างตัวเชื่อม DB ให้ไฟล์ app.js ใช้
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-// --- ฟังก์ชันที่เหลือใช้เหมือนเดิมได้เลย ---
+// --- ฟังก์ชันเดิม ใช้ได้เลย ---
 export async function uploadImageToStorage(file) {
   const filePath = `pika/${Date.now()}-${file.name}`;
   const res = await fetch(`${SUPABASE_URL}/storage/v1/object/vaulted/${filePath}`, {
