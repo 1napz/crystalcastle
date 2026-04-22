@@ -143,43 +143,56 @@ undoPromptBtn?.addEventListener('click', () => {
 
 // สร้างโพสต์ด้วย AI (เรียก /api/post)
 genPostBtn?.addEventListener('click', async () => {
-    const prompt = promptInput.value.trim();
-    const filename = filenameInput.value.trim();
-    if(!prompt) return alert('เจน Prompt ก่อน');
-    
-    genPostBtn.disabled = true;
-    genPostBtn.textContent = '✍️ กำลังเขียน...';
-    postOutput.value = '';
-    
-    try {
-        // เปลี่ยนเป็น /api/post
-        const res = await fetch('/api/post', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                filename,
-                prompt,
-                brand: brandInput?.value || '',
-                category: categorySelect?.value || ''
-            })
-        });
-        const data = await res.json();
-        if(data.post){
-            postOutput.value = data.post;
-            copyPostBtn.classList.remove('hidden');
-            genPostBtn.textContent = '✅ เสร็จ';
-        } else {
-            throw new Error(data.error || 'สร้างโพสต์ไม่สำเร็จ');
-        }
-    } catch(err) {
-        console.error('Post error:', err);
-        postOutput.value = `ลุคใหม่ ${brandInput?.value || 'สินค้า'} พร้อมแล้ว ✨\n\n#CrystalCastle #${categorySelect?.value || 'แฟชั่น'}`;
-        genPostBtn.textContent = '⚠️ แบบง่าย';
-    } finally {
-        setTimeout(() => {
-            genPostBtn.disabled = false;
-            genPostBtn.textContent = '📝 Generate Post';
-        }, 1500);
+  const prompt = promptInput.value.trim();
+  const filename = filenameInput.value.trim();
+  if(!prompt) return alert('เจน Prompt ก่อน');
+  
+  genPostBtn.disabled = true;
+  genPostBtn.textContent = '✍️ กำลังเขียน...';
+  postOutput.value = '';
+  
+  // Fallback captions ที่ดีขึ้น
+  const fallbackCaptions = {
+    'Menswear': `🔥 ${brandInput?.value || 'สินค้า'} ผู้ชาย ดูดีในทุกวัน\n\nตัดเย็บดี ใส่สบาย แมทช์ง่าย\n\n#CrystalCastle #ผู้ชาย #แฟชั่นผู้ชาย #OOTD`,
+    'Womenswear': `✨ ความสวยที่ลงตัวกับ ${brandInput?.value || 'สินค้า'} \n\nดีเทลสวย ทุกชิ้นผ่านการคัดสรร\n\n#CrystalCastle #แฟชั่นผู้หญิง # outfitidea`,
+    'Accessories': `💎 ไอเท็มเด็ดจาก ${brandInput?.value || 'สินค้า'} \n\nเพิ่มความปังให้ลุคของคุณ\n\n#CrystalCastle #เครื่องประดับ #accessories`,
+    'Shoes': `👟 รองเท้าคู่โปรดจาก ${brandInput?.value || 'สินค้า'} \n\nเดินสบาย ใส่ได้ทุกวัน\n\n#CrystalCastle #รองเท้า #sneakerhead`,
+    'Bags': `👜 กระเป๋าสวยจาก ${brandInput?.value || 'สินค้า'} \n\nดีไซน์คลาสสิก ใช้งานได้จริง\n\n#CrystalCastle #กระเป๋า #bagcollection`,
+    'default': `🎬 ${brandInput?.value || 'คอลเลคชันใหม่'} พร้อมส่งแล้ววันนี้!\n\n#CrystalCastle #แฟชั่น #สวยทุกวัน`
+  };
+  
+  const categoryKey = categorySelect?.value || 'default';
+  const fallbackPost = fallbackCaptions[categoryKey] || fallbackCaptions.default;
+  
+  try {
+    const res = await fetch('/api/post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename,
+        prompt,
+        brand: brandInput?.value || '',
+        category: categorySelect?.value || ''
+      })
+    });
+    const data = await res.json();
+    if(data.post && !data.post.includes('error')) {
+      postOutput.value = data.post;
+      copyPostBtn.classList.remove('hidden');
+      genPostBtn.textContent = '✅ เสร็จ';
+    } else {
+      throw new Error('Fallback');
+    }
+  } catch(err) {
+    // ใช้ fallback คุณภาพดี
+    postOutput.value = fallbackPost;
+    genPostBtn.textContent = '⚠️ แบบสำเร็จรูป';
+    copyPostBtn.classList.remove('hidden');
+  } finally {
+    setTimeout(() => {
+      genPostBtn.disabled = false;
+      genPostBtn.textContent = '📝 Generate Post';
+    }, 1500);
     }
 });
 
