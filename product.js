@@ -51,14 +51,59 @@ function renderPreview() {
     if (selectedFiles.length === 0) {
         const emptyDiv = document.createElement('div');
         emptyDiv.className = 'aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 bg-slate-50';
-        emptyDiv.innerHTML = `
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l4-4 4-4 4 4M12 12v-2M12 8v-2M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
-            <span class="text-[11px] mt-1">ยังไม่มีรูป</span>
-        `;
+        
+        // สร้าง SVG อย่างปลอดภัย
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '28');
+        svg.setAttribute('height', '28');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '1.5');
+        
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M4 16l4-4 4-4 4 4M12 12v-2M12 8v-2M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z');
+        svg.appendChild(path);
+        
+        const span = document.createElement('span');
+        span.className = 'text-[11px] mt-1';
+        span.textContent = 'ยังไม่มีรูป';
+        
+        emptyDiv.appendChild(svg);
+        emptyDiv.appendChild(span);
         previewGrid.appendChild(emptyDiv);
         updateFilename();
         return;
     }
+
+    selectedFiles.forEach((fileObj, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'relative aspect-square bg-slate-100 rounded-xl overflow-hidden group';
+        
+        const img = document.createElement('img');
+        // 🔥 ปลอดภัย: ใช้ URL.createObjectURL แทนการรับค่าตรงๆ
+        img.src = URL.createObjectURL(fileObj.file);
+        img.alt = 'Product image';
+        img.className = 'w-full h-full object-cover';
+        img.setAttribute('loading', 'lazy');
+        
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'absolute top-1 right-1 w-5 h-5 bg-black/60 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition';
+        btn.textContent = '×';
+        btn.setAttribute('aria-label', 'Remove image');
+        btn.onclick = () => {
+            URL.revokeObjectURL(img.src);
+            selectedFiles.splice(idx, 1);
+            renderPreview();
+        };
+        
+        wrap.appendChild(img);
+        wrap.appendChild(btn);
+        previewGrid.appendChild(wrap);
+    });
+    updateFilename();
+}
 
     selectedFiles.forEach((fileObj, idx) => {
         const wrap = document.createElement('div');
