@@ -62,7 +62,7 @@
 
       <div id="previewGrid" class="grid grid-cols-3 gap-2">
         <div class="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l4-4 4-4 4 4M12 12v-2M12 8v-2M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l4-4 4 4 4-4 4 4M12 12v-2M12 8v-2M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
           <span class="text-[11px] mt-1">ยังไม่มีรูป</span>
         </div>
       </div>
@@ -134,7 +134,7 @@
           ✍️ สร้างแคปชั่น
         </button>
       </div>
-      <textarea id="postOutput" rows="3" readonly placeholder="กดปุ่มเพื่อสร้างแคปชั่นอัตโนมัติ..." class="w-full p-3.5 rounded-xl border border-slate-200 text-sm bg-slate-50 resize-none"></textarea>
+      <textarea id="postOutput" rows="3" readonly placeholder="กดปุ่มเพื่อสร้างแคปชั่นอัตโนมัติตามรายละเอียดสินค้า" class="w-full p-3.5 rounded-xl border border-slate-200 text-sm bg-slate-50 resize-none"></textarea>
       <div class="flex justify-end mt-1">
         <button id="copyPostBtn" class="hidden text-xs text-violet-500 hover:text-violet-700">📋 คัดลอกแคปชั่น</button>
       </div>
@@ -146,23 +146,20 @@
         <span class="w-7 h-7 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-sm font-semibold">5</span>
         <h2 class="font-semibold text-slate-900">เลือกเครื่องมือ</h2>
       </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="grid grid-cols-3 gap-2">
-  <button id="genFALBtn" class="h-12 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition active:scale-[0.98]">
-    🎬 Kling
-  </button>
-  <button id="genHFBtn" class="h-12 rounded-xl bg-emerald-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition active:scale-[0.98]">
-    ✨ Magic
-  </button>
-  <button id="genSlideshowBtn" class="h-12 rounded-xl bg-amber-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition active:scale-[0.98]">
-    🎞️ สไลด์โชว์
-  </button>
-</div>
-<p class="text-[11px] text-slate-500 mt-2 text-center">
-  Kling (จ่าย) • Magic Hour (ฟรี) • สไลด์โชว์ (ฟรี ไม่ใช้ AI)
-</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button id="genFALBtn" class="h-12 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition active:scale-[0.98]">
+          🎬 Kling
+        </button>
+        <button id="genHFBtn" class="h-12 rounded-xl bg-emerald-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition active:scale-[0.98]">
+          ✨ Magic
+        </button>
+        <button id="genSlideshowBtn" class="h-12 rounded-xl bg-amber-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition active:scale-[0.98]">
+          🎞️ สไลด์โชว์
+        </button>
       </div>
-      <p class="text-[11px] text-slate-500 mt-2 text-center">FAL Kling คุณภาพสูง • Magic Hour ฟรี</p>
+      <p class="text-[11px] text-slate-500 mt-2 text-center">
+        Kling (จ่าย) • Magic Hour (ฟรี) • สไลด์โชว์ (ฟรี ไม่ใช้ AI)
+      </p>
     </section>
 
     <!-- สถานะ -->
@@ -180,7 +177,6 @@
   </div>
 </div>
 
-<!-- 🔥 บรรทัดสำคัญ: เชื่อมต่อ product.js -->
 <script src="product.js"></script>
 </body>
 </html>
