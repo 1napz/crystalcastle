@@ -15,10 +15,12 @@
 <body class="bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-gray-100 min-h-screen">
 <div class="max-w-4xl mx-auto p-6">
   
-  <!-- Header ใหม่: มีปุ่ม Login ที่มุมขวา -->
+  <!-- Header ปรับปรุง: มีลิงก์ไป ผลงาน และ เข้าสู่ระบบ -->
   <header class="mb-10">
     <div class="flex justify-between items-center mb-4">
-      <div></div>
+      <a href="/artifact.html" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm px-4 py-2 rounded-full transition flex items-center gap-2">
+        📁 ผลงานทั้งหมด
+      </a>
       <div class="flex gap-2">
         <a href="/login.html" class="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-2 rounded-full transition flex items-center gap-2 shadow-lg shadow-purple-500/20">
           🔐 เข้าสู่ระบบ
@@ -31,11 +33,11 @@
       </div>
       <h1 class="text-5xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">CRYSTAL CASTLE</h1>
       <p class="text-xl text-gray-400 mt-3">AI Video Studio — อัปโหลดรูป → Gen Prompt → สร้างวิดีโอ</p>
-      <p class="text-sm text-gray-500 mt-1">อัปเดตล่าสุด: 23 เม.ย. 2026</p>
+      <p class="text-sm text-gray-500 mt-1">อัปเดตล่าสุด: 24 เม.ย. 2026</p>
     </div>
   </header>
 
-  <!-- แสดงชื่อไฟล์ปัจจุบัน (dynamic) -->
+  <!-- dynamic filename (คงเดิม) -->
   <div class="flex justify-center mb-6">
     <div class="bg-gray-800/70 rounded-xl px-5 py-2.5 backdrop-blur-sm border border-gray-700">
       <div class="flex items-center gap-3 text-sm">
@@ -46,13 +48,13 @@
     </div>
   </div>
 
-  <!-- Cards ทางเข้า -->
-  <div class="grid md:grid-cols-2 gap-5 mb-10">
+  <!-- Cards ทางเข้า: เพิ่มการ์ดที่ 3 สำหรับดูผลงาน -->
+  <div class="grid md:grid-cols-3 gap-5 mb-10">
     <a href="/product.html" class="group bg-gradient-to-br from-purple-600 to-pink-600 p-[1.5px] rounded-2xl transition-all hover:scale-[1.02]">
       <div class="bg-gray-900 rounded-2xl p-6 h-full group-hover:bg-gray-800 transition">
         <div class="text-4xl mb-3">🎬</div>
         <h2 class="text-xl font-bold mb-2">เปิด Studio</h2>
-        <p class="text-gray-400 text-sm">อัปโหลดรูป → Gen Prompt (Groq) → FAL Kling → สร้างโพสต์อัตโนมัติ</p>
+        <p class="text-gray-400 text-sm">อัปโหลดรูป → Gen Prompt (Groq) → สร้างวิดีโอด้วย Kling/Magic/CTA/Intro/Slideshow</p>
         <p class="text-purple-400 text-xs mt-4 flex items-center gap-1">เข้าเลย →</p>
       </div>
     </a>
@@ -79,9 +81,19 @@
         </div>
       </div>
     </div>
+
+    <!-- การ์ดใหม่: ดูผลงานที่สร้างแล้ว -->
+    <a href="/artifact.html" class="group bg-gradient-to-br from-emerald-600 to-teal-600 p-[1.5px] rounded-2xl transition-all hover:scale-[1.02]">
+      <div class="bg-gray-900 rounded-2xl p-6 h-full group-hover:bg-gray-800 transition">
+        <div class="text-4xl mb-3">📁</div>
+        <h2 class="text-xl font-bold mb-2">ผลงานของฉัน</h2>
+        <p class="text-gray-400 text-sm">ดูวิดีโอทั้งหมดที่เคยสร้าง, คัดลอก Prompt นำกลับมาใช้ใหม่</p>
+        <p class="text-emerald-400 text-xs mt-4 flex items-center gap-1">ดูเลย →</p>
+      </div>
+    </a>
   </div>
 
-  <!-- วิธีใช้งาน -->
+  <!-- วิธีใช้งาน (คงเดิม) -->
   <div class="bg-gray-900/50 rounded-2xl p-6 border border-gray-800 backdrop-blur-sm">
     <h3 class="text-xl font-bold mb-5 flex items-center gap-2">
       <span class="text-2xl">🧭</span> วิธีใช้งาน
@@ -93,11 +105,11 @@
       </div>
       <div class="flex gap-3">
         <div class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs font-bold shrink-0">2</div>
-        <p class="text-gray-300">เข้า <strong class="text-white">Studio</strong> → อัปโหลดรูป → กด <strong class="text-purple-400">✨ Gen Prompt</strong></p>
+        <p class="text-gray-300">เข้า <strong class="text-white">Studio</strong> → อัปโหลดรูป → เลือกเครื่องมือ (AI, Slideshow, Intro, CTA)</p>
       </div>
       <div class="flex gap-3">
         <div class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs font-bold shrink-0">3</div>
-        <p class="text-gray-300">เลือก FAL Kling (แนะนำ) หรือ Magic Hour <br>วิดีโอจะถูกจัดเก็บอัตโนมัติ</p>
+        <p class="text-gray-300">ดาวน์โหลดวิดีโอ หรือแชร์ลง TikTok/Shopee เก็บผลงานไว้ใน <strong class="text-emerald-400">ผลงานของฉัน</strong></p>
       </div>
     </div>
   </div>
@@ -137,7 +149,7 @@ const endpoints = [
   { name: '📝 Generate Post', path: '/api/post', method: 'POST', testBody: { prompt: 'test', brand: 'test', category: 'test' } },
   { name: '🎬 FAL Kling', path: '/api/video', method: 'POST', testBody: { image_url: 'https://example.com/test.jpg', prompt: 'test' } },
   { name: '✨ Magic Hour', path: '/api/magichour', method: 'POST', testBody: { image_url: 'https://example.com/test.jpg', prompt: 'test' } },
-  { name: '📸 Upload', path: '/api/upload', method: 'POST' }
+  { name: '📸 Upload', path: '/api/upload', method: 'POST', testBody: null }
 ];
 
 async function checkStatus() {
