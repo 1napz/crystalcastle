@@ -2,9 +2,9 @@
 const endpoints = [
   { name: 'Gen Prompt', path: '/api/prompt', method: 'POST', testBody: { user_prompt: 'test', category: 'test' } },
   { name: 'Generate Post', path: '/api/post', method: 'POST', testBody: { prompt: 'test', brand: 'test', category: 'test' } },
-  { name: 'FAL Kling', path: '/api/video', method: 'POST', testBody: { image_url: 'https://example.com/test.jpg', prompt: 'test' } },
+  { name: 'FAL Kling', path: '/api/falkling', method: 'POST', testBody: { image_url: 'https://example.com/test.jpg', prompt: 'test' } },
   { name: 'Magic Hour', path: '/api/magichour', method: 'POST', testBody: { image_url: 'https://example.com/test.jpg', prompt: 'test' } },
-  { name: 'Upload', path: '/api/upload', method: 'POST' }
+  { name: 'Upload', path: '/api/video', method: 'POST' }
 ];
 
 async function checkStatus() {
