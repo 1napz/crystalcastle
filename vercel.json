@@ -34,6 +34,6 @@
     "api/prompt.js": { "maxDuration": 10 },
     "api/post.js": { "maxDuration": 10 },
     "api/get-logs.js": { "maxDuration": 10 },
-    "api/artifact.js": { "maxDuration": 10 }
+    "api/artifacts.js": { "maxDuration": 10 }
   }
 }
