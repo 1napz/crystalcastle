@@ -432,3 +432,186 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPreview();
     updateFilename();
 });
+
+
+// ========== TIKTOK STYLE VIDEO GENERATOR (CANVAS + ANIMATION) ==========
+// เพิ่มปุ่มอ้างอิง (ต้องมี id="genTikTokBtn" ใน product.html ด้วย)
+const genTikTokBtn = document.getElementById('genTikTokBtn');
+
+async function generateTikTokVideo() {
+    // ตรวจสอบว่ามีรูปหรือไม่
+    if (selectedFiles.length === 0) {
+        alert('กรุณาอัปโหลดรูปสินค้าก่อน');
+        return;
+    }
+
+    // ดึงข้อมูลจากฟอร์ม
+    const productName = brandInput?.value.trim() || 'สินค้า';
+    const price = prompt('💰 กรอกราคาสินค้า (บาท)', '299');
+    if (!price) return;
+    
+    const discount = prompt('🔥 ส่วนลด (%) (ถ้ามี, ไม่มีกดยกเลิก)', '');
+    const discountPercent = discount ? parseInt(discount) : 0;
+
+    // แสดงสถานะและ disable ปุ่ม
+    if (statusText) {
+        statusText.classList.remove('hidden');
+        statusText.innerHTML = '🎬 กำลังสร้างวิดีโอ TikTok Style... (ใช้เวลาประมาณ 10-15 วินาที)';
+    }
+    if (genTikTokBtn) genTikTokBtn.disabled = true;
+    if (generateBtn) generateBtn.disabled = true;
+
+    try {
+        // 1. สร้าง Canvas
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const duration = 8000; // 8 วินาที
+        const fps = 30;
+        
+        canvas.width = 1080;
+        canvas.height = 1920; // อัตราส่วน 9:16 สำหรับ TikTok
+        
+        // 2. โหลดรูปสินค้า (ใช้รูปแรก)
+        const productImg = new Image();
+        productImg.src = selectedFiles[0].url;
+        await productImg.decode();
+        
+        // 3. เตรียม MediaRecorder
+        const stream = canvas.captureStream(fps);
+        const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        const chunks = [];
+        
+        recorder.ondataavailable = (e) => {
+            if (e.data.size > 0) chunks.push(e.data);
+        };
+        
+        // สร้าง Promise เพื่อรอการบันทึกเสร็จ
+        const videoUrl = await new Promise((resolve) => {
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/mp4' });
+                const url = URL.createObjectURL(blob);
+                resolve(url);
+            };
+            
+            recorder.start();
+            
+            let startTime = null;
+            let animationFrameId;
+            
+            function drawFrame(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = (timestamp - startTime) / 1000; // วินาทีที่ผ่านไป
+                const progress = Math.min(elapsed / (duration / 1000), 1);
+                
+                // --- วาด Animation แต่ละเฟรม ---
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // พื้นหลัง Gradient แบบ TikTok
+                const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                grad.addColorStop(0, '#ff6b6b');
+                grad.addColorStop(0.5, '#ee5a24');
+                grad.addColorStop(1, '#ff4757');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Animation ซูมเข้าสินค้า
+                const scale = 0.7 + progress * 0.35;
+                const imgW = canvas.width * scale;
+                const imgH = canvas.height * scale;
+                ctx.drawImage(productImg, (canvas.width - imgW) / 2, (canvas.height - imgH) / 2, imgW, imgH);
+                
+                // Overlay Gradient ด้านล่าง (ให้ข้อความเด่น)
+                const overlayGrad = ctx.createLinearGradient(0, canvas.height - 300, 0, canvas.height);
+                overlayGrad.addColorStop(0, 'rgba(0,0,0,0)');
+                overlayGrad.addColorStop(1, 'rgba(0,0,0,0.7)');
+                ctx.fillStyle = overlayGrad;
+                ctx.fillRect(0, canvas.height - 300, canvas.width, 300);
+                
+                // ชื่อสินค้า (Slide from top)
+                ctx.font = 'bold 68px "Noto Sans Thai"';
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                const titleY = 150 + Math.min(elapsed * 200, 200);
+                ctx.fillText(productName, 60, titleY);
+                
+                // ราคา (Bounce Effect)
+                const bounce = Math.sin(elapsed * 15) * 12;
+                ctx.font = 'bold 96px "Noto Sans Thai"';
+                ctx.fillStyle = '#f9ca24';
+                ctx.fillText(`฿${price}`, 100, 700 + bounce);
+                
+                // ส่วนลด (Blink Effect)
+                if (discountPercent > 0) {
+                    const blink = Math.sin(elapsed * 20) > 0;
+                    if (blink) {
+                        ctx.font = 'bold 52px "Noto Sans Thai"';
+                        ctx.fillStyle = '#ff4757';
+                        ctx.fillText(`🔥 ลด ${discountPercent}% 🔥`, 180, 880);
+                    }
+                }
+                
+                // ข้อความ Call to Action (Floating)
+                ctx.font = '38px "Noto Sans Thai"';
+                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.fillText('⚡ สินค้าจำกัด! ⚡', 220, canvas.height - 180);
+                
+                // โลโก้/เครดิต
+                ctx.font = '28px "Noto Sans Thai"';
+                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.fillText('Crystal Castle AI', 50, canvas.height - 60);
+                
+                if (progress < 1) {
+                    animationFrameId = requestAnimationFrame(drawFrame);
+                } else {
+                    recorder.stop();
+                    cancelAnimationFrame(animationFrameId);
+                }
+            }
+            
+            animationFrameId = requestAnimationFrame(drawFrame);
+        });
+        
+        // แสดงผลลัพธ์
+        if (statusText) {
+            statusText.innerHTML = `
+                ✅ สร้างวิดีโอ TikTok Style สำเร็จ! 
+                <a href="${videoUrl}" target="_blank" class="underline text-blue-400">▶ เปิดดูวิดีโอ</a> | 
+                <a href="${videoUrl}" download="tiktok-video-${Date.now()}.mp4" class="underline text-purple-400">💾 ดาวน์โหลด</a>
+                <br><span class="text-xs text-gray-500">🎬 วิดีโอความยาว 8 วินาที พร้อมอัปโหลดขึ้น TikTok หรือ Shopee</span>
+            `;
+        }
+        
+        // แสดงตัวอย่างวิดีโอแทนที่ Grid
+        if (previewGrid) {
+            const videoEl = document.createElement('video');
+            videoEl.src = videoUrl;
+            videoEl.controls = true;
+            videoEl.autoplay = true;
+            videoEl.loop = true;
+            videoEl.className = 'w-full rounded-xl mt-3 col-span-3';
+            previewGrid.innerHTML = '';
+            previewGrid.appendChild(videoEl);
+        }
+        
+        // บันทึกชื่อไฟล์ (optional)
+        saveFilename(`tiktok-${productName}-${Date.now()}`);
+        
+    } catch (err) {
+        console.error('TikTok video error:', err);
+        if (statusText) statusText.innerHTML = `❌ สร้างวิดีโอไม่สำเร็จ: ${err.message}`;
+    } finally {
+        if (genTikTokBtn) genTikTokBtn.disabled = false;
+        if (generateBtn) generateBtn.disabled = false;
+        setTimeout(() => {
+            if (statusText && !statusText.innerHTML.includes('✅')) {
+                statusText.classList.add('hidden');
+            }
+        }, 10000);
+    }
+}
+
+// ผูก Event ให้ปุ่ม TikTok (ถ้ามีใน HTML)
+if (genTikTokBtn) {
+    genTikTokBtn.addEventListener('click', generateTikTokVideo);
+}
