@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "@imgly/background-removal": "^1.0.0"
-"scripts": {
-  "docs": "jsdoc -c jsdoc.json"
-}
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.2"
+  },
+  "scripts": {
+    "docs": "jsdoc -c jsdoc.json",
+    "docs:generate": "jsdoc -c jsdoc.json"
   }
 }
