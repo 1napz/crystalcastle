@@ -4,5 +4,8 @@
   "type": "module",
   "dependencies": {
     "@imgly/background-removal": "^1.0.0"
+"scripts": {
+  "docs": "jsdoc -c jsdoc.json"
+}
   }
 }
