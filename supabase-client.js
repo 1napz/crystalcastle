@@ -1,10 +1,16 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const SUPABASE_URL = NEXT_PUBLIC_SUPABASE_URL
-const SUPABASE_ANON_KEY = SUPABASE_ANON_KEY
+// supabase-client.js (ตัวอย่างปลอดภัย)
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+export const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.warn('Missing Supabase env vars. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your env.')
+}
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-
 export async function uploadImageToStorage(file) {
   const filePath = `pika/${Date.now()}-${file.name}`
   const { error } = await supabase.storage.from('vaulted').upload(filePath, file)
