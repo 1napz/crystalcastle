@@ -12,6 +12,7 @@
     "mikestead.dotenv",
     "aaron-bond.better-comments",
     "rangav.vscode-thunder-client",
-    "davidanson.vscode-markdownlint"
-  ]
+    "davidanson.vscode-markdownlint",
+  "typescript.suggest.paths": false ,
+  "javascript.suggest.paths": false
 }
