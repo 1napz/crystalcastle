@@ -5,21 +5,23 @@ on:
     branches: [main]
     paths:
       - 'package-lock.json'
-  workflow_dispatch:  # ให้รันด้วยมือได้ถ้าต้องการ
+  workflow_dispatch:
 
 jobs:
   fix:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # ✅ เพิ่มแล้ว
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}  # สำคัญ! ต้องใช้ PAT เพื่อ push กลับได้
-
+          token: ${{ secrets.GH_PAT }}
+      
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-
-      - name: ตรวจสอบว่า package-lock.json parse ได้หรือไม่
+      
+      - name: Check package-lock.json validity
         id: check
         run: |
           if node -e "JSON.parse(require('fs').readFileSync('package-lock.json','utf8'))" 2>/dev/null; then
@@ -27,8 +29,8 @@ jobs:
           else
             echo "valid=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: สร้าง package-lock.json ใหม่ถ้าเสียหาย
+      
+      - name: Regenerate package-lock.json if invalid
         if: steps.check.outputs.valid == 'false'
         run: |
           rm -f package-lock.json
