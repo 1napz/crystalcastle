@@ -6,9 +6,8 @@
   <title>จัดการสินค้า - Crystal Castle</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Custom CSS เพิ่มเติม -->
+  
   <style>
-    /* Fix accessibility: focus visible */
     :focus-visible {
       outline: 3px solid #8b5cf6;
       outline-offset: 2px;
@@ -34,6 +33,9 @@
       clip: rect(0,0,0,0);
       border: 0;
     }
+    #statusText {
+      min-height: 1.5em;
+    }
   </style>
 </head>
 <body class="bg-slate-50 p-4 pb-20">
@@ -46,12 +48,7 @@
         <span class="w-7 h-7 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-sm font-semibold">1</span>
         <h2 class="font-semibold text-slate-900">รูปสินค้า</h2>
       </div>
-      <div id="previewGrid" class="grid grid-cols-3 gap-2">
-        <div class="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16l4-4 4-4 4 4M12 12v-2M12 8v-2M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
-          <span class="text-[11px] mt-1">ยังไม่มีรูป</span>
-        </div>
-      </div>
+      <div id="previewGrid" class="grid grid-cols-3 gap-2"></div>
       <p class="text-[11px] text-slate-500 mt-2.5">รองรับ JPG, PNG (สูงสุด 10 รูป)</p>
     </section>
 
@@ -125,7 +122,7 @@
       </div>
     </section>
 
-    <!-- ส่วนที่ 5: เลือกเครื่องมือ (แก้ไข dropdown handler) -->
+    <!-- ส่วนที่ 5: เลือก Video Engine -->
     <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
       <div class="flex items-center gap-2.5 mb-4">
         <span class="w-7 h-7 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-sm font-semibold">5</span>
@@ -134,130 +131,86 @@
       <div class="space-y-3">
         <label for="videoEngineSelect" class="text-xs text-slate-500 block">Video Engine</label>
         <select id="videoEngineSelect" class="w-full h-11 px-3 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-violet-500">
+          <option value="">-- เลือกเครื่องมือ --</option>
           <option value="openai">OpenAI Sora</option>
           <option value="runway">Runway Gen-2</option>
           <option value="pika">Pika Labs</option>
+          <option value="fal">FAL Kling</option>
+          <option value="magic">Magic Hour</option>
         </select>
-        <div id="engineInfo" class="text-xs text-slate-500 mt-1 italic"></div>
+        <div id="engineInfo" class="text-xs text-slate-500 mt-1 italic" aria-live="polite" aria-atomic="true"></div>
       </div>
     </section>
 
-    <!-- ปุ่มหลักด้านล่าง -->
-    <div class="sticky bottom-4 flex gap-3 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-slate-200">
-      <button id="submitBtn" type="button" class="flex-1 bg-violet-600 text-white font-medium py-3 rounded-xl hover:bg-violet-700 transition">💾 บันทึกสินค้า</button>
-      <button id="logoutBtn" type="button" class="px-5 py-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition">🚪 ออกจากระบบ</button>
+    <!-- TikTok URL (ตามที่ CodeRabbit ชี้) -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+      <label for="tiktokInput" class="text-xs text-slate-500 mb-1 block">TikTok URL (optional)</label>
+      <input type="url" id="tiktokInput" placeholder="https://www.tiktok.com/@yourusername" 
+             class="w-full h-11 px-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500">
+    </section>
+
+    <!-- สถานะ (ARIA Live Region) -->
+    <div id="statusText" 
+         class="text-center text-sm py-3 hidden rounded-xl"
+         role="status" 
+         aria-live="polite" 
+         aria-atomic="true">
+    </div>
+
+    <!-- ปุ่มหลัก -->
+    <div class="sticky bottom-4 flex gap-3 bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-slate-200">
+      <button id="generateBtn" type="button" 
+              class="flex-1 bg-violet-600 text-white font-medium py-3.5 rounded-xl hover:bg-violet-700 transition disabled:opacity-50">
+        🎥 สร้างวิดีโอเลย
+      </button>
+      <button id="submitBtn" type="button" 
+              class="flex-1 bg-emerald-600 text-white font-medium py-3.5 rounded-xl hover:bg-emerald-700 transition">
+        💾 บันทึกสินค้า
+      </button>
+      <button id="logoutBtn" type="button" 
+              class="px-6 py-3.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition">
+        🚪 ออก
+      </button>
     </div>
 
   </main>
 
+  <script src="product.js"></script>
+
   <script>
-    (function() {
-      // แก้ไข dropdown handler ตาม CodeRabbit (ไม่ใช้ arrow function, ใช้ event.target)
+    // Inline script สำหรับ dropdown + status (เสริม product.js)
+    document.addEventListener('DOMContentLoaded', () => {
       const engineSelect = document.getElementById('videoEngineSelect');
       const engineInfo = document.getElementById('engineInfo');
+      const statusText = document.getElementById('statusText');
+
       const descriptions = {
-        'openai': '✨ OpenAI Sora: สร้างวิดีโอความยาวสูงสุด 60 วินาที ภาพสมจริง',
-        'runway': '🎬 Runway Gen-2: ควบคุมการเคลื่อนไหวได้ละเอียด เหมาะกับสินค้าแฟชั่น',
-        'pika': '🎨 Pika Labs: อนิเมชันสวย เน้นอารมณ์สินค้า'
+        'openai': '✨ OpenAI Sora: วิดีโอสมจริง ความยาวสูงสุด 60 วินาที',
+        'runway': '🎬 Runway Gen-2: ควบคุมการเคลื่อนไหวละเอียด เหมาะกับแฟชั่น',
+        'pika': '🎨 Pika Labs: อนิเมชันสวย เน้นอารมณ์',
+        'fal': 'FAL Kling: คุณภาพสูง ราคาแพง (จ่าย)',
+        'magic': 'Magic Hour: ฟรี 400 เครดิต/วัน เอฟเฟกต์ดี',
+        '': 'กรุณาเลือก Video Engine'
       };
+
       if (engineSelect && engineInfo) {
-        // เปลี่ยนจาก arrow function เป็น regular function + event.target
         engineSelect.addEventListener('change', function(event) {
           const value = event.target.value;
-          engineInfo.textContent = descriptions[value] || 'กรุณาเลือกเครื่องมือ';
+          engineInfo.textContent = descriptions[value] || '';
         });
-        // trigger ครั้งแรก
         engineSelect.dispatchEvent(new Event('change'));
       }
 
-      // ส่วนอื่น ๆ ที่มีอยู่เดิม (จำลองฟังก์ชัน AI, การบันทึก ฯลฯ) 
-      // ให้เพิ่ม type="button" ทุกปุ่มแล้ว
-
-      // จัดการปุ่ม AI ช่วยคิด
-      const genPromptBtn = document.getElementById('genPromptBtn');
-      const promptInput = document.getElementById('promptInput');
-      if (genPromptBtn && promptInput) {
-        genPromptBtn.addEventListener('click', () => {
-          const brand = document.getElementById('brandInput')?.value || '';
-          const category = document.getElementById('categorySelect')?.value || '';
-          promptInput.value = `สร้างวิดีโอแนะนำสินค้า ${brand} ${category} สไตล์โมเดิร์น สนุกสนาน ความยาว 30 วินาที`;
-          document.getElementById('copyPromptBtn')?.classList.remove('hidden');
-          document.getElementById('undoPromptBtn')?.classList.remove('hidden');
-        });
-      }
-
-      // กลับต้นฉบับ prompt
-      const undoPrompt = document.getElementById('undoPromptBtn');
-      if (undoPrompt && promptInput) {
-        undoPrompt.addEventListener('click', () => {
-          promptInput.value = '';
-          undoPrompt.classList.add('hidden');
-          document.getElementById('copyPromptBtn')?.classList.add('hidden');
-        });
-      }
-
-      // คัดลอก prompt
-      const copyPrompt = document.getElementById('copyPromptBtn');
-      if (copyPrompt && promptInput) {
-        copyPrompt.addEventListener('click', () => {
-          navigator.clipboard.writeText(promptInput.value);
-          alert('คัดลอกคำสั่งแล้ว');
-        });
-      }
-
-      // สร้างแคปชั่น (จำลอง)
-      const genPostBtn = document.getElementById('genPostBtn');
-      const postOutput = document.getElementById('postOutput');
-      if (genPostBtn && postOutput) {
-        genPostBtn.addEventListener('click', () => {
-          const brand = document.getElementById('brandInput')?.value || 'สินค้า';
-          const category = document.getElementById('categorySelect')?.value || '';
-          postOutput.value = `✨ ${brand} สวยงาม พร้อมส่ง! #แฟชั่น #${category} สนใจทักสอบถามได้เลย 💖`;
-          document.getElementById('copyPostBtn')?.classList.remove('hidden');
-        });
-      }
-
-      // คัดลอกแคปชั่น
-      const copyPost = document.getElementById('copyPostBtn');
-      if (copyPost && postOutput) {
-        copyPost.addEventListener('click', () => {
-          navigator.clipboard.writeText(postOutput.value);
-          alert('คัดลอกแคปชั่นแล้ว');
-        });
-      }
-
-      // บันทึกสินค้า
-      const submitBtn = document.getElementById('submitBtn');
-      if (submitBtn) {
-        submitBtn.addEventListener('click', () => {
-          alert('บันทึกข้อมูลสินค้าเรียบร้อย (จำลอง)');
-        });
-      }
-
-      // ออกจากระบบ
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-          if (confirm('คุณต้องการออกจากระบบ?')) {
-            window.location.href = '/logout';
-          }
-        });
-      }
-
-      // ตั้งค่าวันที่อัตโนมัติ
-      const dateInput = document.getElementById('dateInput');
-      if (dateInput) {
-        const today = new Date().toLocaleDateString('th-TH');
-        dateInput.value = today;
-      }
-
-      // ตั้งค่าชื่อไฟล์ (จำลอง)
-      const filenameInput = document.getElementById('filenameInput');
-      if (filenameInput) {
-        filenameInput.value = 'product_' + Date.now() + '.json';
-      }
-    })();
+      // ฟังก์ชันแสดงสถานะ (ใช้ร่วมกับ product.js)
+      window.showStatus = function(message, type = 'info') {
+        if (!statusText) return;
+        statusText.classList.remove('hidden', 'text-red-600', 'text-green-600');
+        if (type === 'error') statusText.classList.add('text-red-600');
+        else if (type === 'success') statusText.classList.add('text-green-600');
+        statusText.textContent = message;
+        statusText.classList.remove('hidden');
+      };
+    });
   </script>
-  <script src="product.js"></script>
 </body>
 </html>
