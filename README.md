@@ -1,4 +1,4 @@
-📄 README.md ฉบับเต็ม (ก็อปปี้ทั้งหมด)
+📄 README.md
 
 ```markdown
 ## 💎 Crystal Castle Lite v1.4
