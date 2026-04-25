@@ -15,9 +15,8 @@
     // ... dependencies อื่นๆ ที่มีอยู่
   },
   "devDependencies": {
-    "postcss": "^8.5.10",          // ← เพิ่มหรืออัปเดตบรรทัดนี้
+    "postcss": "^8.5.10",        
     "tailwindcss": "^3.4.0",
-    "autoprefixer": "^10.4.0",
-    // ... devDependencies อื่นๆ
+    "autoprefixer": "^10.4.0"
   }
 }
