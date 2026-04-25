@@ -1,23 +1,17 @@
 {
   "recommendations": [
-    // === Copilot & AI ===
     "github.copilot",
     "github.copilot-chat",
-
-    // === HTML/CSS/Tailwind ===
     "bradlc.vscode-tailwindcss",
-    "ecmel.vscode-html-css",
-
-    // === JavaScript & Formatting ===
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-
-    // === Productivity ===
+    "eamodio.gitlens",
+    "usernamehw.errorlens",
     "christian-kohler.path-intellisense",
-    "formulahendry.auto-rename-tag",
-    "visualstudioexptteam.vscodeintellicode",
-
-    // === Markdown (Optional) ===
+    "ritwickdey.liveserver",
+    "mikestead.dotenv",
+    "aaron-bond.better-comments",
+    "rangav.vscode-thunder-client",
     "davidanson.vscode-markdownlint"
   ]
 }
