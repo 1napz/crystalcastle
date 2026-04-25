@@ -14,5 +14,5 @@
     "rangav.vscode-thunder-client",
     "davidanson.vscode-markdownlint",
   "typescript.suggest.paths": false ,
-  "javascript.suggest.paths": false
+  "javascript.suggest.paths": false]
 }
