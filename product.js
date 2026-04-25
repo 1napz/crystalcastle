@@ -1,5 +1,5 @@
 // product.js — @snapzreview AI Video Studio
-// ไฟล์นี้รวบรวมทุกฟังก์ชันหลักของ Studio: อัปโหลดรูป, Gen Prompt, Gen Caption, สร้างวิดีโอ, Slideshow, Intro, CTA, Thumbnail
+// รวบรวมทุกฟังก์ชันหลัก: อัปโหลดรูป, Gen Prompt, Gen Caption, สร้างวิดีโอ, Slideshow, Intro, CTA, Thumbnail
 
 // ========== STEP 1: อ้างอิง DOM Elements ==========
 const $ = (id) => document.getElementById(id);
@@ -9,8 +9,9 @@ const previewGrid = $('previewGrid');
 const filenameInput = $('filenameInput');
 const promptInput = $('promptInput');
 const genPromptBtn = $('genPromptBtn');
-const genFALBtn = $('genFALBtn');
-const genHFBtn = $('genHFBtn');
+// ปุ่ม Kling / Magic Hour เดิม ถูกแทนที่ด้วย Dropdown
+// const genFALBtn = $('genFALBtn');
+// const genHFBtn = $('genHFBtn');
 const genIntroBtn = $('genIntroBtn');
 const genCTABtn = $('genCTABtn');
 const genThumbnailBtn = $('genThumbnailBtn');
@@ -27,6 +28,10 @@ const copyPostBtn = $('copyPostBtn');
 const generateBtn = $('generateBtn');
 const tiktokBtn = $('tiktokBtn');
 const tiktokInputWrap = $('tiktokInputWrap');
+
+// ========== อ้างอิง Dropdown สำหรับเลือก Video Engine และข้อความอธิบาย ==========
+const videoEngineSelect = $('videoEngineSelect');
+const engineInfo = $('engineInfo');
 
 // ========== STEP 2: ตัวแปรกลาง ==========
 let selectedFiles = [];   // เก็บ list ของรูปที่เลือก { url, file }
@@ -302,7 +307,7 @@ function drawCoverImage(ctx, img, canvas) {
   ctx.drawImage(img, x, y, w, h);
 }
 
-// ========== STEP 17: สร้างวิดีโอด้วย FAL / Magic Hour ==========
+// ========== STEP 17: สร้างวิดีโอด้วย AI Engine ใหม่ (ผ่าน /api/generate-video) ==========
 let lastUploadedFile = null;
 let lastUploadedUrl = null;
 let videoAbortController = null;
@@ -313,29 +318,34 @@ async function generateVideo(engine) {
   }
   videoAbortController = new AbortController();
 
-  if (selectedFiles.length === 0) return showToast('กรุณาอัปโหลดรูปก่อน', 'error');
+  if (selectedFiles.length === 0) {
+    showToast('กรุณาอัปโหลดรูปสินค้าก่อน', 'error');
+    return;
+  }
   const prompt = promptInput.value.trim();
-  if (!prompt) return showToast('กรุณาใส่ Prompt ก่อน', 'error');
-
+  if (!prompt) {
+    showToast('กรุณาใส่ Prompt หรือให้ AI ช่วยคิดก่อน', 'error');
+    return;
+  }
   const customFilename = filenameInput?.value.trim() || `video-${Date.now()}`;
   if (checkDuplicateName(customFilename)) {
     if (!confirm(`ชื่อ ${customFilename} เคยใช้แล้ว จะสร้างทับไหม?`)) return;
   }
 
-  // Disable ปุ่มชั่วคราว
-  [genFALBtn, genHFBtn, generateBtn].forEach(b => { if (b) b.disabled = true; });
+  // ปิดปุ่ม Generate ชั่วคราว
+  generateBtn.disabled = true;
   if (statusText) {
     statusText.classList.remove('hidden');
     statusText.innerHTML = '📤 กำลังอัปโหลดรูป...';
   }
 
-  const engineLabel = engine === 'FAL' ? 'FAL Kling' : 'Magic Hour';
+  // เลือก engine จาก dropdown หรือใช้ 'fal' เป็นค่าเริ่มต้น
+  const selectedEngine = engine || videoEngineSelect?.value || 'fal';
 
   try {
+    // อัปโหลดรูป (หรือ reuse)
     const file = selectedFiles[0].file;
     let imageUrl;
-
-    // ใช้ cache ถ้าเป็นรูปเดิม
     if (lastUploadedFile === file && lastUploadedUrl) {
       imageUrl = lastUploadedUrl;
       if (statusText) statusText.innerHTML = '📦 ใช้รูปที่อัปโหลดแล้ว';
@@ -353,22 +363,31 @@ async function generateVideo(engine) {
       lastUploadedUrl = imageUrl;
     }
 
-    if (statusText) statusText.innerHTML = `⚡ กำลังสร้างวิดีโอ (${engineLabel})...`;
+    if (statusText) {
+      statusText.innerHTML = `⚡ กำลังสร้างวิดีโอด้วย ${selectedEngine}...`;
+    }
 
-    const apiUrl = engine === 'FAL' ? '/api/video' : '/api/magichour';
-    const genRes = await fetch(apiUrl, {
+    // เรียก API endpoint ที่รวมทุก engine
+    const genRes = await fetch('/api/generate-video', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image_url: imageUrl, prompt, filename: customFilename }),
+      body: JSON.stringify({
+        image_url: imageUrl,
+        prompt,
+        filename: customFilename,
+        engine: selectedEngine,
+      }),
       signal: videoAbortController.signal,
     });
 
     const data = await genRes.json();
     if (!genRes.ok) throw new Error(data.error || 'สร้างวิดีโอไม่สำเร็จ');
-    if (!data.video_url) throw new Error('ไม่ได้รับลิงก์วิดีโอ');
+
+    const videoUrl = data.videoUrl || data.taskId;
+    if (!videoUrl) throw new Error('ไม่ได้รับลิงก์วิดีโอ');
 
     if (statusText) {
-      statusText.innerHTML = `✅ สำเร็จ! <a href="${data.video_url}" target="_blank" class="underline text-purple-400">เปิดวิดีโอ</a> | <a href="/artifact.html" class="underline text-emerald-400">ดูผลงาน</a>`;
+      statusText.innerHTML = `✅ สำเร็จ! <a href="${videoUrl}" target="_blank" class="underline text-purple-400">เปิดวิดีโอ</a> | <a href="/artifact.html" class="underline text-emerald-400">ดูผลงาน</a>`;
     }
     saveFilename(customFilename);
   } catch (err) {
@@ -380,16 +399,33 @@ async function generateVideo(engine) {
     if (statusText) statusText.innerHTML = `❌ เกิดข้อผิดพลาด: ${err.message}`;
     showToast(`สร้างวิดีโอไม่สำเร็จ: ${err.message}`, 'error');
   } finally {
-    [genFALBtn, genHFBtn, generateBtn].forEach(b => { if (b) b.disabled = false; });
+    generateBtn.disabled = false;
     videoAbortController = null;
     setTimeout(() => { if (statusText) statusText.classList.add('hidden'); }, 15000);
   }
 }
 
-genFALBtn?.addEventListener('click', debounce(() => generateVideo('FAL'), 1000));
-genHFBtn?.addEventListener('click', debounce(() => generateVideo('HF'), 1000));
+// ปุ่ม Generate เรียกใช้งานจาก dropdown
+generateBtn?.addEventListener('click', debounce(() => generateVideo(), 1000));
 
-// ========== STEP 18: Slideshow Generator ==========
+// ========== STEP 18: แสดงข้อมูล engine เมื่อเปลี่ยน dropdown ==========
+if (videoEngineSelect) {
+  videoEngineSelect.addEventListener('change', () => {
+    const descriptions = {
+      'fal': 'FAL Kling: คุณภาพระดับมืออาชีพ, ใช้ API Key, ราคาสูง',
+      'magic': 'Magic Hour: ฟรี 400 เครดิต/วัน, เอฟเฟกต์หวือหวา',
+      'runway': '🚀 Runway Gen-4: Motion Brush, Camera Control, ทดลองฟรี 125 ครั้ง',
+      'pika': '🎨 Pika 2.2: เอฟเฟกต์สร้างสรรค์, ฟรี ~80 เครดิต/เดือน',
+      'nexa': '🔮 NexaAPI: รวมหลายโมเดล (Veo, Kling, Sora), ฟรี 100 ครั้ง',
+      'wavespeed': '⚡ WaveSpeedAI: รวม 700+ โมเดล, มี Free Tier',
+    };
+    if (engineInfo) engineInfo.textContent = descriptions[this.value] || '';
+  });
+  // เรียกครั้งแรกให้แสดงข้อความ
+  videoEngineSelect.dispatchEvent(new Event('change'));
+}
+
+// ========== STEP 19: Slideshow Generator ==========
 async function generateSlideshow() {
   if (selectedFiles.length < 2) {
     showToast('ต้องมีอย่างน้อย 2 รูปสำหรับ Slideshow', 'error');
@@ -442,7 +478,7 @@ async function generateSlideshow() {
   }
 }
 
-// ========== STEP 19: Intro Generator (Fade-in + แบรนด์) ==========
+// ========== STEP 20: Intro Generator (Fade-in + แบรนด์) ==========
 async function generateIntro() {
   if (selectedFiles.length === 0) {
     showToast('กรุณาอัปโหลดรูปก่อน', 'error');
@@ -511,7 +547,7 @@ async function generateIntro() {
   }
 }
 
-// ========== STEP 20: CTA Generator (สินค้า + จอ Call-to-Action) ==========
+// ========== STEP 21: CTA Generator (สินค้า + จอ Call-to-Action) ==========
 async function generateCTA() {
   if (selectedFiles.length === 0) {
     showToast('กรุณาอัปโหลดรูปก่อน', 'error');
@@ -576,7 +612,7 @@ async function generateCTA() {
   }
 }
 
-// ========== STEP 21: Thumbnail Generator (ภาพปก PNG) ==========
+// ========== STEP 22: Thumbnail Generator (ภาพปก PNG) ==========
 async function generateThumbnail() {
   if (selectedFiles.length === 0) {
     showToast('กรุณาอัปโหลดรูปก่อน', 'error');
@@ -637,13 +673,11 @@ async function generateThumbnail() {
   }
 }
 
-// ========== STEP 22: ผูก Event ทั้งหมด ==========
+// ========== STEP 23: ผูก Event สำหรับปุ่มฟรี (Intro, CTA, Thumb) ==========
 genIntroBtn?.addEventListener('click', debounce(generateIntro, 1000));
 genCTABtn?.addEventListener('click', debounce(generateCTA, 1000));
 genThumbnailBtn?.addEventListener('click', debounce(generateThumbnail, 1000));
 
-generateBtn?.addEventListener('click', () => genFALBtn?.click());
-
-// ========== STEP 23: เริ่มต้นเมื่อโหลดหน้า ==========
+// ========== STEP 24: เริ่มต้นเมื่อโหลดหน้า ==========
 renderPreview();
 updateFilename();
