@@ -30,7 +30,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
-  // ---------- Tailwind CSS ----------
+
   "tailwindCSS.includeLanguages": {
     "html": "html",
     "javascript": "javascript"
@@ -38,7 +38,7 @@
   "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.validate": true,
 
-  // ---------- ไฟล์และ Search ----------
+
   "files.exclude": {
     "node_modules": true,
     ".next": true,
@@ -58,12 +58,12 @@
     "*.json": "jsonc"
   },
 
-  // ---------- Terminal ----------
+ 
   "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.defaultProfile.windows": "PowerShell",
   "terminal.integrated.defaultProfile.osx": "zsh",
 
-  // ---------- Copilot ----------
+ 
   "github.copilot.enable": {
     "*": true,
     "plaintext": false,
@@ -72,21 +72,19 @@
   "github.copilot.chat.localeOverride": "auto",
   "github.copilot.editor.enableAutoCompletions": true,
 
-  // ---------- IntelliCode ----------
+ 
   "vsintellicode.features.apiExamples": true,
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 
-  // ---------- Extension Security ----------
+  Security
   "extensions.autoUpdate": true,
   "extensions.verifySignature": true,
 
-  // ---------- Markdown ----------
+   Markdown 
   "markdownlint.config": {
     "MD013": false,
     "MD033": false
   },
-  {
-  // ปิดการตรวจสอบ Workspace Trust (ถ้าเราไว้ใจโปรเจกต์ที่เราเปิดเสมอ)
-  // "security.workspace.trust.enabled": false
+  { "security.workspace.trust.enabled": false
 }}
 }
