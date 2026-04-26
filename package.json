@@ -11,8 +11,7 @@
   "dependencies": {
     "next": "15.5.15",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-    // ... dependencies อื่นๆ ที่มีอยู่
+    "react-dom: "^19.0.0",
   },
   "devDependencies": {
     "postcss": "^8.5.10",        
