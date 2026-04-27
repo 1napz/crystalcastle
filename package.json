@@ -1,0 +1,18 @@
+{
+  "name": "crystal-castle",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "dev:mock": "NEXT_PUBLIC_USE_MOCK=true next dev",
+    "dev:real": "NEXT_PUBLIC_USE_MOCK=false next dev",
+    "build": "next build",
+    "build:prod": "NEXT_PUBLIC_USE_MOCK=false next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
