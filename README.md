@@ -257,20 +257,3 @@ MIT License — ดูรายละเอียดใน LICENSE
 ```
 
 ---
-
-✅ วิธีใช้
-
-1. กด Select All ที่มุมขวาบนของ code block ด้านบน
-2. กด Copy (Ctrl+C หรือ Cmd+C)
-3. เปิดไฟล์ README.md ในโปรเจกต์ของคุณ
-4. วางทับ (Ctrl+V หรือ Cmd+V)
-5. บันทึกไฟล์
-
-หรือถ้าอยู่ใน GitHub:
-
-1. กดปุ่ม Add file → Create new file
-2. ตั้งชื่อไฟล์เป็น README.md
-3. วางโค้ดด้านบน
-4. กด Commit changes ที่ด้านล่าง
-
----
