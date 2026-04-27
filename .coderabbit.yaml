@@ -1,15 +1,15 @@
 # .coderabbit.yaml
 language: "th"  # ภาษาไทยสำหรับการตอบกลับ
 reviews:
-  profile: "chill"  # เริ่มต้นด้วยโหมดผ่อนคลาย ลดการแจ้งเตือนที่ไม่จำเป็น
+  profile: "assertive"  # เริ่มต้นด้วยโหมดผ่อนคลาย ลดการแจ้งเตือนที่ไม่จำเป็น
   request_changes_workflow: true
   high_level_summary: true
   poem: false      # ปิดบทกวี ลดความรกในการรีวิว
   review_status: true
-  review_details: false
+  review_details: true
   auto_review:
     enabled: true
-    drafts: false   # ไม่รีวิว Draft PRs
+    drafts: true
   path_filters:     # กำหนดข้ามโฟลเดอร์ที่ไม่ต้องการตรวจสอบ
     - "!docs/"
     - "!public/"
