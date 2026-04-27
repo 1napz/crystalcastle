@@ -8,9 +8,9 @@ reviews:
   review_status: true
   auto_review:
     enabled: true
-    drafts: false
+    drafts: true
   base_branches:
-    - "main"
+    - "master"
   path_instructions:
     - path: "api/**"
       instructions: |
