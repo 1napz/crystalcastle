@@ -1,31 +1,49 @@
-# .gitignore
-
-# Environment variables (สำคัญ!)
-.env.local
-.env.production
-.env.*.local
+# ============================================
+# Crystal Castle - .gitignore (สมบูรณ์)
+# ============================================
 
 # Dependencies
 node_modules/
 .pnpm-store/
+.yarn/
+.npm/
 
 # Build outputs
 .next/
 out/
 dist/
 build/
+.cache/
 
-# Mock files ที่สร้างเอง
+# Environment variables (สำคัญที่สุด!)
+.env
+.env.local
+.env.production
+.env.*.local
+.env.development
+.env.test
+
+# Vercel (deployment)
+.vercel
+vercel.log
+
+# Supabase local
+.supabase/
+.supabase-cache/
+
+# Mock files (ยกเว้นไฟล์ template)
+/mocks/
 /mocks/local/
-*.mock.js
+**/*.mock.js
+!src/mocks/mock-api.js   # ข้อยกเว้น
+!**/mock-*.template.js
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS
+*~
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -35,12 +53,50 @@ desktop.ini
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
 # Testing
 coverage/
 .nyc_output/
+.nyc_output
+*.test.js.snap
 
-# Temp
+# Temp files
 tmp/
 temp/
 *.tmp
+*.temp
+
+# Large media (ป้องกัน commit ไฟล์ใหญ่)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.zip
+*.tar.gz
+*.7z
+*.rar
+!public/mocks/sample-video.mp4   # ยกเว้นตัวอย่าง
+
+# Keys & secrets (ป้องกันเผลอ)
+*secret*
+*.pem
+*.key
+*.cert
+*.p8
+*.p12
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.cab
