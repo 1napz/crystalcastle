@@ -4,9 +4,17 @@
     "es2021": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended"
-  ],
+  "extends": ["eslint:recommended"],
+  "globals": {
+    "process": "readonly",
+    "__dirname": "readonly",
+    "console": "readonly",
+    "fetch": "readonly",
+    "localStorage": "readonly",
+    "Blob": "readonly",
+    "MediaRecorder": "readonly",
+    "URL": "readonly"
+  },
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
@@ -16,6 +24,7 @@
     "prefer-const": "error",
     "no-unused-vars": "warn",
     "no-console": "warn",
+    "no-undef": "error",
     "eqeqeq": ["error", "always"],
     "semi": ["error", "always"],
     "quotes": ["error", "single", { "avoidEscape": true }],
@@ -27,9 +36,11 @@
   },
   "ignorePatterns": [
     "node_modules/",
+    ".next/",
     "dist/",
     "build/",
-    ".next/",
-    "coverage/"
+    "coverage/",
+    "public/",
+    "*.min.js"
   ]
 }
