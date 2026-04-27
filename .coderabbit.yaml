@@ -1,28 +1,39 @@
 # .coderabbit.yaml
-language: "th" # ตั้งค่าให้คอมเมนต์เป็นภาษาไทย
+language: "th"  # ภาษาไทยสำหรับการตอบกลับ
 reviews:
-  profile: "assertive" # ให้ feedback แบบละเอียด
-  request_changes_workflow: false
+  profile: "chill"  # เริ่มต้นด้วยโหมดผ่อนคลาย ลดการแจ้งเตือนที่ไม่จำเป็น
+  request_changes_workflow: true
   high_level_summary: true
-  poem: false
+  poem: false      # ปิดบทกวี ลดความรกในการรีวิว
   review_status: true
+  review_details: false
   auto_review:
     enabled: true
-    drafts: true
-  base_branches:
-    - "master"
-  path_instructions:
-    - path: "api/**"
+    drafts: false   # ไม่รีวิว Draft PRs
+  path_filters:     # กำหนดข้ามโฟลเดอร์ที่ไม่ต้องการตรวจสอบ
+    - "!docs/"
+    - "!public/"
+    - "!dist/"
+    - "!.next/"
+    - "!*.lock"
+  path_instructions: # กำหนดคำแนะนำเฉพาะสำหรับพาธต่างๆ
+    - path: "api/**/*.js"
       instructions: |
-        โค้ดในส่วนนี้คือ Next.js API Routes (Node.js 18+) ใช้ Supabase เป็น Backend
-        มีการเรียกใช้ AI APIs หลายตัว, ตรวจสอบ Error Handling, Environment Variables และความปลอดภัยของ API Keys ด้วย
-    - path: "*.html"
+        - ตรวจสอบการจัดการข้อผิดพลาด (try-catch)
+        - ต้องมีการตรวจสอบค่าที่รับเข้ามา (input validation)
+        - ตรวจสอบสิทธิ์และบทบาทก่อนดำเนินการ
+        - ใช้ HTTP status codes ที่เหมาะสม
+        - ตรวจสอบการใช้ Environment Variables ที่ถูกต้อง
+    - path: "product.js"
       instructions: |
-        ใช้ HTML5 + Tailwind CSS (CDN) + Vanilla JavaScript
-        เน้นความ Responsive และการเข้าถึง DOM ผ่าน Vanilla JS
-    - path: "*.js"
+        - ตรวจสอบการเรียกใช้ API (เลือกใช้ `fetch` กับ AbortController)
+        - ตรวจสอบการจัดการ state และ event handlers
+        - หลีกเลี่ยงการใส่ API Keys หรือ secrets ในฝั่ง client
+        - ตรวจสอบการแสดงสถานะการทำงาน (loading, error, success)
+    - path: "**/*.test.js"
       instructions: |
-        JavaScript ฝั่ง Client: ใช้ ES Modules, AbortController ในการ Fetch ทุกครั้ง
-        ไม่ใช้ jQuery, ใช้ showToast() แทน alert()
+        - ตรวจสอบความครอบคลุมในการทดสอบ (test coverage)
+        - ตรวจสอบกรณีขอบ (edge cases)
+        - ตรวจสอบความสามารถในการอ่านและการทำงานของระบบทดสอบ
 chat:
   auto_reply: true
