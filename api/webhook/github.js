@@ -1,3 +1,17 @@
+/**
+ * Handle GitHub webhook POSTs for selected events and forward alert messages to a configured Telegram chat.
+ *
+ * Processes only the GitHub events `secret_scanning_alert`, `deployment_status`, and `workflow_run`. For actionable
+ * states (secret detected, deployment failure/success, workflow failure) constructs a short alert containing an emoji,
+ * event-specific text, repository name (fallback `crystalcastle`), and a Bangkok timestamp, then sends it to the
+ * Telegram bot identified by `TELEGRAM_BOT` and `TELEGRAM_CHAT_ID`.
+ *
+ * Non-POST requests receive HTTP 405. Events outside the listed types or non-actionable event states receive HTTP 200
+ * with an empty body. If Telegram credentials are missing, responds with HTTP 500 and `{ error: 'Telegram not configured' }`.
+ *
+ * @param {import('http').IncomingMessage & { headers: Record<string,string>, method: string, body: any }} req - Incoming HTTP request; expects GitHub webhook headers (`x-github-event`) and JSON body.
+ * @param {import('http').ServerResponse & { status: (code:number) => any, json: (obj:any) => any, end: () => any }} res - HTTP response used to send status and JSON responses.
+ * @returns {void} Sends an HTTP response; on success sends `{ ok: true }` with status 200.
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   
