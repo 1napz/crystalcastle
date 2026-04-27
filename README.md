@@ -1,47 +1,47 @@
-
 ```markdown
-# — AI Video Generator
+# 📹 AI Video Generator - Crystal Castle
 
-คือเครื่องมือสร้างวิดีโอสินค้าด้วย AI  
-อัปโหลดรูป → AI เขียน Prompt → สร้างวิดีโอ → พร้อมแชร์ลง TikTok/Shopee ทันที  
-มีระบบ Slideshow ฟรีในตัว!
+> เครื่องมือสร้างวิดีโอสินค้าด้วย AI อัปโหลดรูป → AI เขียน Prompt → สร้างวิดีโอ → พร้อมแชร์ลง TikTok/Shopee ทันที  
+> **มีระบบ Slideshow ฟรีในตัว!**
 
-🌐 **Live Demo:** [crystalcastle-pi.vercel.app](https://crystalcastle-pi.vercel.app)
 
 ---
 
-## 🆕 มีอะไรใหม่ในเวอร์ชันล่าสุด (v1.4+)
+## ✨ ฟีเจอร์หลัก
 
 | ฟีเจอร์ | สถานะ | รายละเอียด |
-|---------|--------|-------------|
-| UI สำหรับมือถือ | ✅ เสร็จแล้ว | ออกแบบใหม่หมดด้วย Tailwind CSS รองรับจอเล็ก |
-| AI สร้าง Prompt | ✅ พร้อมใช้งาน | Groq (Llama 3.3 70B) ตอบกลับภายใน 2-3 วินาที |
-| AI สร้างแคปชั่น | ✅ พร้อมใช้งาน | แคปชั่นภาษาไทย + hashtag อัตโนมัติ |
-| สร้างวิดีโอ | ✅ พร้อมใช้งาน | FAL Kling / Magic Hour |
-| Groq Logs | ✅ ใหม่ | แสดง Log การเรียก AI แบบ real-time |
-| Fallback AI | ✅ ใหม่ | หาก Groq ล่ม จะสลับไปใช้ Gemini โดยอัตโนมัติ |
-| ระบบความปลอดภัย | ✅ ใหม่ | CSP Headers, X-Frame-Options, Rate Limiting |
-| ปรับแบรนด์ทั่วทั้งแอป | ✅ | เปลี่ยนจาก Crystal Castle → @snapzreview |
-| ลบ Popup ราคา/ส่วนลด | ✅ | ไม่มีการถามราคาในการสร้างวิดีโออีกต่อไป |
+|--------|--------|-------------|
+| 🖼️ อัปโหลดรูปสินค้า | ✅ เสร็จ | รองรับสูงสุด 10 รูป, ไฟล์ไม่เกิน 6MB |
+| 🤖 AI สร้าง Prompt | ✅ พร้อม | Groq (Llama 3.3 70B) + Gemini fallback |
+| 📝 AI สร้างแคปชั่น | ✅ พร้อม | แคปชั่นภาษาไทย + hashtag อัตโนมัติ |
+| 🎬 สร้างวิดีโอ | ✅ พร้อม | FAL Kling / Magic Hour |
+| 🎞️ สไลด์โชว์ฟรี | ✅ พร้อม | ไม่ใช้ AI, ทำได้ทันที |
+| 📱 รองรับมือถือ | ✅ เสร็จ | UI ปรับใหม่ด้วย Tailwind CSS |
+| 📊 Groq Logs | ✅ ใหม่ | แสดง Log การเรียก AI แบบ real-time |
+| 🔄 Fallback AI | ✅ ใหม่ | Groq ล่ม → ใช้ Gemini อัตโนมัติ |
+| 🔒 ความปลอดภัย | ✅ เสร็จ | CSP Headers, RLS, Rate Limiting |
+| 🏷️ แบรนด์ | ✅ | @snapzreview ทั่วทั้งแอป |
 
 ---
 
 ## 🛠️ เทคโนโลยีที่ใช้
 
-- **Frontend:** HTML5 + Tailwind CSS + Vanilla JS
-- **Backend:** Next.js API Routes (Serverless Functions บน Vercel)
-- **Database & Storage:** Supabase
-- **AI:** Groq, Gemini (Fallback), FAL Kling, Magic Hour
-- **Deployment:** Vercel (CI/CD จาก GitHub)
+| ส่วน | เทคโนโลยี |
+|------|-----------|
+| **Frontend** | HTML5 + Tailwind CSS + Vanilla JS |
+| **Backend** | Next.js API Routes (Serverless บน Vercel) |
+| **Database & Storage** | Supabase (PostgreSQL + Storage) |
+| **AI Models** | Groq (Llama 3.3), Gemini (fallback), FAL Kling, Magic Hour |
+| **Deployment** | Vercel (CI/CD จาก GitHub) |
 
 ---
 
 ## 📦 การติดตั้งและรันในเครื่อง
 
 ### ความต้องการเบื้องต้น
-- Node.js 18+
-- บัญชี Supabase (Free Plan ใช้งานได้)
-- API Keys จาก Groq, FAL, Magic Hour (ตามที่ต้องการ)
+- Node.js 18+ 
+- บัญชี Supabase (ฟรี)
+- API Keys: Groq (จำเป็น), FAL/Magic Hour (สำหรับสร้างวิดีโอ)
 
 ### ขั้นตอนการติดตั้ง
 
@@ -56,11 +56,7 @@ npm install
 # 3. คัดลอก Environment Variables ตัวอย่าง
 cp .env.example .env.local
 
-# 4. แก้ไข .env.local ด้วยค่าจริงของคุณ
-#    - NEXT_PUBLIC_SUPABASE_URL
-#    - NEXT_PUBLIC_SUPABASE_ANON_KEY (หรือ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)
-#    - GROQ_API_KEY
-#    - (Optional) GEMINI_API_KEY, FAL_KEY, MAGIC_HOUR_API_KEY
+# 4. แก้ไข .env.local ด้วยค่าจริงของคุณ (ดูรายละเอียดด้านล่าง)
 
 # 5. รัน Development Server
 npm run dev
@@ -72,18 +68,56 @@ npm run dev
 
 ⚙️ การตั้งค่า Environment Variables
 
-ดูรายละเอียดทั้งหมดได้ใน doc/environment-variables.md
+ตัวแปรที่จำเป็น (ต้องมี)
 
-ตัวแปรที่จำเป็น:
+```bash
+# Supabase (จำเป็น)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
 
-· NEXT_PUBLIC_SUPABASE_URL – URL โปรเจกต์ Supabase
-· NEXT_PUBLIC_SUPABASE_ANON_KEY – Public key (เปิดเผยได้) ใช้ใน client-side
-· GROQ_API_KEY – สำหรับ Groq AI
+# Groq AI (จำเป็น)
+GROQ_API_KEY=gsk_your_groq_api_key_here
+```
 
-ตัวแปรเสริม (แนะนำให้เพิ่ม):
+ตัวแปรเสริม (แนะนำให้เพิ่ม)
 
-· SUPABASE_SERVICE_ROLE_KEY – สำหรับ API routes ที่ต้องข้าม Row Level Security (ห้ามใช้ใน client)
-· GEMINI_API_KEY – สำหรับ Fallback AI เมื่อ Groq ล่ม
+```bash
+# Fallback AI (เมื่อ Groq ล่ม)
+GEMINI_API_KEY=AIzaSy...
+
+# สำหรับสร้างวิดีโอ (เลือกอย่างน้อย 1 ตัว)
+FAL_KEY=fal_your_key_here
+MAGIC_HOUR_API_KEY=mh_your_key_here
+
+# Supabase Admin (ใช้ใน API routes เท่านั้น)
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...
+
+# โหมดพัฒนา (ใช้เฉพาะ local)
+NEXT_PUBLIC_USE_MOCK=true   # เปิดใช้งาน Mock Mode
+```
+
+📘 ดูรายละเอียดทั้งหมดได้ใน doc/environment-variables.md
+
+---
+
+🧪 Mock Mode (ทดสอบแบบไม่เสียเครดิต)
+
+สำหรับการทดสอบบนเครื่อง local โดยไม่ต้องใช้ API จริง:
+
+```bash
+# รันด้วย Mock Mode
+npm run dev:mock
+
+# หรือตั้งค่าใน .env.local
+NEXT_PUBLIC_USE_MOCK=true
+```
+
+เมื่อเปิด Mock Mode:
+
+· ✅ ใช้วิดีโอตัวอย่างแทนการสร้างจริง
+· ✅ ใช้ Prompt Template แทนการเรียก Groq
+· ✅ ไม่เสียเครดิต FAL/Magic Hour
+· ⚠️ มี Badge 🔮 MOCK MODE แสดงที่มุมจอ
 
 ---
 
@@ -91,28 +125,30 @@ npm run dev
 
 ```
 crystalcastle/
-├── api/                  # Next.js API Routes
-│   ├── prompt.js         # Gen Prompt ด้วย Groq (พร้อม Fallback Gemini)
-│   ├── video.js          # สร้างวิดีโอ FAL Kling
-│   ├── magichour.js      # สร้างวิดีโอ Magic Hour
-│   ├── post.js           # สร้างแคปชั่น
-│   ├── upload.js         # อัปโหลดรูปไป Supabase Storage
-│   ├── get-logs.js       # ดึง Groq Logs
-│   └── artifacts.js      # GET/POST ผลงาน
-├── public/               # ไฟล์ Static
-├── doc/                  # เอกสารประกอบทั้งหมด
-├── .github/              # GitHub Actions (CI/CD, Secret Scanning)
-├── index.html            # หน้า Home
-├── product.html          # หน้า Studio สร้างวิดีโอ
-├── artifact.html         # หน้าผลงานแต่ละชิ้น
-├── artifacts.html        # รายการผลงานทั้งหมด
-├── login.html            # หน้าเข้าสู่ระบบ (อยู่ระหว่างพัฒนา)
-├── supabase-client.js    # ตัวเชื่อม Supabase สำหรับ Client
-├── product.js            # ฟังก์ชันหลักของ Studio
-├── cta-generator.js      # ฟังก์ชันสร้าง CTA
-├── vercel.json           # ตั้งค่า Vercel (Headers, Functions)
-├── .vercelignore         # ไฟล์ที่ไม่ Deploy
-├── .gitignore
+├── api/                    # Next.js API Routes
+│   ├── prompt.js          # Groq + Gemini fallback
+│   ├── video.js           # FAL Kling
+│   ├── magichour.js       # Magic Hour
+│   ├── post.js            # สร้างแคปชั่น
+│   ├── upload.js          # อัปโหลดรูปไป Supabase
+│   ├── get-logs.js        # ดึง Groq Logs
+│   └── artifacts.js       # GET/POST ผลงาน
+├── public/                # ไฟล์ Static (CSS, รูป, Mock)
+├── doc/                   # เอกสารทั้งหมด
+├── .github/               # GitHub Actions
+├── src/
+│   ├── config/            # Environment config
+│   ├── mocks/             # Mock API responses
+│   ├── services/          # Video service (auto switch mock/real)
+│   └── utils/             # Helper functions
+├── lib/supabase/          # Supabase client (browser + server)
+├── index.html             # หน้า Home
+├── product.html           # หน้า Studio
+├── product.js             # ฟังก์ชันหลัก (อัปเดตล่าสุด)
+├── supabase-client.js     # Supabase connector
+├── middleware.ts          # Auth + route protection
+├── vercel.json            # Vercel config (CSP, Headers)
+├── .env.example           # Template environment
 └── README.md
 ```
 
@@ -120,60 +156,121 @@ crystalcastle/
 
 🔒 ความปลอดภัย
 
-· Environment Variables ทั้งหมดเก็บไว้บน Vercel ไม่มี Secret ใน Source Code
-· Row Level Security (RLS) เปิดใช้งานบนทุกตารางใน Supabase
-· Content Security Policy (CSP) และ X-Frame-Options ถูกตั้งค่าใน vercel.json
-· GitHub Secret Scanning เปิดใช้งานเพื่อป้องกัน Key หลุด
-· ห้ามใช้ process.env ใน Client-side – ให้ใช้ค่าคงที่ที่ปลอดภัย หรือ API Route เท่านั้น
+มาตรการ รายละเอียด
+Environment Variables เก็บบน Vercel ไม่มี Secret ในโค้ด
+Supabase RLS เปิดใช้งานทุกตาราง
+CSP Headers ตั้งค่าใน vercel.json
+X-Frame-Options ป้องกัน Clickjacking
+GitHub Secret Scanning ตรวจจับ Key รั่วไหลอัตโนมัติ
+Rate Limiting จำกัดจำนวน Request ต่อ IP
+No Client Env ห้ามใช้ process.env ในฝั่ง client
 
 ---
 
-🪲 การ Debug และปัญหาที่พบบ่อย
+🐛 การแก้ไขปัญหาที่พบบ่อย
 
 1. API Route Error 500
 
-· สาเหตุอันดับ 1: Environment Variables ยังไม่ได้ตั้งค่าบน Vercel (โดยเฉพาะ NEXT_PUBLIC_SUPABASE_URL)
-· วิธีตรวจสอบ: ดู Runtime Logs ใน Vercel Dashboard → Functions Tab
-· วิธีแก้: เพิ่ม Env ใน Vercel → Redeploy
+· สาเหตุ: Environment Variables ไม่ครบ หรือตั้งค่าผิด
+· แก้ไข: ตรวจสอบ Vercel Dashboard → Functions Tab → ดู Logs
 
 2. supabaseUrl is required
 
-· เกิดจาก process.env.NEXT_PUBLIC_SUPABASE_URL เป็น undefined
-· ตรวจสอบว่าได้ตั้งค่า Environment Variables บน Vercel ครบถ้วนหรือไม่
+· สาเหตุ: NEXT_PUBLIC_SUPABASE_URL ไม่ถูกตั้งค่า
+· แก้ไข: เพิ่ม Environment Variable ใน Vercel และ Redeploy
 
 3. Groq Logs ไม่แสดง
 
-· เช็กว่าได้สร้างตาราง groq_logs ใน Supabase แล้ว (ดูวิธีสร้างได้ใน doc/groq-logs-setup.md)
-· ต้องมี RLS Policy สำหรับ SELECT และ INSERT
+· สาเหตุ: ตาราง groq_logs ไม่มี หรือ RLS Policy ไม่ถูกต้อง
+· แก้ไข: ดูวิธีสร้างใน doc/groq-logs-setup.md
 
-4. Popup ราคา/ส่วนลดยังโผล่
+4. Popup ราคายังโผล่
 
-· เกิดจากใช้ product.js เวอร์ชันเก่า → ดึงโค้ดล่าสุดจาก main branch มาใช้
+· สาเหตุ: ใช้ product.js เวอร์ชันเก่า
+· แก้ไข: ดึงโค้ดล่าสุดจาก main branch
+
+5. CORS Error (Cross-Origin)
+
+· สาเหตุ: เรียก API ข้ามโดเมน
+· แก้ไข: ใช้ relative path /api/... หรือตั้ง CORS ใน vercel.json
 
 ---
 
 📚 เอกสารเพิ่มเติม
 
-ดูรายละเอียดทั้งหมดได้ในโฟลเดอร์ doc/:
+ดูรายละเอียดทั้งหมดได้ในโฟลเดอร์ doc/ :
 
 เอกสาร เนื้อหา
 index.md สารบัญเอกสารทั้งหมด
-supabase-guide.md คู่มือ Supabase ฉบับสมบูรณ์ (RLS, Storage, Policies)
-free-ai-apis.md สรุป Free AI APIs ทั้งหมดที่ใช้ได้จริง
-groq-logs-setup.md การตั้งค่าบันทึกและแสดง Groq API Logs
-security-and-debug.md วิธีการ Debug และความปลอดภัย
-vercel-config.md การตั้งค่า vercel.json และ API Routes
-environment-variables.md รายละเอียด Environment Variables ทั้งหมด
+supabase-guide.md คู่มือ Supabase (RLS, Storage, Policies)
+free-ai-apis.md สรุป Free AI APIs ที่ใช้ได้จริง
+groq-logs-setup.md การตั้งค่า Groq API Logs
+security-and-debug.md ความปลอดภัยและวิธีการ Debug
+vercel-config.md การตั้งค่า vercel.json
+environment-variables.md รายละเอียด Environment Variables
+
+---
+
+🚀 Deploy บน Vercel
+
+https://vercel.com/button
+
+ขั้นตอนการ Deploy
+
+1. Fork หรือ Clone โปรเจกต์นี้
+2. เข้าไปที่ Vercel Dashboard
+3. Import GitHub Repository
+4. ตั้งค่า Environment Variables (ตามหัวข้อด้านบน)
+5. กด Deploy
 
 ---
 
 🤝 การมีส่วนร่วม (Contributing)
 
 ยินดีรับ Pull Request เสมอ!
-ก่อนส่ง PR กรุณาตรวจสอบว่าไม่มี Secret หลุด และผ่านการ Format โค้ดแล้ว
+
+ก่อนส่ง PR:
+
+· ✅ ตรวจสอบว่าไม่มี Secret (API Key) หลุด
+· ✅ Format โค้ดให้เรียบร้อย
+· ✅ ทดสอบกับ Mock Mode ก่อน
+· ✅ อัปเดตเอกสารถ้าจำเป็น
 
 ---
 
 📄 License
 
 MIT License — ดูรายละเอียดใน LICENSE
+
+---
+
+💬 ติดต่อ
+
+· GitHub Issues: สร้าง Issue ใหม่
+· อีเมล: nobizzmaru@gmail.com
+
+---
+
+<div align="center">
+  Made with ❤️ by @snapzreview
+</div>
+```
+
+---
+
+✅ วิธีใช้
+
+1. กด Select All ที่มุมขวาบนของ code block ด้านบน
+2. กด Copy (Ctrl+C หรือ Cmd+C)
+3. เปิดไฟล์ README.md ในโปรเจกต์ของคุณ
+4. วางทับ (Ctrl+V หรือ Cmd+V)
+5. บันทึกไฟล์
+
+หรือถ้าอยู่ใน GitHub:
+
+1. กดปุ่ม Add file → Create new file
+2. ตั้งชื่อไฟล์เป็น README.md
+3. วางโค้ดด้านบน
+4. กด Commit changes ที่ด้านล่าง
+
+---
