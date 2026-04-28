@@ -41,5 +41,6 @@ reviews:
       instructions: |
         - ตรวจสอบ coverage และ edge cases
         - ใช้ describe/it ให้เหมาะสม
+exclude_authors: []
 chat:
   auto_reply: true
