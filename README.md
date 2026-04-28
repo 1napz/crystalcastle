@@ -1,253 +1,266 @@
 ```markdown
-# 📹 AI Video Generator - Crystal Castle
+# 🎬 Crystal Castle – AI Video Generator for Social Commerce
 
-> เครื่องมือสร้างวิดีโอสินค้าด้วย AI อัปโหลดรูป → AI เขียน Prompt → สร้างวิดีโอ → พร้อมแชร์ลง TikTok/Shopee ทันที  
-> **มีระบบ Slideshow ฟรีในตัว!**
+> Turn product images into engaging AI‑generated videos with auto‑written captions.  
+> Ready for TikTok, Shopee, and other social platforms.  
+> **Includes a free built‑in slideshow mode!**
 
-
----
-
-## ✨ ฟีเจอร์หลัก
-
-| ฟีเจอร์ | สถานะ | รายละเอียด |
-|--------|--------|-------------|
-| 🖼️ อัปโหลดรูปสินค้า | ✅ เสร็จ | รองรับสูงสุด 10 รูป, ไฟล์ไม่เกิน 6MB |
-| 🤖 AI สร้าง Prompt | ✅ พร้อม | Groq (Llama 3.3 70B) + Gemini fallback |
-| 📝 AI สร้างแคปชั่น | ✅ พร้อม | แคปชั่นภาษาไทย + hashtag อัตโนมัติ |
-| 🎬 สร้างวิดีโอ | ✅ พร้อม | FAL Kling / Magic Hour |
-| 🎞️ สไลด์โชว์ฟรี | ✅ พร้อม | ไม่ใช้ AI, ทำได้ทันที |
-| 📱 รองรับมือถือ | ✅ เสร็จ | UI ปรับใหม่ด้วย Tailwind CSS |
-| 📊 Groq Logs | ✅ ใหม่ | แสดง Log การเรียก AI แบบ real-time |
-| 🔄 Fallback AI | ✅ ใหม่ | Groq ล่ม → ใช้ Gemini อัตโนมัติ |
-| 🔒 ความปลอดภัย | ✅ เสร็จ | CSP Headers, RLS, Rate Limiting |
-| 🏷️ แบรนด์ | ✅ | @snapzreview ทั่วทั้งแอป |
+[![Vercel Deploy](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)](https://vercel.com/new/clone?repository-url=https://github.com/1napz/crystalcastle)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub issues](https://img.shields.io/github/issues/1napz/crystalcastle)](https://github.com/1napz/crystalcastle/issues)
 
 ---
 
-## 🛠️ เทคโนโลยีที่ใช้
+## ✨ Key Features
 
-| ส่วน | เทคโนโลยี |
-|------|-----------|
-| **Frontend** | HTML5 + Tailwind CSS + Vanilla JS |
-| **Backend** | Next.js API Routes (Serverless บน Vercel) |
+| Feature | Status | Description |
+|---------|--------|-------------|
+| 🖼️ Product image upload | ✅ Done | Drag & drop, up to 10 images, max 6MB each |
+| 🤖 AI prompt generation | ✅ Live | Groq (Llama 3.3 70B) + Gemini fallback |
+| 📝 AI caption generation | ✅ Live | Thai/English captions + hashtags automatically |
+| 🎬 Video generation | ✅ Live | FAL Kling / Magic Hour (selectable) |
+| 🎞️ Free slideshow | ✅ Live | Instant non‑AI video from uploaded images |
+| 📱 Mobile responsive | ✅ Done | Modern Tailwind CSS + dark mode |
+| 📊 Groq usage logs | ✅ New | Real‑time AI call logs |
+| 🔄 Automatic fallback | ✅ New | Groq fails → Gemini takes over |
+| 🔒 Security hardening | ✅ Done | CSP headers, RLS, rate limiting |
+| 🏷️ Branding | ✅ | `@snapzreview` across the app |
+| 🌙 Dark mode | ✅ New | User preference + system detection |
+| 🎨 Modern UI | ✅ New | Two‑column layout, engine card selector, action log |
+
+---
+
+## 🛠️ Tech Stack
+
+| Area | Technology |
+|------|-------------|
+| **Frontend** | HTML5 + Tailwind CSS + Vanilla JS (no framework) |
+| **Backend** | Next.js API Routes (serverless on Vercel) |
 | **Database & Storage** | Supabase (PostgreSQL + Storage) |
 | **AI Models** | Groq (Llama 3.3), Gemini (fallback), FAL Kling, Magic Hour |
-| **Deployment** | Vercel (CI/CD จาก GitHub) |
+| **Deployment** | Vercel (CI/CD from GitHub) |
 
 ---
 
-## 📦 การติดตั้งและรันในเครื่อง
+## 📸 UI Preview
 
-### ความต้องการเบื้องต้น
+- **Two‑column desktop layout** – controls on left, preview & output on right.
+- **Drag & drop upload zone** – visual feedback, image counter.
+- **Radio card engine selector** – FAL Kling vs Magic Hour with descriptions.
+- **Live action log** – timestamped status messages.
+- **Dark mode toggle** – persistent across sessions.
+
+---
+
+## 📦 Local Development
+
+### Prerequisites
+
 - Node.js 18+ 
-- บัญชี Supabase (ฟรี)
-- API Keys: Groq (จำเป็น), FAL/Magic Hour (สำหรับสร้างวิดีโอ)
+- Supabase account (free tier works)
+- API keys: Groq (required), FAL / Magic Hour (for video generation)
 
-### ขั้นตอนการติดตั้ง
+### Setup
 
 ```bash
-# 1. Clone โปรเจกต์
+# 1. Clone the repository
 git clone https://github.com/1napz/crystalcastle.git
 cd crystalcastle
 
-# 2. ติดตั้ง dependencies
+# 2. Install dependencies
 npm install
 
-# 3. คัดลอก Environment Variables ตัวอย่าง
+# 3. Copy example environment file
 cp .env.example .env.local
 
-# 4. แก้ไข .env.local ด้วยค่าจริงของคุณ (ดูรายละเอียดด้านล่าง)
+# 4. Edit `.env.local` with your real keys (see below)
 
-# 5. รัน Development Server
+# 5. Start development server
 npm run dev
 ```
 
-เปิด http://localhost:3000 ในเบราว์เซอร์
+Open http://localhost:3000 in your browser.
 
 ---
 
-⚙️ การตั้งค่า Environment Variables
+⚙️ Environment Variables
 
-ตัวแปรที่จำเป็น (ต้องมี)
+Required
 
 ```bash
-# Supabase (จำเป็น)
+# Supabase (required)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
 
-# Groq AI (จำเป็น)
+# Groq AI (required)
 GROQ_API_KEY=gsk_your_groq_api_key_here
 ```
 
-ตัวแปรเสริม (แนะนำให้เพิ่ม)
+Optional (but recommended)
 
 ```bash
-# Fallback AI (เมื่อ Groq ล่ม)
+# Fallback AI (when Groq is down)
 GEMINI_API_KEY=AIzaSy...
 
-# สำหรับสร้างวิดีโอ (เลือกอย่างน้อย 1 ตัว)
+# Video generation (at least one)
 FAL_KEY=fal_your_key_here
 MAGIC_HOUR_API_KEY=mh_your_key_here
 
-# Supabase Admin (ใช้ใน API routes เท่านั้น)
+# Supabase admin (for API routes only)
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...
 
-# โหมดพัฒนา (ใช้เฉพาะ local)
-NEXT_PUBLIC_USE_MOCK=true   # เปิดใช้งาน Mock Mode
+# Development only
+NEXT_PUBLIC_USE_MOCK=true   # Enable mock mode
 ```
 
-📘 ดูรายละเอียดทั้งหมดได้ใน doc/environment-variables.md
+Full reference: doc/environment-variables.md
 
 ---
 
-🧪 Mock Mode (ทดสอบแบบไม่เสียเครดิต)
+🧪 Mock Mode (Test Without Using Credits)
 
-สำหรับการทดสอบบนเครื่อง local โดยไม่ต้องใช้ API จริง:
+Run locally without consuming real API quotas:
 
 ```bash
-# รันด้วย Mock Mode
+# Start with mock mode enabled
 npm run dev:mock
 
-# หรือตั้งค่าใน .env.local
+# Or set in .env.local
 NEXT_PUBLIC_USE_MOCK=true
 ```
 
-เมื่อเปิด Mock Mode:
+When mock mode is active:
 
-· ✅ ใช้วิดีโอตัวอย่างแทนการสร้างจริง
-· ✅ ใช้ Prompt Template แทนการเรียก Groq
-· ✅ ไม่เสียเครดิต FAL/Magic Hour
-· ⚠️ มี Badge 🔮 MOCK MODE แสดงที่มุมจอ
+· ✅ Fake video files are used instead of real generation
+· ✅ Prompt templates replace Groq API calls
+· ✅ No FAL / Magic Hour credits are consumed
+· ⚠️ A 🔮 MOCK MODE badge appears on screen
 
 ---
 
-📂 โครงสร้างโปรเจกต์
+📂 Project Structure
 
 ```
 crystalcastle/
-├── api/                    # Next.js API Routes
+├── api/                    # Next.js API routes
 │   ├── prompt.js          # Groq + Gemini fallback
 │   ├── video.js           # FAL Kling
 │   ├── magichour.js       # Magic Hour
-│   ├── post.js            # สร้างแคปชั่น
-│   ├── upload.js          # อัปโหลดรูปไป Supabase
-│   ├── get-logs.js        # ดึง Groq Logs
-│   └── artifacts.js       # GET/POST ผลงาน
-├── public/                # ไฟล์ Static (CSS, รูป, Mock)
-├── doc/                   # เอกสารทั้งหมด
-├── .github/               # GitHub Actions
-├── src/
-│   ├── config/            # Environment config
-│   ├── mocks/             # Mock API responses
-│   ├── services/          # Video service (auto switch mock/real)
-│   └── utils/             # Helper functions
-├── lib/supabase/          # Supabase client (browser + server)
-├── index.html             # หน้า Home
-├── product.html           # หน้า Studio
-├── product.js             # ฟังก์ชันหลัก (อัปเดตล่าสุด)
+│   ├── post.js            # Caption generation
+│   ├── upload.js          # Image upload to Supabase
+│   ├── get-logs.js        # Groq logs retrieval
+│   └── artifacts.js       # GET/POST user artifacts
+├── public/                # Static files (CSS, images, mock data)
+├── doc/                   # All documentation
+├── .github/               # GitHub Actions workflows
+├── src/                   # Frontend source (optional)
+├── lib/supabase/          # Supabase client (browser and server)
+├── index.html             # Home page (optional)
+├── product.html           # Studio page (NEW UI)
+├── product.js             # Main logic (legacy, replaced by inline script but kept for reference)
 ├── supabase-client.js     # Supabase connector
 ├── middleware.ts          # Auth + route protection
-├── vercel.json            # Vercel config (CSP, Headers)
-├── .env.example           # Template environment
+├── vercel.json            # Vercel config (CSP, headers)
+├── .env.example           # Environment template
 └── README.md
 ```
 
 ---
 
-🔒 ความปลอดภัย
+🔒 Security
 
-มาตรการ รายละเอียด
-Environment Variables เก็บบน Vercel ไม่มี Secret ในโค้ด
-Supabase RLS เปิดใช้งานทุกตาราง
-CSP Headers ตั้งค่าใน vercel.json
-X-Frame-Options ป้องกัน Clickjacking
-GitHub Secret Scanning ตรวจจับ Key รั่วไหลอัตโนมัติ
-Rate Limiting จำกัดจำนวน Request ต่อ IP
-No Client Env ห้ามใช้ process.env ในฝั่ง client
+Measure Implementation
+Environment variables Stored on Vercel – no secrets in code
+Supabase RLS Enabled on all tables
+CSP headers Configured in vercel.json
+X-Frame-Options Prevents clickjacking
+GitHub secret scanning Automatically detects leaked keys
+Rate limiting Limits requests per IP (via Upstash)
+No client env No process.env exposed on client side
 
 ---
 
-🐛 การแก้ไขปัญหาที่พบบ่อย
+🐛 Troubleshooting Common Issues
 
-1. API Route Error 500
+1. API route returns 500
 
-· สาเหตุ: Environment Variables ไม่ครบ หรือตั้งค่าผิด
-· แก้ไข: ตรวจสอบ Vercel Dashboard → Functions Tab → ดู Logs
+· Cause: Missing or incorrect environment variables.
+· Fix: Check Vercel Dashboard → Functions tab → View logs.
 
 2. supabaseUrl is required
 
-· สาเหตุ: NEXT_PUBLIC_SUPABASE_URL ไม่ถูกตั้งค่า
-· แก้ไข: เพิ่ม Environment Variable ใน Vercel และ Redeploy
+· Cause: NEXT_PUBLIC_SUPABASE_URL not set.
+· Fix: Add the variable in Vercel and redeploy.
 
-3. Groq Logs ไม่แสดง
+3. Groq logs not showing
 
-· สาเหตุ: ตาราง groq_logs ไม่มี หรือ RLS Policy ไม่ถูกต้อง
-· แก้ไข: ดูวิธีสร้างใน doc/groq-logs-setup.md
+· Cause: Missing groq_logs table or incorrect RLS policies.
+· Fix: See doc/groq-logs-setup.md.
 
-4. Popup ราคายังโผล่
+4. Dark mode not persisting
 
-· สาเหตุ: ใช้ product.js เวอร์ชันเก่า
-· แก้ไข: ดึงโค้ดล่าสุดจาก main branch
+· Cause: Local storage blocked or browser privacy settings.
+· Fix: Ensure localStorage is enabled; fallback to system preference.
 
-5. CORS Error (Cross-Origin)
+5. CORS errors
 
-· สาเหตุ: เรียก API ข้ามโดเมน
-· แก้ไข: ใช้ relative path /api/... หรือตั้ง CORS ใน vercel.json
-
----
-
-📚 เอกสารเพิ่มเติม
-
-ดูรายละเอียดทั้งหมดได้ในโฟลเดอร์ doc/ :
-
-เอกสาร เนื้อหา
-index.md สารบัญเอกสารทั้งหมด
-supabase-guide.md คู่มือ Supabase (RLS, Storage, Policies)
-free-ai-apis.md สรุป Free AI APIs ที่ใช้ได้จริง
-groq-logs-setup.md การตั้งค่า Groq API Logs
-security-and-debug.md ความปลอดภัยและวิธีการ Debug
-vercel-config.md การตั้งค่า vercel.json
-environment-variables.md รายละเอียด Environment Variables
+· Cause: Cross‑origin API calls.
+· Fix: Use relative paths /api/... or configure CORS in vercel.json.
 
 ---
 
-🚀 Deploy บน Vercel
+📚 Full Documentation
+
+All detailed guides are in the doc/ folder:
+
+Document Content
+index.md Table of contents
+supabase-guide.md Supabase setup (RLS, storage, policies)
+free-ai-apis.md Usable free AI APIs
+groq-logs-setup.md Setting up Groq API logs
+security-and-debug.md Security hardening & debugging
+vercel-config.md Vercel configuration
+environment-variables.md All environment variables explained
+
+---
+
+🚀 Deploy on Vercel
 
 https://vercel.com/button
 
-ขั้นตอนการ Deploy
+Steps
 
-1. Fork หรือ Clone โปรเจกต์นี้
-2. เข้าไปที่ Vercel Dashboard
-3. Import GitHub Repository
-4. ตั้งค่า Environment Variables (ตามหัวข้อด้านบน)
-5. กด Deploy
+1. Fork or clone this repository.
+2. Go to Vercel Dashboard.
+3. Import your GitHub repository.
+4. Add the required environment variables (see above).
+5. Click Deploy.
 
 ---
 
-🤝 การมีส่วนร่วม (Contributing)
+🤝 Contributing
 
-ยินดีรับ Pull Request เสมอ!
+Pull requests are welcome!
 
-ก่อนส่ง PR:
+Before submitting a PR:
 
-· ✅ ตรวจสอบว่าไม่มี Secret (API Key) หลุด
-· ✅ Format โค้ดให้เรียบร้อย
-· ✅ ทดสอบกับ Mock Mode ก่อน
-· ✅ อัปเดตเอกสารถ้าจำเป็น
+· ✅ Ensure no secrets (API keys) are committed.
+· ✅ Format your code properly.
+· ✅ Test with mock mode enabled.
+· ✅ Update documentation if needed.
 
 ---
 
 📄 License
 
-MIT License — ดูรายละเอียดใน LICENSE
+MIT License – see the LICENSE file for details.
 
 ---
 
-💬 ติดต่อ
+💬 Contact
 
-· GitHub Issues: สร้าง Issue ใหม่
-· อีเมล: nobizzmaru@gmail.com
+· GitHub Issues: Create a new issue
+· Email: nobizzmaru@gmail.com
 
 ---
 
@@ -256,4 +269,11 @@ MIT License — ดูรายละเอียดใน LICENSE
 </div>
 ```
 
----
+This updated README includes:
+
+· New UI features (drag‑and‑drop, dark mode, engine selector, action log)
+· Updated project structure notes
+· Troubleshooting entry for dark mode persistence
+· Consistent formatting and badges
+
+You can replace your existing README.md with this content. If you need a specific section changed or additional details added (e.g., screenshots, video demo link), just let me know.
