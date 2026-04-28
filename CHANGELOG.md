@@ -8,22 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- (ตัวอย่าง: เพิ่มฟีเจอร์ AI fallback chain แบบ dynamic โดยใช้ LiteLLM proxy)
+
+No changes
 
 ### Changed
-- (ตัวอย่าง: ปรับปรุงประสิทธิภาพการโหลดหน้า product.html)
+
+No changes
 
 ### Fixed
-- (ตัวอย่าง: แก้ไขบั๊กการแสดงผลบน Safari)
+
+No changes
 
 ### Removed
-- (ตัวอย่าง: ลบการพึ่งพาที่ไม่ใช้แล้ว)
+
+No changes
 
 ---
 
 ## [1.6.0] - 2026-04-28
 
 ### Added
+
 - ระบบสร้างวิดีโอแบบอะซิงโครนัส (Async video generation) โดยใช้ Upstash QStash + Supabase เพื่อแก้ปัญหา timeout ของ Vercel Hobby Plan (10 วินาที)
   - `POST /api/generate-video` สำหรับสร้าง task และส่งงานไปยังคิว
   - `POST /api/process-video` สำหรับ worker ที่เรียก FAL/Magic Hour ในพื้นหลัง
@@ -40,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ไฟล์ตัวอย่าง environment variables (`.env.example`) ที่สมบูรณ์ พร้อมทั้งคีย์ที่จำเป็นและคีย์เสริม
 
 ### Changed
+
 - ปรับปรุง `vercel.json` ให้เหมาะสมกับแผน Hobby Plan:
   - ลบ `ignoreCommand` ที่ไม่รองรับ
   - ตั้ง `maxDuration: 10` สำหรับ API routes ทั้งหมด (ค่าสูงสุดที่ใช้ได้ในแผนฟรี)
@@ -53,11 +59,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - กำหนดมาตรฐาน Prettier (`.prettierrc`) ให้ใช้ single quotes, trailing commas แบบ `es5`, และความกว้างบรรทัด 100
 
 ### Fixed
+
 - แก้ไขข้อขัดแย้งระหว่าง ESLint และ Prettier โดยเพิ่ม `eslint-config-prettier` และปิดกฎที่ซ้ำซ้อน
 - แก้ไข syntax error ในฟังก์ชัน `updateFilename()` ภายในไฟล์ `product.js`
 - ทำให้ `.env.local` ถูก ignore อย่างถูกต้อง (เพิ่มใน `.gitignore` และ `.prettierignore`)
 
 ### Removed
+
 - ลบ `ignoreCommand` ออกจาก `vercel.json` (ไม่รองรับในแผน Hobby)
 - ลบป๊อปอัปเกี่ยวกับราคา/ส่วนลด (ถูกลบไปแล้วในเวอร์ชันก่อนหน้า)
 
@@ -66,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.5.0] - 2026-04-26
 
 ### Added
+
 - ตัวเลือกเมนูแบบเลื่อนลง (dropdown) สำหรับเลือก AI Video Engine (FAL, Runway, Pika, Nexa, WaveSpeed) ใน UI
 - API endpoint `/api/generate-video` รองรับหลาย video engines
 - Security Headers (CSP, X-Frame-Options, Permissions-Policy)
@@ -76,18 +85,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ระบบ AI สำรอง (Fallback) Groq → Gemini
 
 ### Changed
+
 - อัปเดต `product.html`: เปลี่ยนจากปุ่ม Kling/Magic เป็นตัวเลือกแบบ dropdown
 - อัปเดต `product.js` ให้รองรับการเลือก engine
 - เปลี่ยนแบรนด์โปรเจกต์เป็น `@snapzreview`
 - ปรับปรุง `vercel.json` เพิ่มการตั้งค่า `maxDuration`
 
 ### Fixed
+
 - แก้ไขปัญหา Vercel build ล้มเหลว (ลดจำนวน serverless functions ให้เหลือ ≤12)
 - ลบป๊อปอัปเรื่องราคา/ส่วนลดที่น่ารำคาญ
 
 ---
 
 ## [1.4.0] - ก่อนหน้านี้
+
 - เปิดตัวโปรเจกต์ครั้งแรก
 - อัปโหลดรูปภาพ, สร้าง Prompt, สร้างวิดีโอด้วย FAL/Magic Hour
 - เชื่อมต่อ Supabase (Storage, Authentication, RLS)
