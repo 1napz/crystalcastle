@@ -1,16 +1,14 @@
-# .coderabbit.yaml
-language: "th"
-early_access: false
+#.coderabbit.yaml
 reviews:
-  profile: "chill"                      # เปลี่ยนเป็น chill เพื่อเริ่มต้นแบบนุ่มนวล
-  request_changes_workflow: true
+  profile: request_changes_workflow # moved here
   high_level_summary: true
   poem: false
   review_status: true
   review_details: true
   auto_review:
     enabled: true
-    drafts: false                       # ปิดการรีวิว Draft PR
+    drafts: false # ปิดการรีวิว Draft PR - was true before
+
   path_filters:
     - "!docs/"
     - "!public/"
@@ -19,6 +17,7 @@ reviews:
     - "!*.lock"
     - "!**/__tests__/**"
     - "!**/*.test.js"
+
   path_instructions:
     - path: "api/**/*.js"
       instructions: |
@@ -37,10 +36,11 @@ reviews:
         - ตรวจสอบ MD022 (blank lines after headings)
         - ตรวจสอบ MD047 (single trailing newline)
         - [Unreleased] ต้องมี reference link (compare v1.6.0...HEAD)
-    - path: "**/*.test.js"
       instructions: |
         - ตรวจสอบ coverage และ edge cases
         - ใช้ describe/it ให้เหมาะสม
+
 exclude_authors: []
+
 chat:
   auto_reply: true
