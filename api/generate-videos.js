@@ -17,7 +17,7 @@ const TIMEOUTS = {
 // Supabase client for logging
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 export default async function handler(req, res) {
@@ -114,7 +114,7 @@ export default async function handler(req, res) {
 
 // -------------------- FAL Implementation --------------------
 async function generateWithFAL(image_url, prompt, signal) {
-  const response = await fetch('https://api.fal.ai/v1/image-to-video', {
+  const response = await fetch('https://api.fal.ai/v1/kling/generation', {
     method: 'POST',
     headers: {
       'Authorization': `Key ${process.env.FAL_KEY}`,
@@ -123,7 +123,8 @@ async function generateWithFAL(image_url, prompt, signal) {
     body: JSON.stringify({ 
       image_url, 
       prompt,
-      sync_mode: false // Use async mode
+      duration: 6,
+      sync_mode: false
     }),
     signal,
   });
@@ -135,12 +136,12 @@ async function generateWithFAL(image_url, prompt, signal) {
 
   const data = await response.json();
   
-  // If video is ready immediately
+
   if (data.video_url) {
     return { videoUrl: data.video_url };
   }
   
-  // Otherwise poll for completion
+
   if (data.request_id) {
     const videoUrl = await pollFALTask(data.request_id, signal);
     return { videoUrl, taskId: data.request_id };
