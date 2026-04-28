@@ -1,6 +1,6 @@
 {
   "name": "crystalcastle",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "description": "AI Video Generator for TikTok Shop",
   "private": true,
   "scripts": {
@@ -12,7 +12,15 @@
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --fix",
-    "type-check": "tsc --noEmit"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky install",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:major": "standard-version --release-as major",
+    "postrelease": "git push --follow-tags origin main"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.0",
@@ -24,9 +32,15 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5",
+    "standard-version": "^9.5.0",
     "typescript": "^5"
   }
 }
