@@ -1,368 +1,192 @@
 // api/generate-video.js
 import { createClient } from '@supabase/supabase-js';
 
-// Supported engines
-const SUPPORTED_ENGINES = ['fal', 'magic', 'runway', 'pika', 'nexa', 'wavespeed'];
+// ----------------------------------------------------------------------
+// 1. Configuration & Environment Validation
+// ----------------------------------------------------------------------
+const SUPPORTED_ENGINES = ['fal', 'magic'];         // engines ที่เปิดใช้งานจริง
+const FALLBACK_CHAIN = { fal: 'magic', magic: null }; // ถ้า fal ล้ม ให้ลอง magic
 
-// Timeouts per engine (milliseconds)
 const TIMEOUTS = {
-  fal: 120000,    // 2 minutes
+  fal: 120000,   // 2 minutes
   magic: 120000,
-  runway: 180000, // 3 minutes
-  pika: 180000,
-  nexa: 180000,
-  wavespeed: 180000,
+  // runway: 180000,
+  // pika: 180000,
+  // nexa: 180000,
+  // wavespeed: 180000,
 };
 
-// Supabase client for logging
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!supabaseUrl || !supabaseServiceKey) {
+  throw new Error('Missing Supabase environment variables for server');
+}
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+// ----------------------------------------------------------------------
+// 2. Main Handler
+// ----------------------------------------------------------------------
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { image_url, prompt, filename, engine = 'fal' } = req.body;
 
-  // Validate required fields
   if (!image_url || !prompt) {
-    return res.status(400).json({ 
-      error: 'Missing required fields: image_url, prompt' 
-    });
+    return res.status(400).json({ error: 'Missing required fields: image_url, prompt' });
   }
-
-  // Validate engine
   if (!SUPPORTED_ENGINES.includes(engine)) {
-    return res.status(400).json({ 
-      error: `Unsupported engine: ${engine}. Use one of: ${SUPPORTED_ENGINES.join(', ')}` 
-    });
+    return res.status(400).json({ error: `Unsupported engine: ${engine}. Supported: ${SUPPORTED_ENGINES.join(', ')}` });
   }
 
-  // Setup timeout
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), TIMEOUTS[engine] || 120000);
+  // Fallback logic: ถ้า engine primary ล้ม ให้ลอง fallback engine
+  const enginesToTry = [engine, FALLBACK_CHAIN[engine]].filter(Boolean);
+  let lastError = null;
 
-  try {
-    let result;
-
-    // Route to appropriate engine
-    switch (engine) {
-      case 'fal':
-        result = await generateWithFAL(image_url, prompt, controller.signal);
-        break;
-      case 'magic':
-        result = await generateWithMagicHour(image_url, prompt, controller.signal);
-        break;
-      case 'runway':
-        result = await generateWithRunway(image_url, prompt, controller.signal);
-        break;
-      case 'pika':
-        result = await generateWithPika(image_url, prompt, controller.signal);
-        break;
-      case 'nexa':
-        result = await generateWithNexaAPI(image_url, prompt, controller.signal);
-        break;
-      case 'wavespeed':
-        result = await generateWithWaveSpeed(image_url, prompt, controller.signal);
-        break;
-      default:
-        result = await generateWithFAL(image_url, prompt, controller.signal);
-    }
-
-    // Log to Supabase (optional - don't fail if logging fails)
+  for (const currentEngine of enginesToTry) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), TIMEOUTS[currentEngine]);
     try {
-      await supabase.from('video_logs').insert({
-        engine,
-        prompt,
-        image_url,
-        video_url: result.videoUrl,
-        filename: filename || 'unknown',
-        created_at: new Date().toISOString(),
-      });
-    } catch (logError) {
-      console.error('Log insert error:', logError);
-    }
+      let result;
+      switch (currentEngine) {
+        case 'fal':
+          result = await generateWithFAL(image_url, prompt, controller.signal);
+          break;
+        case 'magic':
+          result = await generateWithMagicHour(image_url, prompt, controller.signal);
+          break;
+        // ----- Engines ที่ยังไม่เปิดใช้งาน (comment ไว้) -----
+        // case 'runway':
+        //   result = await generateWithRunway(image_url, prompt, controller.signal);
+        //   break;
+        // case 'pika':
+        //   result = await generateWithPika(image_url, prompt, controller.signal);
+        //   break;
+        // case 'nexa':
+        //   result = await generateWithNexaAPI(image_url, prompt, controller.signal);
+        //   break;
+        // case 'wavespeed':
+        //   result = await generateWithWaveSpeed(image_url, prompt, controller.signal);
+        //   break;
+        default:
+          throw new Error(`Engine ${currentEngine} not implemented`);
+      }
 
-    return res.status(200).json({
-      success: true,
-      videoUrl: result.videoUrl,
-      taskId: result.taskId || null,
-      engine,
-    });
+      // Log ลง Supabase (ไม่ให้กระทบ response)
+      try {
+        await supabase.from('video_logs').insert({
+          engine: currentEngine,
+          prompt,
+          image_url,
+          video_url: result.videoUrl,
+          filename: filename || 'unknown',
+          created_at: new Date().toISOString(),
+        });
+      } catch (logErr) {
+        console.error('Log insert error:', logErr);
+      }
 
-  } catch (err) {
-    console.error(`[generate-video] ${engine} error:`, err);
-    
-    // Handle timeout specifically
-    if (err.name === 'AbortError') {
-      return res.status(504).json({ 
-        error: `Request timeout after ${TIMEOUTS[engine] / 1000} seconds` 
+      return res.status(200).json({
+        success: true,
+        videoUrl: result.videoUrl,
+        taskId: result.taskId || null,
+        engine: currentEngine,
+        fallbackUsed: currentEngine !== engine,
       });
+    } catch (err) {
+      lastError = err;
+      console.error(`[${currentEngine}] failed:`, err.message);
+      // ถ้ามี fallback engine ต่อไป ให้ลองต่อ
+      if (currentEngine === enginesToTry[enginesToTry.length - 1]) break;
+      // else continue to next engine
+    } finally {
+      clearTimeout(timeout);
     }
-    
-    return res.status(500).json({ 
-      error: err.message || 'Video generation failed' 
-    });
-  } finally {
-    clearTimeout(timeout);
   }
+
+  // ถ้าทุก engine ล้มเหลว
+  return res.status(500).json({
+    error: `All engines failed. Last error: ${lastError?.message || 'Unknown error'}`,
+  });
 }
 
-// -------------------- FAL Implementation --------------------
+// ----------------------------------------------------------------------
+// 3. Engine Implementations (เฉพาะที่ใช้งานได้จริง + comment สำหรับอนาคต)
+// ----------------------------------------------------------------------
+
+// ---------- FAL (Kling) ----------
 async function generateWithFAL(image_url, prompt, signal) {
-  const response = await fetch('https://api.fal.ai/v1/image-to-video', {
+  const falKey = process.env.FAL_KEY;
+  if (!falKey) throw new Error('FAL_KEY is missing');
+
+  const response = await fetch('https://api.fal.ai/v1/kling/generation', {
     method: 'POST',
     headers: {
-      'Authorization': `Key ${process.env.FAL_KEY}`,
+      'Authorization': `Key ${falKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 
-      image_url, 
-      prompt,
-      sync_mode: false // Use async mode
-    }),
+    body: JSON.stringify({ image_url, prompt, duration: 6, aspect_ratio: '9:16' }),
     signal,
   });
-
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
-    throw new Error(err.detail || 'FAL API request failed');
+    throw new Error(err.detail || err.message || `FAL API error: ${response.status}`);
   }
-
   const data = await response.json();
-  
-  // If video is ready immediately
-  if (data.video_url) {
-    return { videoUrl: data.video_url };
-  }
-  
-  // Otherwise poll for completion
+  if (data.video_url) return { videoUrl: data.video_url };
   if (data.request_id) {
     const videoUrl = await pollFALTask(data.request_id, signal);
     return { videoUrl, taskId: data.request_id };
   }
-  
   throw new Error('Unexpected FAL response format');
 }
 
 async function pollFALTask(requestId, signal) {
-  const maxAttempts = 30;
-  const pollInterval = 5000; // 5 seconds
-  
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+  const falKey = process.env.FAL_KEY;
+  for (let attempt = 0; attempt < 30; attempt++) {
     const res = await fetch(`https://api.fal.ai/v1/requests/${requestId}`, {
-      headers: { 'Authorization': `Key ${process.env.FAL_KEY}` },
+      headers: { 'Authorization': `Key ${falKey}` },
       signal,
     });
-    
-    if (!res.ok) {
-      throw new Error(`FAL polling failed: ${res.status}`);
-    }
-    
+    if (!res.ok) throw new Error(`FAL polling failed: ${res.status}`);
     const data = await res.json();
-    
     if (data.status === 'COMPLETED') {
       const videoUrl = data.output?.video_url || data.output?.video;
       if (videoUrl) return videoUrl;
-      throw new Error('FAL completed but no video URL found');
+      throw new Error('FAL completed but no video URL');
     }
-    
-    if (data.status === 'FAILED') {
-      throw new Error(`FAL task failed: ${data.error || 'Unknown error'}`);
-    }
-    
-    // Wait before next poll
-    await new Promise(resolve => setTimeout(resolve, pollInterval));
+    if (data.status === 'FAILED') throw new Error(`FAL task failed: ${data.error}`);
+    await new Promise(r => setTimeout(r, 5000));
   }
-  
-  throw new Error('FAL polling timeout after 30 attempts');
+  throw new Error('FAL polling timeout');
 }
 
-// -------------------- Magic Hour Implementation --------------------
+// ---------- Magic Hour ----------
 async function generateWithMagicHour(image_url, prompt, signal) {
-  const response = await fetch('https://api.magichour.ai/v1/video', {
+  const magicKey = process.env.MAGIC_HOUR_API_KEY;
+  if (!magicKey) throw new Error('MAGIC_HOUR_API_KEY is missing');
+
+  const response = await fetch('https://api.magichour.ai/v1/video/generate', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${process.env.MAGIC_HOUR_API_KEY}`,
+      'Authorization': `Bearer ${magicKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 
-      image_url, 
-      prompt,
-      duration: 6
-    }),
+    body: JSON.stringify({ image_url, prompt, duration: 6, aspect_ratio: '9:16' }),
     signal,
   });
-  
-  if (!response.ok) {
-    throw new Error(`Magic Hour API error: ${response.status}`);
-  }
-  
+  if (!response.ok) throw new Error(`Magic Hour API error: ${response.status}`);
   const data = await response.json();
-  
-  if (!data.url) {
-    throw new Error('Magic Hour response missing video URL');
-  }
-  
-  return { videoUrl: data.url };
-}
-
-// -------------------- Runway Implementation --------------------
-async function generateWithRunway(image_url, prompt, signal) {
-  const response = await fetch('https://api.runwayml.com/v1/image-to-video', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.RUNWAYML_API_SECRET}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'gen4_turbo',
-      promptText: prompt,
-      promptImage: image_url,
-      ratio: '9:16',
-    }),
-    signal,
-  });
-  
-  if (!response.ok) {
-    throw new Error(`Runway API error: ${response.status}`);
-  }
-  
-  const data = await response.json();
-  
-  if (data.id) {
-    const videoUrl = await pollRunwayTask(data.id, signal);
-    return { videoUrl, taskId: data.id };
-  }
-  
-  throw new Error('Runway response missing task ID');
-}
-
-async function pollRunwayTask(taskId, signal) {
-  const maxAttempts = 30;
-  const pollInterval = 10000; // 10 seconds
-  
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const res = await fetch(`https://api.runwayml.com/v1/tasks/${taskId}`, {
-      headers: { 'Authorization': `Bearer ${process.env.RUNWAYML_API_SECRET}` },
-      signal,
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Runway polling failed: ${res.status}`);
-    }
-    
-    const data = await res.json();
-    
-    if (data.status === 'SUCCEEDED') {
-      const videoUrl = data.output?.video;
-      if (videoUrl) return videoUrl;
-      throw new Error('Runway completed but no video URL');
-    }
-    
-    if (data.status === 'FAILED') {
-      throw new Error('Runway task failed');
-    }
-    
-    await new Promise(resolve => setTimeout(resolve, pollInterval));
-  }
-  
-  throw new Error('Runway polling timeout');
-}
-
-// -------------------- Pika Implementation --------------------
-async function generateWithPika(image_url, prompt, signal) {
-  const response = await fetch('https://api.pika.art/v1/image-to-video', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.PIKA_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      prompt,
-      image_url,
-      duration: 6,
-      aspect_ratio: '9:16',
-    }),
-    signal,
-  });
-  
-  if (!response.ok) {
-    throw new Error(`Pika API error: ${response.status}`);
-  }
-  
-  const data = await response.json();
-  const videoUrl = data.video_url || data.url;
-  
-  if (!videoUrl) {
-    throw new Error('Pika response missing video URL');
-  }
-  
+  const videoUrl = data.video_url || data.url || data.output?.video;
+  if (!videoUrl) throw new Error('Magic Hour response missing video URL');
   return { videoUrl };
 }
 
-// -------------------- NexaAPI Implementation --------------------
-async function generateWithNexaAPI(image_url, prompt, signal) {
-  const response = await fetch('https://api.nexa-api.com/v1/video/generate', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.NEXA_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'veo3',
-      prompt,
-      image_url,
-      duration: 8,
-      resolution: '1080p',
-      aspect_ratio: '9:16',
-    }),
-    signal,
-  });
-  
-  if (!response.ok) {
-    throw new Error(`NexaAPI error: ${response.status}`);
-  }
-  
-  const data = await response.json();
-  
-  if (!data.url) {
-    throw new Error('NexaAPI response missing video URL');
-  }
-  
-  return { videoUrl: data.url };
-}
-
-// -------------------- WaveSpeed Implementation --------------------
-async function generateWithWaveSpeed(image_url, prompt, signal) {
-  const response = await fetch('https://api.wavespeed.ai/v1/image-to-video', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.WAVESPEED_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'wan-2.1',
-      prompt,
-      image: image_url,
-    }),
-    signal,
-  });
-  
-  if (!response.ok) {
-    throw new Error(`WaveSpeed API error: ${response.status}`);
-  }
-  
-  const data = await response.json();
-  const videoUrl = data.outputs?.[0] || data.url;
-  
-  if (!videoUrl) {
-    throw new Error('WaveSpeed response missing video URL');
-  }
-  
-  return { videoUrl };
-}
+// ---------- Engines ในอนาคต (comment ไว้ พร้อมวิธีเปิดใช้งาน) ----------
+/*
+async function generateWithRunway(image_url, prompt, signal) { ... }
+async function generateWithPika(image_url, prompt, signal) { ... }
+async function generateWithNexaAPI(image_url, prompt, signal) { ... }
+async function generateWithWaveSpeed(image_url, prompt, signal) { ... }
+*/
