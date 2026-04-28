@@ -1,4 +1,4 @@
-name: "Gist Sync"
+name: "GistSync"
 on:
   push:
     branches: [main, master]  # ทำงานเมื่อมีการ push ไปยัง main หรือ master
@@ -17,7 +17,7 @@ jobs:
           GIST_TOKEN: ${{ secrets.GIST_TOKEN }} #  PAT ที่เราสร้างไว้
         with:
           gists: |
-            - id: <GIST_ID>  # ใส่ ID ของ Gist เป้าหมาย (ส่วนท้ายของ URL)
+            - id: GIST_TOKEN # ใส่ ID ของ Gist เป้าหมาย (ส่วนท้ายของ URL)
               description: "My synced file"
               files:
                 - README.md   # ชื่อไฟล์ที่ต้องการ sync
