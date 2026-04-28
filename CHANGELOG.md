@@ -22,6 +22,13 @@
 - Resolved Vercel build failure (reduced serverless functions to ≤12)
 - Removed annoying price/discount popups
 
+## [Unreleased]
+### Added
+- ยังไม่มีการเพิ่มฟีเจอร์ใหม่ในเวอร์ชันนี้
+
+### Changed
+- ยังไม่มีการเปลี่ยนแปลงในเวอร์ชันนี้
+
 ## [1.4.0] - Earlier
 - Initial project launch
 - Upload images, generate prompts, create videos with FAL/Magic Hour
