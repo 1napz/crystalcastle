@@ -1,3 +1,43 @@
+
+# CodeRabbit configuration for crystalcastle
+# Drop this file into the root of your repository as `.coderabbit.yaml`
+
+reviews:
+  paths:
+    include: 
+      - "src/**"        # main source code
+      - "lib/**"        # shared libraries
+    exclude: 
+      - "tests/**"      # skip test files
+      - "docs/**"       # skip documentation
+  checks:
+    - bug               # catch potential bugs
+    - style             # enforce coding style
+    - security          # flag security issues
+    - performance       # highlight inefficiencies
+    - maintainability   # ensure readability and structure
+
+autofix:
+  enabled: true
+  suggestions:
+    - simplify-code
+    - add-docstrings
+    - generate-unit-tests
+
+ci:
+  required: true        # enforce checks before merge
+  fail_on:
+    - bug
+    - security
+
+summary:
+  enabled: true         # PR summaries for quick review
+  walkthrough: true     # step-by-step explanation of changes
+
+notifications:
+  slack: true           # send review updates to Slack
+  github: true          # post comments directly in PRs
+=======
 #.coderabbit.yaml
 reviews:
   profile: request_changes_workflow
@@ -82,3 +122,4 @@ exclude_authors:
 
 chat:
   auto_reply: true
+
