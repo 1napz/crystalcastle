@@ -1,0 +1,21 @@
+# 📌 CODEOWNERS file
+# วางไฟล์นี้ไว้ที่ root ของ repo หรือใน .github/
+
+# กำหนด reviewer หลักสำหรับทุกไฟล์
+*       @1napz
+
+# 🔧 Source code
+/src/   @1napz @team-devs
+
+# 🧪 Tests
+/tests/ @qa-team
+
+# 📚 Documentation
+/docs/  @doc-team
+
+# ⚙️ CI/CD workflows
+.github/workflows/ @devops-team
+
+# 🔐 Security-related files
+/.env*              @security-team
+/security/          @security-team
