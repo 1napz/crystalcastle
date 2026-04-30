@@ -36,5 +36,8 @@ docs/
 4. Pin CrystalCastle on your profile so visitors see this structure immediately.  
 
 ---
-
-Would you like me to draft starter templates for each file (e.g., SECURITY.md, CONTRIBUTING.md, STYLEGUIDE.md) so you can drop them straight into CrystalCastle without writing from scratch?
+###########
+#If have file need to edit/delete/move to (folder).
+Please let me know. 
+by Open Ticket
+############
