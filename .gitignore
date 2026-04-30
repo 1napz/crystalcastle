@@ -10,7 +10,7 @@ build/
 .vercel/
 
 # Environment variables
-
+.env*
 
 
 # IDE
