@@ -20,6 +20,18 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+/**
+ * Handle POST requests to generate a video from an image and text prompt using a selected backend engine.
+ *
+ * Validates required fields, dispatches the generation request to the configured engine, enforces an engine-specific timeout, and returns the generated video's URL and optional task ID. Attempts a best-effort log to Supabase but does not fail the request if logging fails. Responds with appropriate HTTP status codes for method, validation, timeout, and internal errors.
+ *
+ * @param {object} req - HTTP request object. Expects req.body to include:
+ *   - {string} image_url - URL of the source image (required).
+ *   - {string} prompt - Text prompt describing the desired video (required).
+ *   - {string} [filename] - Optional filename to record in logs.
+ *   - {string} [engine='fal'] - Optional engine identifier; must be one of SUPPORTED_ENGINES.
+ * @param {object} res - HTTP response object used to send status and JSON payloads.
+ */
 export default async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -112,7 +124,15 @@ export default async function handler(req, res) {
   }
 }
 
-// -------------------- FAL Implementation --------------------
+/**
+ * Generate a video from a source image and prompt using FAL's Kling generation API.
+ *
+ * @param {string} image_url - URL of the source image to animate.
+ * @param {string} prompt - Text prompt describing the desired video.
+ * @param {AbortSignal} [signal] - Optional AbortSignal to cancel the request.
+ * @returns {{videoUrl: string, taskId?: string}} An object containing the resulting `videoUrl` and, when generation was queued, the FAL `taskId`.
+ * @throws {Error} When the FAL API returns an error response, when the response format is unexpected, or when polling the FAL task fails.
+ */
 async function generateWithFAL(image_url, prompt, signal) {
   const response = await fetch('https://api.fal.ai/v1/kling/generation', {
     method: 'POST',
