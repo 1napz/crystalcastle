@@ -38,3 +38,6 @@ temp/
 # Mock files
 /mocks/local/
 *.mock.js
+
+
+**/dist/**
