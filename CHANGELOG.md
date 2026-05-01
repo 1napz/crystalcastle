@@ -87,6 +87,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+### Added
+- ยังไม่มีการเพิ่มฟีเจอร์ใหม่ในเวอร์ชันนี้
+
+### Changed
+- ยังไม่มีการเปลี่ยนแปลงในเวอร์ชันนี้
+
 ## [1.4.0] - Earlier
 - เปิดตัวโปรเจกต์ครั้งแรก
 - อัปโหลดรูปภาพ, สร้าง Prompt, สร้างวิดีโอด้วย FAL/Magic Hour
