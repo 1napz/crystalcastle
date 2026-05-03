@@ -22,8 +22,8 @@
 
   <header class="mb-10">
     <div class="flex justify-between items-center mb-4">
-      <a href="/artifacts.html" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm px-4 py-2 rounded-full">📁 ผลงานทั้งหมด</a>
-      <a href="/login.html" class="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-2 rounded-full">🔐 เข้าสู่ระบบ</a>
+      <a href="./artifacts.html" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm px-4 py-2 rounded-full">📁 ผลงานทั้งหมด</a>
+      <a href="./login.html" class="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-2 rounded-full">🔐 เข้าสู่ระบบ</a>
     </div>
     <div class="text-center">
       <div class="inline-block p-4 rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm mb-4">
@@ -35,7 +35,7 @@
   </header>
 
   <div class="grid md:grid-cols-3 gap-5 mb-10">
-    <a href="/product.html" class="group bg-gradient-to-br from-purple-600 to-pink-600 p-[1.5px] rounded-2xl hover:scale-[1.02]">
+    <a href="./product.html" class="group bg-gradient-to-br from-purple-600 to-pink-600 p-[1.5px] rounded-2xl hover:scale-[1.02]">
       <div class="bg-gray-900 rounded-2xl p-6 h-full">
         <div class="text-4xl mb-3">🎬</div>
         <h2 class="text-xl font-bold mb-2">เปิด Studio</h2>
@@ -54,7 +54,7 @@
         <button id="refreshStatusBtn" class="bg-gray-800 hover:bg-gray-700 text-xs px-3 py-1.5 rounded-full">🔄 รีเฟรช</button>
       </div>
     </div>
-    <a href="/artifact.html" class="group bg-gradient-to-br from-emerald-600 to-teal-600 p-[1.5px] rounded-2xl hover:scale-[1.02]">
+    <a href="./artifact.html" class="group bg-gradient-to-br from-emerald-600 to-teal-600 p-[1.5px] rounded-2xl hover:scale-[1.02]">
       <div class="bg-gray-900 rounded-2xl p-6 h-full">
         <div class="text-4xl mb-3">📁</div>
         <h2 class="text-xl font-bold mb-2">ผลงานของฉัน</h2>
@@ -86,7 +86,7 @@
     list.innerHTML = '';
     const endpoints = [
       { name: '🤖 Gen Prompt', path: '/api/prompt', method: 'POST', testBody: { prompt: 'test' } },
-      { name: '📝 Generate Post', path: '/api/post', method: 'POST', testBody: { prompt: 'test', brand: 'test', category: 'test' } },
+      { name: '📝 Generate Post', path: './api/post', method: 'POST', testBody: { prompt: 'test', brand: 'test', category: 'test' } },
       { name: '🎬 FAL Kling', path: '/api/video', method: 'POST', testBody: { image_url: 'https://example.com/test.jpg', prompt: 'test' } },
       { name: '✨ Magic Hour', path: '/api/magichour', method: 'POST', testBody: { image_url: 'https://example.com/test.jpg', prompt: 'test' } }
     ];
