@@ -20,18 +20,25 @@
 
 ---
 
-## [1.6.0] - 2026-04-28
-... (ตามที่คุณมีอยู่แล้ว)
+## [1.1.0] - 2026-05-05
+### 🚀 Added
+- ปรับปรุง Studio UI ให้รองรับการ preview video แบบ real-time
+- เพิ่มระบบ notification ผ่าน Telegram integration
+- ปรับปรุง Agent Dashboard ให้แสดงสถานะ engines และ Supabase logs
 
----
+### 🔒 Security & Privacy
+- เพิ่มการตรวจสอบ API key validity ใน CI/CD
+- ปรับปรุง `privacy.yml` ให้รองรับ mock mode
+- เพิ่มการตรวจสอบ secret leakage ใน workflow
 
-## [1.5.0] - 2026-04-26
-... (ตามที่คุณมีอยู่แล้ว)
+### 🛠 Developer Experience
+- เพิ่ม unit tests สำหรับ `engines.js` และ `supabase.js`
+- ปรับปรุง README.md → เพิ่ม badges สำหรับ Build, Privacy Check, Security Scan
+- เพิ่มตัวอย่าง `.env.local` ที่ชัดเจนขึ้นสำหรับ contributor
 
----
-
-## [1.4.0] - Earlier
-... (ตามที่คุณมีอยู่แล้ว)
+### 🐛 Fixed
+- แก้ไข bug ในการเลือก video engine ที่ไม่ sync กับ UI
+- แก้ไข error ของ Supabase logging ที่เกิดจาก key mismatch
 
 ---
 
@@ -56,8 +63,6 @@
 ---
 
 ## 🔗 Compare Links
-[Unreleased]: https://github.com/1napz/crystalcastle/compare/v1.6.0...HEAD  
-[1.6.0]: https://github.com/1napz/crystalcastle/compare/v1.5.0...v1.6.0  
-[1.5.0]: https://github.com/1napz/crystalcastle/compare/v1.4.0...v1.5.0  
-[1.4.0]: https://github.com/1napz/crystalcastle/releases/tag/v1.4.0  
+[Unreleased]: https://github.com/1napz/crystalcastle/compare/v1.1.0...HEAD  
+[1.1.0]: https://github.com/1napz/crystalcastle/compare/v1.0.0...v1.1.0  
 [1.0.0]: https://github.com/1napz/crystalcastle/releases/tag/v1.0.0
