@@ -1,4 +1,4 @@
-# 🚀 Pull Request
+# 🚀 Pull Request – Crystal Castle
 
 ## 📌 Summary
 สรุปสั้น ๆ ว่า PR นี้ทำอะไร / แก้อะไร / ทำไมต้องทำ
@@ -58,8 +58,18 @@ Expected result:
 - [ ] รัน `npm run ci` ผ่านในเครื่อง
 - [ ] ไม่มี console error
 - [ ] Docs อัปเดต (ถ้ามีผลกระทบ)
+- [ ] **Privacy check ผ่าน (`setup-config/privacy.yml` validated)**
+- [ ] **ไม่มีการใช้ฟิลด์ deprecated (`code_scanning_upload`)**
+- [ ] **Security scan ผ่าน (`security-scan.yml`)**
 
 ---
 
 ## 🧠 Notes / Context เพิ่มเติม
 (ใส่ reasoning หรือ trade-off)
+
+---
+
+## 🔎 Governance
+- Reviewer ที่ต้อง approve: **@1napz** + **@supabase**
+- Privacy policy: [`docs/privacy.md`](./docs/privacy.md)
+- Contributor onboarding: [`Contribute.md`](./Contribute.md)
