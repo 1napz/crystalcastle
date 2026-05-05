@@ -1,4 +1,3 @@
-# .github/workflows/coderabbit.yml
 name: CodeRabbit Review
 
 on:
