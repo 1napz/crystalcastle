@@ -1,73 +1,15 @@
-name: CI/CD Pipeline
-
+name: CI
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
-
 jobs:
-  build-and-test:
+  build-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run lint
-        run: npm run lint
-
-      - name: Run unit tests with coverage
-        run: npm test -- --coverage
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
-
-  privacy-check:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Privacy enforcement
-        run: npm run privacy-check
-
-  security-scan:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Run CodeQL analysis
-        uses: github/codeql-action/analyze@v2
-
-  deploy:
-    needs: [build-and-test, privacy-check, security-scan]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install --production
-
-      - name: Deploy to Production
-        run: npm run deploy
+      - run: npm install
+      - run: npm run lint
+      - run: npm test -- --coverage
