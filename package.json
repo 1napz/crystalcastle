@@ -1,20 +1,24 @@
 {
   "name": "crystalcastle",
   "version": "1.4.0",
-  "description": "AI Video Generator for TikTok Shop",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:mock": "NEXT_PUBLIC_USE_MOCK=true next dev",
-    "dev:real": "NEXT_PUBLIC_USE_MOCK=false next dev",
+
     "build": "next build",
-    "build:prod": "NEXT_PUBLIC_USE_MOCK=false next build",
     "start": "next start",
+
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --fix",
+
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "tsc --noEmit"
+
+    "type-check": "tsc --noEmit",
+
+    "test": "echo \"No tests yet\" && exit 0",
+
+    "ci": "npm run type-check && npm run lint && npm run format:check && npm run build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.0",
