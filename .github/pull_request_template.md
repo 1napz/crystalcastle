@@ -1,37 +1,27 @@
-# 📌 Pull Request: Merge i18n.js → product.js
+# 📌 Pull Request Template – Crystal Castle
 
-## 📝 Summary
-- ย้าย Logic ทั้งหมดจาก `i18n.js` ไปไว้ที่ส่วนบนสุดของ `product.js`
-- ลบการเรียก `<script src="i18n.js">` ออกจาก HTML
-- รวม i18n และ Product Logic ไว้ในไฟล์เดียวเพื่อความง่ายในการ Maintain
+## 📝 Purpose
+อธิบายว่า PR นี้ทำอะไร เช่น bug fix, feature ใหม่, refactor, docs update
 
----
+## 🔄 Changes
+- รายการสิ่งที่เปลี่ยนแปลง
+- ใช้ bullet points เพื่อให้ reviewer อ่านง่าย
 
-## ✅ QA Checklist
+## ✅ Tests
+- [ ] Unit tests ผ่านทั้งหมด
+- [ ] Integration tests ผ่าน
+- [ ] Manual test บน local ผ่าน
 
-### 🔴 Migration Steps
-- [ ] คัดลอก Logic ทั้งหมดจาก `i18n.js` → วางใน `product.js`
-- [ ] ตรวจสอบตัวแปรซ้ำ (`translations`, `currentLang`) → รวมเป็นตัวเดียว
+## 📖 Documentation
+- [ ] อัปเดต docs/ หรือ README.md ถ้ามีการเปลี่ยนแปลงที่เกี่ยวข้อง
+- [ ] เพิ่มตัวอย่างการใช้งานใหม่ (ถ้ามี)
 
-### 🟠 HTML Integration
-- [ ] ID/Selector ตรงกับ `product.html` (`langSelect`, `title`, `generateBtn`, `artifactLink`)
-- [ ] ลบ `<script src="i18n.js">` ออกจาก HTML
+## 🔒 Security & CI/CD
+- [ ] ตรวจสอบว่าไม่มี secret หรือ credential หลุดเข้ามา
+- [ ] CI/CD checks ผ่านทั้งหมด (lint, build, test, security)
 
-### 🟡 Product Logic
-- [ ] `generateProduct()` และ `saveToLocalStorage()` ทำงานได้ตามเดิม
-- [ ] ชื่อไฟล์ที่ Gen ตรงกับ Format `YYYYMMDD-Category-Brand`
-
-### 🟢 i18n Test
-- [ ] ค่า Default เป็นภาษาไทย
-- [ ] เปลี่ยนเป็น `en` → UI เป็นภาษาอังกฤษ
-- [ ] กลับมาเลือก `th` → UI กลับเป็นภาษาไทย
-
-### 🔵 Deployment
-- [ ] Vercel Build ผ่าน
-- [ ] Console ไม่มี Error เกี่ยวกับ i18n หรือ Selector
+## 👀 Reviewer Notes
+- จุดที่ reviewer ควรโฟกัสเป็นพิเศษ
+- ข้อควรระวังหรือ dependency ที่เกี่ยวข้อง
 
 ---
-
-## 🚀 Next Steps
-- QA Team ตรวจสอบภาษาและการ Generate Artifact
-- Reviewer ยืนยัน Checklist ก่อน Approve
