@@ -1,58 +1,56 @@
+# =========================
 # Dependencies
+# =========================
 node_modules/
-.pnp
-.pnp.js
+.pnpm-store/
 
-# Temporary and checkpoint files (จาก Codespaces / Jupyter)
-untitled*
-*.checkpoint*
-*.ipynb_checkpoints*
-
-# Environment
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-!.env.example
-
-# Build
+# =========================
+# Build outputs
+# =========================
 .next/
 out/
-build
-dist
+dist/
+build/
+.vercel/
 
-# IDE
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# IDE / OS
+# =========================
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 .DS_Store
-Thumbs.db
 
+# =========================
 # Logs
+# =========================
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
-# Git config ส่วนตัว (ห้ามอยู่ใน repo)
-.gitconfig
-
-# Supabase
-supabase/.branches
-supabase/.temp
-
-# Vercel
-.vercel
-
-# Testing
+# =========================
+# Coverage / Reports
+# =========================
 coverage/
-cypress/videos/
-cypress/screenshots/
+.nyc_output
 
-# Misc
+# =========================
+# Temp files
+# =========================
+tmp/
+temp/
 *.tmp
-*.bak
+
+# =========================
+# Local mocks only
+# =========================
+mocks/local/
+mocks/tmp/

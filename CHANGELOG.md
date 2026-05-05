@@ -1,34 +1,68 @@
-# Changelog
+# 📜 Changelog – Crystal Castle
 
-## [1.5.0] - 2026-04-26
+รูปแบบอ้างอิงจาก [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) และ [Semantic Versioning](https://semver.org/).
+
+---
+
+## [Unreleased]
+
 ### Added
-- Dropdown เลือก AI Video Engine (FAL, Runway, Pika, Nexa, WaveSpeed)
-- รวม API Video Engine ใน `/api/generate-video`
-- Security Headers (CSP, X-Frame-Options, Permissions-Policy)
-- Workflow `fix-package-lock.yml` สำหรับซ่อม lockfile อัตโนมัติ
-- เอกสาร `SECURITY.md`, `copilot-instructions.md`
+- ยังไม่มีการเพิ่มฟีเจอร์ใหม่ในเวอร์ชันนี้
 
 ### Changed
-- ปรับ UI `product.html` ใช้ Dropdown แทนปุ่ม Kling/Magic เดิม
-- ปรับ `product.js` รองรับการเลือก Engine
+- ยังไม่มีการเปลี่ยนแปลงในเวอร์ชันนี้
 
 ### Fixed
-- แก้ Vercel Build Failed (ลด Functions เหลือ ≤12)
-- แก้ Dependabot `package-lock.json not parseable`
-- ลบ popup ราคา/ส่วนลด
+- ยังไม่มีการแก้ไขข้อบกพร่องในเวอร์ชันนี้
 
-## [1.4.0] - 2026-04-20
-### Added
-- Slideshow, Intro, CTA, Thumbnail generators
-- Groq Logs แสดงใน `index.html`
-- ระบบ Fallback AI (Groq → Gemini)
+### Removed
+- ยังไม่มีการลบฟีเจอร์ใด ๆ ในเวอร์ชันนี้
 
-### Changed
-- เปลี่ยนแบรนด์เป็น @snapzreview
-- ปรับปรุง `vercel.json` เพิ่ม maxDuration
+---
 
-## [1.0.0] - 2026-04-01
-### Added
-- เปิดตัวโปรเจกต์ครั้งแรก
-- อัปโหลดรูป, Gen Prompt, สร้างวิดีโอด้วย FAL/Magic
-- Supabase integration
+## [1.1.0] - 2026-05-05
+### 🚀 Added
+- ปรับปรุง Studio UI ให้รองรับการ preview video แบบ real-time
+- เพิ่มระบบ notification ผ่าน Telegram integration
+- ปรับปรุง Agent Dashboard ให้แสดงสถานะ engines และ Supabase logs
+
+### 🔒 Security & Privacy
+- เพิ่มการตรวจสอบ API key validity ใน CI/CD
+- ปรับปรุง `privacy.yml` ให้รองรับ mock mode
+- เพิ่มการตรวจสอบ secret leakage ใน workflow
+
+### 🛠 Developer Experience
+- เพิ่ม unit tests สำหรับ `engines.js` และ `supabase.js`
+- ปรับปรุง README.md → เพิ่ม badges สำหรับ Build, Privacy Check, Security Scan
+- เพิ่มตัวอย่าง `.env.local` ที่ชัดเจนขึ้นสำหรับ contributor
+
+### 🐛 Fixed
+- แก้ไข bug ในการเลือก video engine ที่ไม่ sync กับ UI
+- แก้ไข error ของ Supabase logging ที่เกิดจาก key mismatch
+
+---
+
+## [1.0.0] - 2026-05-05
+### 🚀 Added
+- เปิดตัว **Studio UI** (`index.html`) เป็นหน้าแรกของ GitHub Pages
+- ย้ายเนื้อหา `product.html` → `index.html`
+- เพิ่มโครงสร้างโค้ดแบบ **modular** (`engines.js`, `supabase.js`, `ui.js`)
+- เชื่อมโยงกับ **Supabase** สำหรับการบันทึก logs และ action
+- รองรับหลาย video engines (FAL, Magic Hour, RunwayML, Pika, Nexa, Wavespeed)
+- เพิ่ม **Documentation Hub (`doc/index.md`)**
+
+### 🔒 Security & Privacy
+- เพิ่ม **privacy.yml** และ **security.yml** สำหรับ CI/CD enforcement
+- ห้าม commit `.env.local` หรือ API keys จริงลง GitHub
+- ใช้ GitHub Secrets / Vercel Dashboard สำหรับ environment variables
+
+### 🛠 Developer Experience
+- เพิ่ม **Mock Mode** สำหรับการทดสอบใน dev environment
+- เพิ่ม CI/CD workflow (`ci.yml`) → lint, test, build, privacy-check, security-scan
+
+---
+
+## 🔗 Compare Links
+[Unreleased]: https://github.com/1napz/crystalcastle/compare/v1.1.0...HEAD  
+[1.1.0]: https://github.com/1napz/crystalcastle/compare/v1.0.0...v1.1.0  
+[1.0.0]: https://github.com/1napz/crystalcastle/releases/tag/v1.0.0
