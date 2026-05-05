@@ -1,7 +1,39 @@
+`markdown
+
+📋 Pull Request Description
+
+🔹 Purpose
+- What does this PR do?
+- Why is it needed?
+
+🔹 Changes
+- List the main changes (files, configs, features)
+- Example: Added settings.yml for CI/CD configuration
+
+🔹 Impact
+- How does this affect deployment, CI/CD, or repo governance?
+- Any breaking changes?
+
+🔹 Testing
+- Steps to verify changes locally
+- Example: npm run test or vercel --prod
+
+🔹 Governance
+- Linked issue(s): #ISSUE_ID
+- Reviewer(s): @username
+- Labels: ci/cd, config, docs
+
+🔹 Notes
+- Any special considerations (security, secrets, migration steps)
+`
+
+
 # 📌 Pull Request Template – Crystal Castle
 
-## 📝 Purpose
-อธิบายว่า PR นี้ทำอะไร เช่น bug fix, feature ใหม่, refactor, docs update
+
+🔹 Purpose
+- What does this PR do?
+- Why is it needed?
 
 ## 🔄 Changes
 - รายการสิ่งที่เปลี่ยนแปลง
