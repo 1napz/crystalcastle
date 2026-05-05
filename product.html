@@ -116,9 +116,10 @@ function updateFilename() {
     String(now.getDate()).padStart(2, '0');
   if (dateInput) dateInput.value = yyyymmdd;
   const category = categorySelect?.value || 'Product';
-  const brand = brandInput?.value.trim().replace(/\s+/g, '') || 'Brand';
+  const brand = (brandInput?.value.trim().replace(/\s+/g, '') || 'Brand').slice(0, 20);
   const count = selectedFiles.length;
-  filenameInput.value = `\( {yyyymmdd}- \){category}-\( {brand}- \){count}img`;
+  // ✅ แก้ไขแล้ว: ลบ syntax error
+  filenameInput.value = `${yyyymmdd}-${category}-${brand}-${count}img`;
 }
 
 // ========== Render Preview ==========
@@ -151,7 +152,7 @@ function renderPreview() {
     btn.className = 'absolute top-1 right-1 w-5 h-5 bg-black/60 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition';
     btn.textContent = '×';
     btn.onclick = () => {
-      URL.revokeObjectURL(img.src);
+      URL.revokeObjectURL(fileObj.url);
       selectedFiles.splice(idx, 1);
       renderPreview();
     };
@@ -186,6 +187,117 @@ fileInput?.addEventListener('change', (e) => {
   renderPreview();
 });
 
+// ========== Generate Prompt ==========
+async function generatePrompt() {
+  if (selectedFiles.length === 0) {
+    showStatus('กรุณาอัปโหลดรูปก่อนสร้าง Prompt', 'error');
+    return;
+  }
+
+  const productName = brandInput?.value.trim() || 'สินค้า';
+  const category = categorySelect?.value || 'general';
+
+  if (genPromptBtn) genPromptBtn.disabled = true;
+  showStatus('🧠 กำลังสร้าง Prompt ด้วย AI...', 'loading');
+
+  if (promptAbortController) promptAbortController.abort();
+  promptAbortController = new AbortController();
+
+  try {
+    const response = await fetch('/api/generate-prompt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productName, category }),
+      signal: promptAbortController.signal,
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'สร้าง Prompt ไม่สำเร็จ');
+
+    const newPrompt = data.prompt;
+    if (newPrompt) {
+      // Save to history
+      const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+      if (promptInput.value) history.push(promptInput.value);
+      localStorage.setItem('promptHistory', JSON.stringify(history.slice(-10)));
+
+      promptInput.value = newPrompt;
+      showStatus('✨ สร้าง Prompt สำเร็จ!', 'success');
+    } else {
+      throw new Error('ไม่ได้รับ Prompt');
+    }
+  } catch (err) {
+    if (err.name === 'AbortError') return;
+    showStatus(`❌ ${err.message}`, 'error');
+  } finally {
+    if (genPromptBtn) genPromptBtn.disabled = false;
+    promptAbortController = null;
+  }
+}
+
+// ========== Generate Post/Caption ==========
+async function generatePost() {
+  if (selectedFiles.length === 0) {
+    showStatus('กรุณาอัปโหลดรูปก่อน', 'error');
+    return;
+  }
+
+  const productName = brandInput?.value.trim() || 'สินค้า';
+  const category = categorySelect?.value || 'general';
+  const currentPrompt = promptInput.value.trim() || '';
+
+  if (genPostBtn) genPostBtn.disabled = true;
+  showStatus('📝 กำลังสร้างแคปชั่นและ hashtag...', 'loading');
+
+  if (postAbortController) postAbortController.abort();
+  postAbortController = new AbortController();
+
+  try {
+    const response = await fetch('/api/generate-post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productName, category, prompt: currentPrompt }),
+      signal: postAbortController.signal,
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'สร้างโพสต์ไม่สำเร็จ');
+
+    if (postOutput) {
+      postOutput.value = data.caption || data.post || '';
+      postOutput.classList.remove('hidden');
+    }
+    showStatus('✅ สร้างแคปชั่นสำเร็จ!', 'success');
+  } catch (err) {
+    if (err.name === 'AbortError') return;
+    showStatus(`❌ ${err.message}`, 'error');
+  } finally {
+    if (genPostBtn) genPostBtn.disabled = false;
+    postAbortController = null;
+  }
+}
+
+// ========== Copy to Clipboard ==========
+function copyToClipboard(elementId) {
+  const element = $(elementId);
+  if (element && element.value) {
+    navigator.clipboard.writeText(element.value);
+    showToast('คัดลอกแล้ว!', 'success');
+  }
+}
+
+function undoPrompt() {
+  const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+  if (history.length > 0) {
+    const previousPrompt = history.pop();
+    promptInput.value = previousPrompt;
+    localStorage.setItem('promptHistory', JSON.stringify(history));
+    showToast('เลิกทำสำเร็จ', 'info');
+  } else {
+    showToast('ไม่มีประวัติให้เลิกทำ', 'info');
+  }
+}
+
 // ========== Generate Video ==========
 async function generateVideo() {
   if (videoAbortController) videoAbortController.abort();
@@ -218,10 +330,13 @@ async function generateVideo() {
       imageUrl = lastUploadedUrl;
       showStatus('📦 ใช้รูปที่อัปโหลดแล้ว', 'info');
     } else {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('filename', customFilename);
+
       const uploadRes = await fetch('/api/upload', {
         method: 'POST',
-        headers: { 'x-filename': customFilename, 'Content-Type': file.type },
-        body: file,
+        body: formData,
         signal: videoAbortController.signal,
       });
       if (!uploadRes.ok) throw new Error('อัปโหลดรูปไม่สำเร็จ');
@@ -254,6 +369,14 @@ async function generateVideo() {
     showStatus(`🎉 สร้างวิดีโอสำเร็จแล้ว!`, 'success');
     saveFilename(customFilename);
 
+    // Auto-download or open video
+    if (videoUrl.startsWith('http')) {
+      const a = document.createElement('a');
+      a.href = videoUrl;
+      a.target = '_blank';
+      a.download = `${customFilename}.mp4`;
+      a.click();
+    }
   } catch (err) {
     if (err.name === 'AbortError') {
       showStatus('⏹️ ยกเลิกการสร้างแล้ว', 'info');
@@ -279,19 +402,23 @@ async function generateIntro() {
 
   try {
     const canvas = document.createElement('canvas');
-    canvas.width = 1080; canvas.height = 1920;
+    canvas.width = 1080;
+    canvas.height = 1920;
     const ctx = canvas.getContext('2d');
 
     const chunks = [];
     const stream = canvas.captureStream(30);
-    const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+    const mimeType = MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
+    const recorder = new MediaRecorder(stream, { mimeType });
 
     recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
     recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: 'video/webm' });
+      const blob = new Blob(chunks, { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `${filename}.webm`; a.click();
+      a.href = url;
+      a.download = `${filename}.${mimeType === 'video/webm' ? 'webm' : 'mp4'}`;
+      a.click();
       URL.revokeObjectURL(url);
       showStatus('✅ Intro พร้อมดาวน์โหลดแล้ว!', 'success');
     };
@@ -340,19 +467,23 @@ async function generateCTA() {
 
   try {
     const canvas = document.createElement('canvas');
-    canvas.width = 1080; canvas.height = 1920;
+    canvas.width = 1080;
+    canvas.height = 1920;
     const ctx = canvas.getContext('2d');
 
     const chunks = [];
     const stream = canvas.captureStream(30);
-    const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+    const mimeType = MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
+    const recorder = new MediaRecorder(stream, { mimeType });
 
     recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
     recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: 'video/webm' });
+      const blob = new Blob(chunks, { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `${filename}.webm`; a.click();
+      a.href = url;
+      a.download = `${filename}.${mimeType === 'video/webm' ? 'webm' : 'mp4'}`;
+      a.click();
       URL.revokeObjectURL(url);
       showStatus('✅ CTA พร้อมดาวน์โหลดแล้ว!', 'success');
     };
@@ -363,7 +494,10 @@ async function generateCTA() {
       const img = new Image();
       img.src = selectedFiles[i].url;
       await new Promise(resolve => {
-        img.onload = () => { drawCoverImage(ctx, img, canvas); resolve(); };
+        img.onload = () => {
+          drawCoverImage(ctx, img, canvas);
+          resolve();
+        };
         img.onerror = resolve;
       });
       await new Promise(r => setTimeout(r, 1000));
@@ -399,7 +533,8 @@ async function generateThumbnail() {
 
   try {
     const canvas = document.createElement('canvas');
-    canvas.width = 1080; canvas.height = 1920;
+    canvas.width = 1080;
+    canvas.height = 1920;
     const ctx = canvas.getContext('2d');
 
     const img = new Image();
@@ -425,7 +560,9 @@ async function generateThumbnail() {
     canvas.toBlob((blob) => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `${filename}-thumbnail.png`; a.click();
+      a.href = url;
+      a.download = `${filename}-thumbnail.png`;
+      a.click();
       URL.revokeObjectURL(url);
       showStatus('✅ Thumbnail พร้อมดาวน์โหลดแล้ว!', 'success');
     }, 'image/png');
@@ -452,8 +589,8 @@ if (videoEngineSelect && engineInfo) {
       'openai': '✨ OpenAI Sora — วิดีโอสมจริง ความยาวสูงสุด 60 วินาที',
       'runway': '🎬 Runway Gen-2 — ควบคุมการเคลื่อนไหวละเอียด',
       'pika': '🎨 Pika Labs — อนิเมชันสวย',
-      'fal': 'FAL Kling — คุณภาพระดับมืออาชีพ (จ่าย)',
-      'magic': 'Magic Hour — ฟรี 400 เครดิต/วัน',
+      'fal': '🚀 FAL Kling — คุณภาพระดับมืออาชีพ',
+      'magic': '✨ Magic Hour — ฟรี 400 เครดิต/วัน',
       '': 'กรุณาเลือก Video Engine'
     };
     engineInfo.textContent = descriptions[value] || '';
@@ -462,14 +599,76 @@ if (videoEngineSelect && engineInfo) {
 }
 
 // ========== Event Listeners ==========
+genPromptBtn?.addEventListener('click', debounce(generatePrompt, 500));
+genPostBtn?.addEventListener('click', debounce(generatePost, 500));
+copyPromptBtn?.addEventListener('click', () => copyToClipboard('promptInput'));
+copyPostBtn?.addEventListener('click', () => copyToClipboard('postOutput'));
+undoPromptBtn?.addEventListener('click', undoPrompt);
 generateBtn?.addEventListener('click', debounce(generateVideo, 800));
 genIntroBtn?.addEventListener('click', debounce(generateIntro, 800));
 genCTABtn?.addEventListener('click', debounce(generateCTA, 800));
 genThumbnailBtn?.addEventListener('click', debounce(generateThumbnail, 800));
 
+// Auto-save prompt draft
+promptInput?.addEventListener('input', debounce(() => {
+  localStorage.setItem('promptDraft', promptInput.value);
+}, 1000));
+
 // ========== Initialize ==========
 document.addEventListener('DOMContentLoaded', () => {
   renderPreview();
   updateFilename();
+
+  // Load saved prompt draft
+  const savedDraft = localStorage.getItem('promptDraft');
+  if (savedDraft && promptInput && !promptInput.value) {
+    promptInput.value = savedDraft;
+  }
+
+  // Load saved category and brand
+  if (categorySelect && localStorage.getItem('lastCategory')) {
+    categorySelect.value = localStorage.getItem('lastCategory');
+  }
+  if (brandInput && localStorage.getItem('lastBrand')) {
+    brandInput.value = localStorage.getItem('lastBrand');
+  }
+
+  categorySelect?.addEventListener('change', () => {
+    localStorage.setItem('lastCategory', categorySelect.value);
+  });
+  brandInput?.addEventListener('change', () => {
+    localStorage.setItem('lastBrand', brandInput.value);
+  });
+
   console.log('✅ product.js โหลดสำเร็จ — สถานะสวยงาม + ครบทุกฟังก์ชัน');
 });
+<header>
+  <h1>Crystal Castle — Product Upload</h1>
+  <nav>
+    <a href="artifacts.html">📂 ผลงาน</a>
+    <button id="logoutBtn">🚪 ออกจากระบบ</button>
+  </nav>
+</header>
+
+<main>
+  <!-- Upload Section -->
+  <section class="upload-card">
+    <h2>📷 อัปโหลดรูปสินค้า</h2>
+    <input type="file" id="fileUpload" multiple accept="image/png, image/jpeg">
+    <div id="previewArea">ยังไม่มีรูป</div>
+    <small>รองรับ JPG, PNG สูงสุด 10 รูป</small>
+  </section>
+
+  <!-- TikTok Section -->
+  <section class="tiktok-card">
+    <h2>🔗 ลิงก์ TikTok</h2>
+    <input type="url" id="tiktokUrl" placeholder="https://www.tiktok.com/@username/video/...">
+  </section>
+
+  <!-- Stepper -->
+  <section class="stepper">
+    <div class="active">Step 1: Upload</div>
+    <div>Step 2: TikTok</div>
+    <div>Step 3: Generate</div>
+  </section>
+</main>
