@@ -4,6 +4,33 @@
 Crystal Castle ใช้ไฟล์ `.github/CODEOWNERS` เพื่อกำหนด reviewer สำหรับแต่ละโฟลเดอร์/ไฟล์  
 ทุก PR จะถูก assign reviewer อัตโนมัติ โดยมี **@coderabbitai** เป็น reviewer หลักเสมอ
 
+## 📋 Reviewer Checklist – CrystalCastle (PR เพิ่มไฟล์ใหม่)
+
+### 🔹 Governance
+- [ ] มี PR Description ครบถ้วน (Purpose, Changes, Impact, Testing, Linked Issues)
+- [ ] มีการเชื่อมโยงกับ Issue (Closes #...)
+- [ ] Reviewer ถูก assign ตาม CODEOWNERS
+
+### 🔹 File & Repo Hygiene
+- [ ] ไฟล์ใหม่อยู่ในโครงสร้าง repo ที่ถูกต้อง
+- [ ] ไม่มีการ commit ไฟล์ที่ไม่เกี่ยวข้อง เช่น .env.local, package-lock.json
+- [ ] มีการอัปเดต docs/ หรือ README.md
+
+### 🔹 Code Quality
+- [ ] โค้ดอ่านง่าย
+- [ ] ไม่มี hard-coded secrets
+- [ ] ESLint/Prettier ผ่าน
+
+### 🔹 Testing
+- [ ] มี test coverage สำหรับไฟล์ใหม่
+- [ ] Unit/Integration tests ผ่าน
+- [ ] Manual test บน local ผ่าน
+
+### 🔹 CI/CD & Deployment
+- [ ] Workflow รันผ่านทั้งหมด
+- [ ] ไม่มี error จาก Vercel deploy
+- [ ] Artifact checks ผ่านครบ
+
 ## 📂 การแบ่งความรับผิดชอบ
 - **lib/** → @coderabbitai, @1napz  
   ตรวจสอบโค้ดหลัก, fallback logic, modularization
