@@ -1,29 +1,28 @@
 # 🤖 AI Instructions — CrystalCastle
 
 ## 🧠 Scope
-Applies to all AI-related logic:
-- prompt engineering
-- caption generation
-- script generation
-- video/slideshow pipeline
-- automation workflows
-
----
+ครอบคลุม AI-related logic ทั้งหมด:
+- Prompt engineering
+- Caption generation
+- Script generation
+- Video/slideshow pipeline
+- Automation workflows
+- Model quota guardrails
 
 ## 🎯 Objective
-Generate high-conversion short-form content for social commerce platforms:
-- TikTok
-- Shopee
-- Instagram Reels
+สร้าง short-form content ที่มี conversion สูงสำหรับ Social Commerce:
+- Platforms: TikTok, Shopee, Instagram Reels
+- KPI:
+  - CTR ≥ 5%
+  - Watch time ≥ 10s
+  - Conversion uplift ≥ 15%
 
-Content must be:
-- engaging in first 3 seconds
-- concise and punchy
-- optimized for conversion (CTR + sales)
+Content ต้อง:
+- ดึงดูดใน 3 วินาทีแรก
+- กระชับและชัดเจน
+- Optimized for CTR + Sales
 
----
-
-## 🧩 Core Pipeline
+## 🪄 Core Pipeline
 
 ### Input
 ```json
