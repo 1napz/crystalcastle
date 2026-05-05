@@ -39,6 +39,16 @@
 ### Repository Not Found
 - ตรวจสอบชื่อ repo และสิทธิ์การเข้าถึง
 
+- # Troubleshooting Merge Conflicts 🛠️
+
+## ภาษาไทย
+เมื่อ contributor ทำงานบน branch ของตัวเองและพยายาม merge เข้ากับ base branch (เช่น `main`) อาจเกิด **merge conflict** ได้  
+ขั้นตอนการแก้ไขคือ:
+
+1. ใช้ `git status` เพื่อตรวจสอบไฟล์ที่ conflict  
+2. เปิดไฟล์ที่ conflict ใน editor (VS Code, Vim, ฯลฯ)  
+3. มองหา conflict markers:
+
 ### Vercel Quota Exceeded
 - รอ 24 ชั่วโมง หรืออัปเกรด plan
 
