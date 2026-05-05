@@ -52,215 +52,32 @@
 - **Live action log** – timestamped status messages.
 - **Dark mode toggle** – persistent across sessions.
 
+# CrystalCastle 🏰
+
+## Overview
+CrystalCastle is a modern workflow and subscription-enabled platform built with Supabase, Stripe, and Next.js.  
+It provides CI/CD automation, onboarding documentation, and reviewer training materials.
+
 ---
 
-## 📦 Local Development
+## Features
+- 🔐 Authentication with Supabase
+- 💳 Subscription system (Stripe + Supabase)
+- ⚙️ CI/CD workflows with GitHub Actions
+- 📚 Onboarding docs & reviewer training quizzes
+- 🌐 Multi-language support (Thai/English)
 
+---
+
+## Getting Started
 ### Prerequisites
+- Node.js >= 18
+- Supabase project
+- Stripe account
+- Vercel (for deployment)
 
-- Node.js 18+ 
-- Supabase account (free tier works)
-- API keys: Groq (required), FAL / Magic Hour (for video generation)
-
-### Setup
-
+### Installation
 ```bash
-# 1. Clone the repository
 git clone https://github.com/1napz/crystalcastle.git
 cd crystalcastle
-
-# 2. Install dependencies
 npm install
-
-# 3. Copy example environment file
-cp .env.example .env.local
-
-# 4. Edit `.env.local` with your real keys (see below)
-
-# 5. Start development server
-npm run dev
-```
-
-Open http://localhost:3000 in your browser.
-
----
-
-⚙️ Environment Variables
-
-Required
-
-```bash
-# Supabase (required)
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
-
-# Groq AI (required)
-GROQ_API_KEY=gsk_your_groq_api_key_here
-```
-
-Optional (but recommended)
-
-```bash
-# Fallback AI (when Groq is down)
-GEMINI_API_KEY=AIzaSy...
-
-# Video generation (at least one)
-FAL_KEY=fal_your_key_here
-MAGIC_HOUR_API_KEY=mh_your_key_here
-
-# Supabase admin (for API routes only)
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...
-
-# Development only
-NEXT_PUBLIC_USE_MOCK=true   # Enable mock mode
-```
-
-Full reference: doc/environment-variables.md
-
----
-
-🧪 Mock Mode (Test Without Using Credits)
-
-Run locally without consuming real API quotas:
-
-```bash
-# Start with mock mode enabled
-npm run dev:mock
-
-# Or set in .env.local
-NEXT_PUBLIC_USE_MOCK=true
-```
-
-When mock mode is active:
-
-· ✅ Fake video files are used instead of real generation
-· ✅ Prompt templates replace Groq API calls
-· ✅ No FAL / Magic Hour credits are consumed
-· ⚠️ A 🔮 MOCK MODE badge appears on screen
-
----
-
-📂 Project Structure
-
-```
-crystalcastle/
-├── api/                    # Next.js API routes
-│   ├── prompt.js          # Groq + Gemini fallback
-│   ├── video.js           # FAL Kling
-│   ├── magichour.js       # Magic Hour
-│   ├── post.js            # Caption generation
-│   ├── upload.js          # Image upload to Supabase
-│   ├── get-logs.js        # Groq logs retrieval
-│   └── artifacts.js       # GET/POST user artifacts
-├── public/                # Static files (CSS, images, mock data)
-├── doc/                   # All documentation
-├── .github/               # GitHub Actions workflows
-├── src/                   # Frontend source (optional)
-├── lib/supabase/          # Supabase client (browser and server)
-├── index.html             # Home page (optional)
-├── product.html           # Studio page (NEW UI)
-├── product.js             # Main logic (legacy, replaced by inline script but kept for reference)
-├── supabase-client.js     # Supabase connector
-├── middleware.ts          # Auth + route protection
-├── vercel.json            # Vercel config (CSP, headers)
-├── .env.example           # Environment template
-└── README.md
-```
-
----
-
-🔒 Privacy & Security Governance
-
-Crystal Castle ใช้ first‑party telemetry เท่านั้น และ enforce security scan ผ่าน Microsoft Defender  
-
-- ✅ Privacy policy ตรวจสอบผ่าน privacy-check.yml  
-- 🔒 Security scan ตรวจสอบโค้ดทุก PR และ push ผ่าน security-scan.yml  
-- 📖 รายละเอียดนโยบายอยู่ใน docs/privacy.md และ Contribute.md  
-
-📊 Governance Flow
-
-`mermaid
-flowchart TD
-    A[Contributor PR] --> B[Privacy Check Workflow]
-    A --> C[Security Scan Workflow]
-    B --> D{Privacy Passed?}
-    C --> E{Security Passed?}
-    D -->|Yes| F[CI/CD Validation]
-    D -->|No| G[Block PR]
-    E -->|Yes| F
-    E -->|No| G
-    F --> H[Review by Owners]
-    H --> I[Merge to Main]
-`
-
----
-
-
-📚 Full Documentation
-
-All detailed guides are in the doc/ folder:
-
-Document Content
-index.md Table of contents
-supabase-guide.md Supabase setup (RLS, storage, policies)
-free-ai-apis.md Usable free AI APIs
-groq-logs-setup.md Setting up Groq API logs
-security-and-debug.md Security hardening & debugging
-vercel-config.md Vercel configuration
-environment-variables.md All environment variables explained
-
----
-
-🚀 Deploy on Vercel
-
-https://vercel.com/button
-
-Steps
-
-1. Fork or clone this repository.
-2. Go to Vercel Dashboard.
-3. Import your GitHub repository.
-4. Add the required environment variables (see above).
-5. Click Deploy.
-
----
-
-🤝 Contributing
-
-Pull requests are welcome!
-
-Before submitting a PR:
-
-· ✅ Ensure no secrets (API keys) are committed.
-· ✅ Format your code properly.
-· ✅ Test with mock mode enabled.
-· ✅ Update documentation if needed.
-
----
-
-📄 License
-
-MIT License – see the LICENSE file for details.
-
----
-
-💬 Contact
-
-· GitHub Issues: Create a new issue
-· Email: nobizzmaru@gmail.com
-
----
-
-<div align="center">
-  Made with ❤️ by @snapzreview
-</div>
-```
-
-This updated README includes:
-
-· New UI features (drag‑and‑drop, dark mode, engine selector, action log)
-· Updated project structure notes
-· Troubleshooting entry for dark mode persistence
-· Consistent formatting and badges
-
-You can replace your existing README.md with this content. If you need a specific section changed or additional details added (e.g., screenshots, video demo link), just let me know.
