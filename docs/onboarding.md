@@ -1,8 +1,66 @@
-# CrystalCastle Onboarding Guide
+# 🚀 Onboarding Guide (CrystalCastle)
 
-## 🚀 ขั้นตอนการเริ่มต้น (Getting Started)
+## 1. Environment Setup / การตั้งค่า Environment
+**English:**  
+- Clone the repository: `git clone https://github.com/1napz/crystalcastle.git`  
+- Install dependencies: `npm install`  
+- Copy `.env.example` → `.env.local` and fill in required values.  
 
-1. **Clone Repository**
-   ```bash
-   git clone https://github.com/1napz/crystalcastle.git
-   cd crystalcastle
+**ไทย:**  
+- โคลน repository: `git clone https://github.com/1napz/crystalcastle.git`  
+- ติดตั้ง dependencies: `npm install`  
+- คัดลอก `.env.example` → `.env.local` และกรอกค่า environment ที่จำเป็น  
+
+---
+
+## 2. Branch Convention / การตั้งชื่อ Branch
+**English:**  
+- `feature/<name>` → new features  
+- `fix/<name>` → bug fixes  
+- `docs/<name>` → documentation updates  
+
+**ไทย:**  
+- `feature/<ชื่อ>` → ฟีเจอร์ใหม่  
+- `fix/<ชื่อ>` → แก้บั๊ก  
+- `docs/<ชื่อ>` → อัปเดตเอกสาร  
+
+---
+
+## 3. Running CI/CD / การรัน CI/CD
+**English:**  
+- Run lint: `npm run lint`  
+- Run tests: `npm test`  
+- Build project: `npm run build`  
+
+**ไทย:**  
+- รัน lint: `npm run lint`  
+- รัน test: `npm test`  
+- สร้าง build: `npm run build`  
+
+---
+
+## 4. Pull Request Workflow / ขั้นตอนการทำ PR
+**English:**  
+1. Ensure CI/CD passes locally.  
+2. Fill PR template completely.  
+3. Link related issues.  
+4. Wait for reviewer approval.  
+
+**ไทย:**  
+1. ตรวจสอบให้ CI/CD ผ่านในเครื่องก่อน  
+2. กรอก PR template ให้ครบถ้วน  
+3. เชื่อมโยงกับ Issue ที่เกี่ยวข้อง  
+4. รอ reviewer อนุมัติ  
+
+---
+
+## 5. Troubleshooting / การแก้ปัญหา
+**English:**  
+- Merge conflict → run `git fetch origin main && git rebase origin/main`  
+- CI/CD fail → check logs in GitHub Actions  
+- Coverage < 80% → add more unit tests  
+
+**ไทย:**  
+- Merge conflict → ใช้คำสั่ง `git fetch origin main && git rebase origin/main`  
+- CI/CD fail → ตรวจสอบ logs ใน GitHub Actions  
+- Coverage < 80% → เพิ่ม unit tests ให้ครอบคลุมมากขึ้น
