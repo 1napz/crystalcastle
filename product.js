@@ -25,5 +25,13 @@ function saveToLocalStorage(filename) {
   });
 
   // บันทึกกลับลง LocalStorage
-  localStorage.setItem("artifacts", JSON.stringify(artifacts));
+ 
+
+function saveToHistory(data) {
+    let history = JSON.parse(localStorage.getItem('studio_history') || '[]');
+    history.unshift(data); // เพิ่มข้อมูลใหม่ไว้บนสุด
+    localStorage.setItem('studio_history', JSON.stringify(history.slice(0, 50))); // เก็บแค่ 50 รายการล่าสุด
 }
+ localStorage.setItem("artifacts", JSON.stringify(artifacts));
+}
+
