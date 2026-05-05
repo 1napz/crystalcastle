@@ -1,13 +1,15 @@
-```markdown
-# 🎬 Crystal Castle – AI Video Generator for Social Commerce
+`markdown
+🎬 Crystal Castle – AI Video Generator for Social Commerce
 
 > Turn product images into engaging AI‑generated videos with auto‑written captions.  
 > Ready for TikTok, Shopee, and other social platforms.  
-> **Includes a free built‑in slideshow mode!**
+> Includes a free built‑in slideshow mode!
 
-[![Vercel Deploy](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)](https://vercel.com/new/clone?repository-url=https://github.com/1napz/crystalcastle)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/1napz/crystalcastle)](https://github.com/1napz/crystalcastle/issues)
+![Vercel Deploy](https://vercel.com/new/clone?repository-url=https://github.com/1napz/crystalcastle)
+![License: MIT](https://opensource.org/licenses/MIT)
+![GitHub issues](https://github.com/1napz/crystalcastle/issues)
+![Privacy Check](./setup-config/privacy.yml)
+![Security Scan](./.github/workflows/security-scan.yml)
 
 ---
 
@@ -167,47 +169,32 @@ crystalcastle/
 
 ---
 
-🔒 Security
+🔒 Privacy & Security Governance
 
-Measure Implementation
-Environment variables Stored on Vercel – no secrets in code
-Supabase RLS Enabled on all tables
-CSP headers Configured in vercel.json
-X-Frame-Options Prevents clickjacking
-GitHub secret scanning Automatically detects leaked keys
-Rate limiting Limits requests per IP (via Upstash)
-No client env No process.env exposed on client side
+Crystal Castle ใช้ first‑party telemetry เท่านั้น และ enforce security scan ผ่าน Microsoft Defender  
 
----
+- ✅ Privacy policy ตรวจสอบผ่าน privacy-check.yml  
+- 🔒 Security scan ตรวจสอบโค้ดทุก PR และ push ผ่าน security-scan.yml  
+- 📖 รายละเอียดนโยบายอยู่ใน docs/privacy.md และ Contribute.md  
 
-🐛 Troubleshooting Common Issues
+📊 Governance Flow
 
-1. API route returns 500
-
-· Cause: Missing or incorrect environment variables.
-· Fix: Check Vercel Dashboard → Functions tab → View logs.
-
-2. supabaseUrl is required
-
-· Cause: NEXT_PUBLIC_SUPABASE_URL not set.
-· Fix: Add the variable in Vercel and redeploy.
-
-3. Groq logs not showing
-
-· Cause: Missing groq_logs table or incorrect RLS policies.
-· Fix: See doc/groq-logs-setup.md.
-
-4. Dark mode not persisting
-
-· Cause: Local storage blocked or browser privacy settings.
-· Fix: Ensure localStorage is enabled; fallback to system preference.
-
-5. CORS errors
-
-· Cause: Cross‑origin API calls.
-· Fix: Use relative paths /api/... or configure CORS in vercel.json.
+`mermaid
+flowchart TD
+    A[Contributor PR] --> B[Privacy Check Workflow]
+    A --> C[Security Scan Workflow]
+    B --> D{Privacy Passed?}
+    C --> E{Security Passed?}
+    D -->|Yes| F[CI/CD Validation]
+    D -->|No| G[Block PR]
+    E -->|Yes| F
+    E -->|No| G
+    F --> H[Review by Owners]
+    H --> I[Merge to Main]
+`
 
 ---
+
 
 📚 Full Documentation
 
