@@ -1,79 +1,36 @@
 `markdown
 
-📋 Pull Request Description
+📝 Pull Request Template (CrystalCastle)
 
-🔹 Purpose
-- What does this PR do?
-- Why is it needed?
+📌 Description / คำอธิบาย
+- English: Please describe the purpose of this PR and the changes made.
+- ไทย: กรุณาอธิบายวัตถุประสงค์ของ PR และสิ่งที่แก้ไข/เพิ่มเติม
 
-🔹 Changes
-- List the main changes (files, configs, features)
-- Example: Added settings.yml for CI/CD configuration
+---
 
-🔹 Impact
-- How does this affect deployment, CI/CD, or repo governance?
-- Any breaking changes?
+✅ Checklist / รายการตรวจสอบ
+- [ ] CI/CD pipeline passed (lint, test, build, privacy, security)  
+- [ ] Coverage ≥ 80%  
+- [ ] No governance violations (privacy/security)  
+- [ ] Branch naming follows convention (feature/, fix/, docs/)  
+- [ ] Commit messages are clear and scoped  
 
-🔹 Testing
-- Steps to verify changes locally
-- Example: npm run test or vercel --prod
+---
 
-🔹 Governance
-- Linked issue(s): #ISSUE_ID
-- Reviewer(s): @username
-- Labels: ci/cd, config, docs
+🔍 Impact / ผลกระทบ
+- English: What impact does this PR have on the system (features, workflows, APIs)?  
+- ไทย: PR นี้มีผลกระทบต่อระบบอย่างไร (ฟีเจอร์, workflow, API)
 
-🔹 Notes
-- Any special considerations (security, secrets, migration steps)
-`
+---
 
+🧪 Testing / การทดสอบ
+- English: Describe how you tested these changes.  
+- ไทย: อธิบายวิธีการทดสอบที่ใช้ตรวจสอบการแก้ไขนี้
 
-`markdown
+---
 
-📌 Pull Request Template – Crystal Castle
-
-📝 Summary
-โปรดอธิบายว่า PR นี้ทำอะไร:
-- ปัญหาที่แก้ไข / ฟีเจอร์ที่เพิ่ม
-- เหตุผลที่ต้องทำการเปลี่ยนแปลงนี้
-
-🔄 Changes
-- รายการสิ่งที่เปลี่ยนแปลง (ไฟล์, configs, features)
-- ใช้ bullet points เพื่อให้ reviewer อ่านง่าย
-
-✅ Impact
-- ผลกระทบต่อระบบ (CI/CD, Deployment, Security, Governance)
-- มี Breaking Changes หรือไม่
-
-🧪 Testing
-วิธีตรวจสอบการทำงาน:
-- [ ] Unit tests ผ่านทั้งหมด
-- [ ] Integration tests ผ่าน
-- [ ] Manual test บน local ผ่าน
-
-📖 Documentation
-- [ ] อัปเดต docs/ หรือ README.md ถ้ามีการเปลี่ยนแปลงที่เกี่ยวข้อง
-- [ ] เพิ่มตัวอย่างการใช้งานใหม่ (ถ้ามี)
-
-🔒 Security & CI/CD
-- [ ] ตรวจสอบว่าไม่มี secret หรือ credential หลุดเข้ามา
-- [ ] CI/CD checks ผ่านทั้งหมด (lint, build, test, security)
-
-📌 Related Issues
+📎 Linked Issues / Issue ที่เกี่ยวข้อง
 - Closes #ISSUE_ID
-- Milestone: (ถ้ามี)
-
-👥 Reviewers
-- Reviewer ที่เกี่ยวข้อง (CODEOWNERS จะ assign อัตโนมัติ)
-- ต้องมี reviewer อย่างน้อย 1 คนอนุมัติ
-
-👀 Reviewer Notes
-- จุดที่ reviewer ควรโฟกัสเป็นพิเศษ
-- ข้อควรระวังหรือ dependency ที่เกี่ยวข้อง
-
-🛡️ Notes
-- ตรวจสอบว่า secrets ถูกจัดการผ่าน environment variables เท่านั้น
-- ห้าม commit ไฟล์ .env
 `
 
 ---
