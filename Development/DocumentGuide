@@ -1,0 +1,13 @@
+📘 CrystalCastle Development Guide
+
+## 1. Project Overview
+AI Video Generator สำหรับ TikTok Shop  
+ใช้ Next.js + Supabase + Vercel
+
+---
+
+## 2. Setup
+
+```bash
+npm install
+npm run dev
