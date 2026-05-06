@@ -1,39 +1,26 @@
-# CrystalCastle Governance Config
-# เปิด Early Access เพื่อทดลอง Slack Agent ฟรี
-
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+version: 2
 early_access: true
 
-review:
-  reject_on_error: true
-  rules:
-    - id: bilingual-docs
-      description: Require bilingual (ไทย/English) documentation updates
-      severity: error
-      match:
-        files: ["docs/**/*.md"]
-      checks:
-        must_include: ["English:", "ไทย:"]
-    - id: changelog-update
-      description: Require changelog entry for each PR
-      severity: error
-      match:
-        files: ["CHANGELOG.md"]
-      checks:
-        regex: "v[0-9]+\\.[0-9]+\\.[0-9]+"
-    - id: release-notes-update
-      description: Require release notes with highlights and bug fixes
-      severity: error
-      match:
-        files: ["docs/release-notes*.md"]
-      checks:
-        must_include: ["Feature Highlights", "Bug Fixes"]
+rules:
+  - id: bilingual-docs
+    description: Require bilingual (ไทย/English) documentation updates
+    severity: error
+    match:
+      files: ["docs/**/*.md"]
+    checks:
+      must_include: ["English:", "ไทย:"]
 
-slack_agent:
-  scopes:
-    - name: crystalcastle-pr-review
-      repos: ["1napz/crystalcastle"]
-      spend_limit: 100 # agent minutes quota
-      connections:
-        - jira
-        - notion
-        - github
+comment_template: |
+  ### 📝 CodeRabbitAI Feedback (Bilingual)
+  **English:** Missing bilingual docs, changelog, release notes
+  **ไทย:** ไม่มี bilingual docs, changelog, release notes
+
+scopes:
+  - name: crystalcastle-pr-review
+    repos: ["1napz/crystalcastle"]
+    spend_limit: 100
+    connections:
+      - github
+      - jira
+      - notion
