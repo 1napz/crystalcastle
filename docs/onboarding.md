@@ -64,3 +64,46 @@
 - Merge conflict → ใช้คำสั่ง `git fetch origin main && git rebase origin/main`  
 - CI/CD fail → ตรวจสอบ logs ใน GitHub Actions  
 - Coverage < 80% → เพิ่ม unit tests ให้ครอบคลุมมากขึ้น
+
+📊 Contributor Onboarding Flow Diagram
+
+`mermaid
+flowchart TD
+    A[👥 Contributor joins CrystalCastle] --> B[📂 Clone Repository]
+    B --> C[🖥️ Open in VS Code + Devcontainer]
+    C --> D{✅ Health Check Pass?}
+    D -- Yes --> E[🔑 Configure Secrets]
+    D -- No --> F[⚠️ Recovery Container + Reviewer Enforcement]
+
+    E --> G[📋 Reviewer Checklist]
+    G --> H[📝 Reviewer Expectations]
+    H --> I[🎉 Contributor Ready for Development]
+`
+
+---
+
+🇹🇭 ภาษาไทย
+
+ขั้นตอนการ Onboarding
+1. Clone repo → git clone https://github.com/1napz/crystalcastle.git  
+2. เปิดด้วย VS Code + Devcontainer (javascript-node:20)  
+3. ตรวจสอบ Health Check (runArgs)  
+   - ถ้า fail → ใช้ recovery container และ reviewer ตรวจสอบ log  
+4. ตั้งค่า Secrets (NEXTPUBLICSUPABASEURL, NEXTPUBLICSUPABASEANONKEY, GROQAPI_KEY)  
+5. Reviewer ใช้ checklist ตรวจสอบ repo hygiene  
+6. Contributor พร้อมเริ่มพัฒนา  
+
+---
+
+🇬🇧 English
+
+Onboarding Steps
+1. Clone repo → git clone https://github.com/1napz/crystalcastle.git  
+2. Open with VS Code + Devcontainer (javascript-node:20)  
+3. Verify Health Check (runArgs)  
+   - If fail → recovery container triggered, reviewer checks logs  
+4. Configure Secrets (NEXTPUBLICSUPABASEURL, NEXTPUBLICSUPABASEANONKEY, GROQAPI_KEY)  
+5. Reviewer applies checklist for repo hygiene enforcement  
+6. Contributor ready for development  
+
+---
