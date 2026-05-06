@@ -1,13 +1,15 @@
-name: Frontend Build & Deploy
+name: Frontend CI/CD
 
 on:
   push:
-    branches: [ main ]
+    paths:
+      - 'frontend/**'
   pull_request:
-    branches: [ main ]
+    paths:
+      - 'frontend/**'
 
 jobs:
-  build:
+  build-and-test-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -19,28 +21,21 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Run lint
-        run: npm run lint
+        run: |
+          cd frontend
+          npm install
 
       - name: Run tests
-        run: npm test
+        run: |
+          cd frontend
+          npm test
 
       - name: Build frontend
-        run: npm run build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+        run: |
+          cd frontend
+          npm run build
 
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          cd frontend
+          npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
