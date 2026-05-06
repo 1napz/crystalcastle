@@ -1,46 +1,42 @@
-# 🏰 CrystalCastle Pull Request Template
+# 📌 CrystalCastle Pull Request Template / เทมเพลต Pull Request ของ CrystalCastle
 
-## 📌 Description / รายละเอียด
-**English:**  
-Please describe the purpose of this PR and the APIs updated.  
-**ไทย:**  
-กรุณาอธิบายวัตถุประสงค์ของ PR และ API ที่อัปเดต  
+## 📝 Description / รายละเอียด
+Please describe the changes introduced in this PR.  
+โปรดอธิบายการเปลี่ยนแปลงที่นำมาใน PR นี้
 
 ---
 
-## 🔄 Changes / การเปลี่ยนแปลง
-- [ ] API endpoints updated  
-- [ ] Documentation updated (`docs/repo-overview.md`, `archive/legacy-api.md`)  
-- [ ] Environment variables updated (`.env.example`, `docs/environment-variables.md`)  
+## ✅ Checklist for Contributors / เช็คลิสต์สำหรับผู้ส่ง PR
+- [ ] I have read the [Onboarding Guide](./instructions/Onboarding.md)  
+  ฉันได้อ่าน [คู่มือการเริ่มต้นใช้งาน](./instructions/Onboarding.md) แล้ว
+- [ ] `.vercelignore` exists and excludes unnecessary files  
+  มีไฟล์ `.vercelignore` และตัดไฟล์ที่ไม่จำเป็นออกแล้ว
+- [ ] Copilot CLI installed and verified (`copilot --version`)  
+  ติดตั้ง Copilot CLI และตรวจสอบแล้ว (`copilot --version`)
+- [ ] Authentication completed (`copilot /login`)  
+  ยืนยันตัวตนเรียบร้อยแล้ว (`copilot /login`)
+- [ ] Mock mode tested (`npm run dev:mock`)  
+  ทดสอบโหมด Mock แล้ว (`npm run dev:mock`)
+- [ ] API routes lightweight, shared logic in `/lib/`  
+  เส้นทาง API เบา และ logic ที่ใช้ร่วมกันอยู่ใน `/lib/`
+- [ ] Supabase RLS policies + `groq_logs` table verified  
+  ตรวจสอบนโยบาย RLS ของ Supabase และตาราง `groq_logs` แล้ว
+- [ ] Vercel plan quota checked (Hobby vs Pro)  
+  ตรวจสอบโควต้า Vercel แล้ว (Hobby vs Pro)
 
 ---
 
-## ✅ Reviewer Checklist – API Integration PRs
+## 👥 Reviewer Enforcement / การบังคับใช้สำหรับ Reviewer
+Reviewers must confirm the following before approval:  
+ผู้ตรวจสอบต้องยืนยันสิ่งต่อไปนี้ก่อนอนุมัติ:
 
-### English
-- [ ] No usage of **Fal API v1** (`api.fal.ai/v1/kling/generation`)  
-- [ ] Uses **Fal API v2** (`fal.run/fal-ai/kling-video/v2/master/image-to-video`)  
-- [ ] No usage of **Magic Hour synchronous flow**  
-- [ ] Uses **Magic Hour async job flow**  
-- [ ] No usage of **Supabase legacy auth (`auth/v1`)**  
-- [ ] Uses **Supabase `auth/v2`** with JWT + RLS  
-- [ ] No usage of **Gemini/Groq old endpoints** without authentication  
-- [ ] Uses **latest Gemini model (`gemini-1.5-pro`)** with secure API key  
-- [ ] No usage of **Video Engine synchronous endpoints**  
-- [ ] Uses **async job endpoints** with polling/callback  
-- [ ] Contributor updated **`archive/legacy-api.md`** if any API was deprecated  
-- [ ] Contributor updated **`docs/environment-variables.md`** if new API keys are required  
+- [ ] Checklist items above are completed  
+  เช็คลิสต์ด้านบนทำครบแล้ว
+- [ ] Governance flow followed (see [ReviewerChecklist.md](./instructions/ReviewerChecklist.md))  
+  ปฏิบัติตาม Flow ของ Governance (ดู [ReviewerChecklist.md](./instructions/ReviewerChecklist.md))
 
-### ภาษาไทย
-- [ ] ไม่มีการเรียกใช้ **Fal API v1** (`api.fal.ai/v1/kling/generation`)  
-- [ ] ใช้ **Fal API v2** (`fal.run/fal-ai/kling-video/v2/master/image-to-video`)  
-- [ ] ไม่ใช้ **Magic Hour synchronous flow**  
-- [ ] ใช้ **Magic Hour async job flow**  
-- [ ] ไม่เรียก **Supabase legacy auth (`auth/v1`)**  
-- [ ] ใช้ **Supabase `auth/v2`** พร้อม JWT + RLS  
-- [ ] ไม่ใช้ **Gemini/Groq endpoints เก่า** ที่ไม่มีการ auth  
-- [ ] ใช้ **Gemini รุ่นล่าสุด (`gemini-1.5-pro`)** พร้อม API key ที่ปลอดภัย  
-- [ ] ไม่ใช้ **Video Engine synchronous endpoints**  
-- [ ] ใช้ **async job endpoints** ที่รองรับ polling/callback  
-- [ ] Contributor อัปเดต **`archive/legacy-api.md`** หากมี API ถูก deprecate  
-- [ ] Contributor อัปเดต **`docs/environment-variables.md`** หากต้องเพิ่ม API keys ใหม่
+---
+
+## 🚀 Notes / หมายเหตุ
+Please include any additional context, screenshots, or references.  
+โปรดใส่บริบทเพิ่มเติม, ภาพหน้าจอ, หรือแหล่งอ้างอิง
