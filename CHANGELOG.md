@@ -1,3 +1,39 @@
+`markdown
+
+📜 CrystalCastle Changelog
+
+v1.5.1 – 2026-05-06
+
+✨ Features / ฟีเจอร์ใหม่
+- เพิ่ม bilingual reviewer checklist (workflows/ReviewerChecklist.md) พร้อม Flow Diagram  
+- ปรับปรุงเอกสาร README.md โดยเพิ่ม Quick Start bilingual block  
+- เสริม Reviewer Impact section ใน RELEASE_NOTES.md  
+
+🛠️ Fixes / การแก้ไขบั๊ก
+- ปรับปรุง docstring coverage เป็น 85% (เกิน threshold 80%)  
+- แก้ไข governance enforcement ให้สอดคล้องกับ schema v2 ของ .coderabbit.yaml  
+- ปรับปรุง auto-comment bilingual reminders ให้ทำงานถูกต้อง  
+
+📚 Docs / เอกสาร
+- อัปเดต CHANGELOG.md ให้รวม PR #247 และ #248  
+- เพิ่มลิงก์จาก README.md ไปยัง reviewer artifacts (ReviewerChecklist.md, GovernanceFlow.md)  
+- ขยาย RELEASE_NOTES.md ให้มี Quick Start bilingual block  
+
+🔒 Governance / การบังคับใช้กฎระเบียบ
+- Reviewer checklist บังคับใช้ bilingual docstring coverage ≥ 80%  
+- Branch naming rules ยังคงบังคับใช้ (feature/, fix/, docs/, chore/)  
+- .coderabbit.yaml validate ผ่าน schema v2  
+
+📋 Reviewer Impact / ผลกระทบต่อผู้ตรวจสอบ
+- Reviewer ต้องตรวจสอบ fallback chain (FAL → Magic Hour)  
+- Reviewer ต้อง enforce bilingual docstring coverage ก่อนอนุมัติ  
+- Reviewer ต้องยืนยันว่า .coderabbit.yaml ใช้ schema v2  
+- Reviewer ต้องตรวจสอบว่า PR title อธิบาย fallback + governance enforcement  
+- Reviewer ต้องยืนยันว่ามี changelog entry และ release notes ครบถ้วน  
+`
+
+---
+
 # 📜 CrystalCastle Changelog
 ## [1.4.0] – 2026-05-06
 
