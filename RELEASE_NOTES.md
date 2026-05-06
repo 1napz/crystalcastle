@@ -1,44 +1,52 @@
-# 🚀 CrystalCastle Release Notes (Bilingual)
-
-## 📌 Purpose / วัตถุประสงค์
-**English:**  
-Release Notes summarize new features, changes, and fixes in each version of CrystalCastle. They are bilingual to ensure clarity for contributors and reviewers.  
-
-**ไทย:**  
-Release Notes ใช้สรุปฟีเจอร์ใหม่ การเปลี่ยนแปลง และการแก้ไขในแต่ละเวอร์ชันของ CrystalCastle โดยใช้สองภาษาเพื่อให้ contributor และ reviewer เข้าใจตรงกัน  
+# 🚀 CrystalCastle Release Notes – v1.5.0 (2026-05-06)
 
 ---
 
-## 🔖 Version 1.2.0 — 2026-05-06
-### ✨ New Features / ฟีเจอร์ใหม่
-- **English:** Added bilingual Reviewer Training Guide and Reviewer Notes for governance enforcement.  
-- **ไทย:** เพิ่ม Reviewer Training Guide และ Reviewer Notes สองภาษาเพื่อบังคับใช้ governance  
-
-- **English:** Introduced Telegram Alert Template and workflow for CI/CD failure notifications.  
-- **ไทย:** เพิ่ม Telegram Alert Template และ workflow สำหรับแจ้งเตือน CI/CD fail  
-
-### 🔄 Changes / การเปลี่ยนแปลง
-- **English:** Updated `archive/legacy-api.md` with stricter governance rules.  
-- **ไทย:** อัปเดต `archive/legacy-api.md` ด้วยกฎ governance ที่เข้มงวดขึ้น  
-
-### 🛠 Fixes / การแก้ไข
-- **English:** Optimized CI/CD workflow triggers to reduce Vercel quota usage.  
-- **ไทย:** ปรับปรุง CI/CD workflow triggers เพื่อลดการใช้ quota ของ Vercel  
+## ✨ Features / ฟีเจอร์ใหม่
+- Refactored **FAL → Magic Hour async fallback chain** for video generation  
+- Added bilingual auto-comment reminders for reviewers in `.coderabbit.yaml`  
+- Improved docstring coverage to **82%** (above 80% threshold)  
+- Enhanced governance flow documentation (`workflows/GovernanceFlow.md`)  
 
 ---
 
-## 🔖 Version 1.1.0 — 2026-05-05
-### ✨ New Features / ฟีเจอร์ใหม่
-- **English:** Added bilingual PR template and reviewer checklist.  
-- **ไทย:** เพิ่ม PR template และ reviewer checklist สองภาษา  
-
-### 🔄 Changes / การเปลี่ยนแปลง
-- **English:** Improved `.vercelignore` to optimize deployment.  
-- **ไทย:** ปรับปรุง `.vercelignore` เพื่อเพิ่มประสิทธิภาพการ deploy  
+## 🛠️ Fixes / การแก้ไขบั๊ก
+- Corrected FAL endpoint to official spec:  
+  `fal.run/fal-ai/kling-video/v2/master/image-to-video`  
+- Adjusted FAL payload: `duration` must be string, `aspect_ratio` set to `"9:16"`  
+- Rewrote Magic Hour workflow: image upload → job creation → polling → download final video  
+- Removed deprecated keys from `.coderabbit.yaml` (`version`, `comment_template`, `scopes`)  
 
 ---
 
-## 🔖 Version 1.0.0 — 2026-05-01
-### 🎉 Initial Release / การปล่อยครั้งแรก
-- **English:** Initial release with CI/CD workflows, Supabase integration, and governance artifacts.  
-- **ไทย:** ปล่อยครั้งแรกพร้อม CI/CD workflows, Supabase integration และ governance artifacts
+## 📚 Docs / เอกสาร
+- Added bilingual docstrings to `generate-videos.js` functions  
+- Updated reviewer checklist in `workflows/ReviewerChecklist.md`  
+- Expanded onboarding guide (`workflows/Onboarding.md`) with Copilot CLI setup  
+- Governance flow diagram (`workflows/GovernanceFlow.md`) now bilingual ASCII chart  
+
+---
+
+## 🔒 Governance / การบังคับใช้กฎระเบียบ
+- `.coderabbit.yaml` updated to schema v2 with auto-comment enforcement  
+- Branch naming rules enforced (`feature/*`, `fix/*`, `docs/*`, `chore/*`)  
+- Reviewer checklist requires:  
+  - `.env.local` includes `FAL_KEY` and `MAGIC_HOUR_API_KEY`  
+  - Docstring coverage ≥ 80%  
+  - API endpoints match official specs  
+- CI/CD workflows auto-check technical compliance (`.github/workflows/`)  
+
+---
+
+## 📋 Reviewer Impact / ผลกระทบต่อผู้ตรวจสอบ
+- Reviewers must verify fallback chain works (FAL → Magic Hour)  
+- Reviewers must enforce bilingual docstring coverage before approval  
+- Reviewers must confirm `.coderabbit.yaml` validates against schema v2  
+- Reviewers must ensure changelog entry is present in PR  
+
+---
+
+## 🌐 Next Steps / ขั้นตอนถัดไป
+- Contributors follow onboarding guide (`workflows/Onboarding.md`)  
+- Reviewers enforce governance flow (`workflows/GovernanceFlow.md`)  
+- CI/CD workflows auto-check technical compliance before deploy
