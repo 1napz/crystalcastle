@@ -26,17 +26,40 @@ Please describe the changes introduced in this PR.
 
 ---
 
+## 🔎 Checklist for Governance / เช็คลิสต์ด้าน Governance
+- [ ] `.env.local` มี `FAL_KEY` และ `MAGIC_HOUR_API_KEY`  
+- [ ] FAL endpoint และ payload ถูกต้อง (`duration` เป็น string, `aspect_ratio = "9:16"`)  
+- [ ] Magic Hour workflow ใช้ async (Upload → Job → Polling → Download)  
+- [ ] Docstring coverage ≥ 80% และ bilingual  
+- [ ] `README.md` มี Quick Start bilingual block  
+- [ ] `CHANGELOG.md` มี entry ล่าสุด  
+- [ ] `RELEASE_NOTES.md` bilingual + Reviewer Impact  
+- [ ] `.coderabbit.yaml` ใช้ schema v2 และ validate ผ่าน  
+- [ ] Branch naming rules ถูกต้อง (`feature/*`, `fix/*`, `docs/*`, `chore/*`)  
+- [ ] Auto-comment bilingual reminders ทำงาน  
+- [ ] CI/CD workflows ครบถ้วน (lint/test/build/deploy + security scan + governance enforcement)
+
+---
+
 ## 👥 Reviewer Enforcement / การบังคับใช้สำหรับ Reviewer
 Reviewers must confirm the following before approval:  
 ผู้ตรวจสอบต้องยืนยันสิ่งต่อไปนี้ก่อนอนุมัติ:
 
-- [ ] Checklist items above are completed  
-  เช็คลิสต์ด้านบนทำครบแล้ว
-- [ ] Governance flow followed (see [ReviewerChecklist.md](./instructions/ReviewerChecklist.md))  
-  ปฏิบัติตาม Flow ของ Governance (ดู [ReviewerChecklist.md](./instructions/ReviewerChecklist.md))
+- [ ] Contributor checklist completed  
+  เช็คลิสต์ของผู้ส่ง PR ทำครบแล้ว
+- [ ] Governance checklist completed  
+  เช็คลิสต์ด้าน Governance ทำครบแล้ว
+- [ ] Governance flow followed (see [ReviewerChecklist.md](./workflows/ReviewerChecklist.md))  
+  ปฏิบัติตาม Flow ของ Governance (ดู [ReviewerChecklist.md](./workflows/ReviewerChecklist.md))
 
 ---
 
 ## 🚀 Notes / หมายเหตุ
 Please include any additional context, screenshots, or references.  
 โปรดใส่บริบทเพิ่มเติม, ภาพหน้าจอ, หรือแหล่งอ้างอิง
+
+---
+
+## ✅ Final Decision / การตัดสินใจสุดท้าย
+- ถ้าทุกข้อผ่าน → ✅ Merge ได้  
+- ถ้ามีข้อไม่ผ่าน → ⚠️ ต้องแก้ไขก่อน Merge
