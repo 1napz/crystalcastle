@@ -1,44 +1,35 @@
-name: CI/CD Pipeline
+name: CI/CD Build & Deploy
 
 on:
-  pull_request:
-    branches: [ "main" ]
   push:
-    branches: [ "main" ]
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  ai-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Python
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.11'
+          node-version: '20'
 
-      # 3. Install dependencies
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: npm install
 
-      # 4. Run AI pipeline tests
-      - name: Run AI pipeline tests
-        run: |
-          mkdir -p tests/ai/results
-          pytest --junitxml=tests/ai/results/results.xml
+      - name: Run tests
+        run: npm test
 
-      # 5. Upload test results
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-test-results
-          path: tests/ai/results/
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to Vercel
+        if: github.ref == 'refs/heads/main'
+        run: |
+          npx vercel --token=${{ secrets.VERCEL_TOKEN }} --prod
