@@ -1,0 +1,65 @@
+# CodeRabbitAI Configuration for CrystalCastle
+
+version: 1
+
+rules:
+  - id: bilingual-docs
+    description: "Require bilingual (ไทย/English) documentation updates"
+    severity: error
+    triggers:
+      - files: ["docs/**/*.md"]
+    checks:
+      - ensure_text: ["English:", "ไทย:"]
+
+  - id: quota-logs
+    description: "Ensure quota monitoring logs include warnings"
+    severity: warning
+    triggers:
+      - files: [".github/workflows/*.yml", "src/**/*.ts", "src/**/*.js"]
+    checks:
+      - ensure_text: ["Quota usage"]
+
+  - id: security-scan
+    description: "Require security scan step in workflows"
+    severity: error
+    triggers:
+      - files: [".github/workflows/*.yml"]
+    checks:
+      - ensure_text: ["npm audit", "snyk"]
+
+  - id: changelog-update
+    description: "Require changelog entry for each PR"
+    severity: error
+    triggers:
+      - files: ["CHANGELOG.md"]
+    checks:
+      - regex: "v[0-9]+\\.[0-9]+\\.[0-9]+"
+
+  - id: release-notes-update
+    description: "Require release notes with feature highlights and bug fixes"
+    severity: error
+    triggers:
+      - files: ["docs/release-notes*.md"]
+    checks:
+      - ensure_text: ["Feature Highlights", "Bug Fixes"]
+
+enforcement:
+  reject_on_error: true
+  comment_template: |
+    ### 📝 CodeRabbitAI Feedback (Bilingual)
+
+    **English:**  
+    This PR is missing required updates. Please fix the following before approval:  
+    - ❌ Bilingual documentation updates  
+    - ❌ Changelog entry with correct versioning  
+    - ❌ Release notes with feature highlights and bug fixes  
+    - ⚠️ Quota monitoring logs incomplete  
+    - ⚠️ Security scan step not found  
+
+    **ไทย:**  
+    PR นี้ยังขาดการอัปเดตที่จำเป็น กรุณาแก้ไขก่อน approval:  
+    - ❌ เอกสาร bilingual  
+    - ❌ changelog entry พร้อม versioning ที่ถูกต้อง  
+    - ❌ release notes ที่มี feature highlights และ bug fixes  
+    - ⚠️ quota monitoring logs ยังไม่ครบ  
+    - ⚠️ ไม่พบขั้นตอน security scan
