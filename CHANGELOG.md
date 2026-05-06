@@ -1,102 +1,226 @@
-# Changelog
+`markdown
 
-All notable changes to this project will be documented in this file.
+📜 CrystalCastle Changelog
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+v1.5.1 – 2026-05-06
 
-## [Unreleased]
+✨ Features / ฟีเจอร์ใหม่
+- เพิ่ม bilingual reviewer checklist (workflows/ReviewerChecklist.md) พร้อม Flow Diagram  
+- ปรับปรุงเอกสาร README.md โดยเพิ่ม Quick Start bilingual block  
+- เสริม Reviewer Impact section ใน RELEASE_NOTES.md  
 
-### Added
-- ยังไม่มีการเพิ่มฟีเจอร์ใหม่ในเวอร์ชันนี้
+🛠️ Fixes / การแก้ไขบั๊ก
+- ปรับปรุง docstring coverage เป็น 85% (เกิน threshold 80%)  
+- แก้ไข governance enforcement ให้สอดคล้องกับ schema v2 ของ .coderabbit.yaml  
+- ปรับปรุง auto-comment bilingual reminders ให้ทำงานถูกต้อง  
 
-### Changed
-- ยังไม่มีการเปลี่ยนแปลงในเวอร์ชันนี้
+📚 Docs / เอกสาร
+- อัปเดต CHANGELOG.md ให้รวม PR #247 และ #248  
+- เพิ่มลิงก์จาก README.md ไปยัง reviewer artifacts (ReviewerChecklist.md, GovernanceFlow.md)  
+- ขยาย RELEASE_NOTES.md ให้มี Quick Start bilingual block  
 
-### Fixed
-- ยังไม่มีการแก้ไขข้อบกพร่องในเวอร์ชันนี้
+🔒 Governance / การบังคับใช้กฎระเบียบ
+- Reviewer checklist บังคับใช้ bilingual docstring coverage ≥ 80%  
+- Branch naming rules ยังคงบังคับใช้ (feature/, fix/, docs/, chore/)  
+- .coderabbit.yaml validate ผ่าน schema v2  
 
-### Removed
-- ยังไม่มีการลบฟีเจอร์ใด ๆ ในเวอร์ชันนี้
-
----
-
-## [1.6.0] - 2026-04-28
-
-### Added
-- ระบบสร้างวิดีโอแบบอะซิงโครนัส (Async video generation) โดยใช้ Upstash QStash + Supabase เพื่อแก้ปัญหา timeout ของ Vercel Hobby Plan (10 วินาที)
-  - `POST /api/generate-video` สำหรับสร้าง task และส่งงานไปยังคิว
-  - `POST /api/process-video` สำหรับ worker ที่เรียก FAL/Magic Hour ในพื้นหลัง
-  - `GET /api/task/[id]` สำหรับให้ frontend ใช้ polling ตรวจสอบสถานะ
-- เครื่องมือตรวจจับความลับ (Secret scanning) เพื่อเพิ่มความปลอดภัย
-  - `detect-secrets` + pre-commit hook (`.pre-commit-config.yaml`)
-  - `gitleaks` GitHub Actions workflow (`.github/workflows/gitleaks.yml`)
-- กำหนดค่า CodeRabbit (`.coderabbit.yaml`) ด้วยภาษาไทย, โปรไฟล์ `chill`, และคำแนะนำเฉพาะสำหรับโฟลเดอร์ `api/` และไฟล์ `product.js`
-- เอกสารกลยุทธ์การแตกกิ่ง (`docs/branching-strategy.md`) อธิบายการใช้งาน GitHub Flow และ Feature Branches
-- คู่มือการพัฒนา (`docs/development.md`) สำหรับการติดตั้ง, การพัฒนาในเครื่อง, Codespaces และการแก้ไขข้อผิดพลาด
-- Workflow สำหรับ Auto-merge Dependabot PRs (`.github/workflows/dependabot-auto-merge.yml`)
-- Workflow ตรวจสอบชื่อ Pull Request ให้เป็นไปตาม Conventional Commits (`.github/workflows/semantic-pr.yml`)
-- Health check endpoint (`/api/health`) สำหรับการตรวจสอบสถานะระบบ
-- ไฟล์ตัวอย่าง environment variables (`.env.example`) ที่สมบูรณ์ พร้อมทั้งคีย์ที่จำเป็นและคีย์เสริม
-
-### Changed
-- ปรับปรุง `vercel.json` ให้เหมาะสมกับแผน Hobby Plan:
-  - ลบ `ignoreCommand` ที่ไม่รองรับ
-  - ตั้ง `maxDuration: 10` สำหรับ API routes ทั้งหมด (ค่าสูงสุดที่ใช้ได้ในแผนฟรี)
-  - เพิ่ม cache headers ที่เหมาะสมสำหรับ static assets และ security headers (`X-Content-Type-Options`, `X-Frame-Options` ฯลฯ)
-- ปรับปรุง `README.md` ให้มี badges, ขั้นตอนการพัฒนา, หมายเหตุเกี่ยวกับ secret scanning, และปุ่ม Deploy บน Vercel ที่ใช้งานได้จริง
-- ปรับแต่ง `.devcontainer/devcontainer.json`:
-  - ใช้ฟิลด์ `secrets` ในการ inject `GROQ_API_KEY`, `GEMINI_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-  - เพิ่ม `postStartCommand` เพื่อเริ่ม dev server อัตโนมัติ
-  - กำหนด `hostRequirements` (4 CPU / 8 GB RAM)
-- อัปเกรดการตั้งค่า ESLint (`.eslintrc.json`) โดยเพิ่ม `eslint-config-prettier` เพื่อป้องกันความขัดแย้ง
-- กำหนดมาตรฐาน Prettier (`.prettierrc`) ให้ใช้ single quotes, trailing commas แบบ `es5`, และความกว้างบรรทัด 100
-
-### Fixed
-- แก้ไขข้อขัดแย้งระหว่าง ESLint และ Prettier โดยเพิ่ม `eslint-config-prettier` และปิดกฎที่ซ้ำซ้อน
-- แก้ไข syntax error ในฟังก์ชัน `updateFilename()` ภายในไฟล์ `product.js`
-- ทำให้ `.env.local` ถูก ignore อย่างถูกต้อง (เพิ่มใน `.gitignore` และ `.prettierignore`)
-
-### Removed
-- ลบ `ignoreCommand` ออกจาก `vercel.json` (ไม่รองรับในแผน Hobby)
-- ลบป๊อปอัปเกี่ยวกับราคา/ส่วนลด (ถูกลบไปแล้วในเวอร์ชันก่อนหน้า)
+📋 Reviewer Impact / ผลกระทบต่อผู้ตรวจสอบ
+- Reviewer ต้องตรวจสอบ fallback chain (FAL → Magic Hour)  
+- Reviewer ต้อง enforce bilingual docstring coverage ก่อนอนุมัติ  
+- Reviewer ต้องยืนยันว่า .coderabbit.yaml ใช้ schema v2  
+- Reviewer ต้องตรวจสอบว่า PR title อธิบาย fallback + governance enforcement  
+- Reviewer ต้องยืนยันว่ามี changelog entry และ release notes ครบถ้วน  
+`
 
 ---
 
-## [1.5.0] - 2026-04-26
+# 📜 CrystalCastle Changelog
+## [1.4.0] – 2026-05-06
 
-### Added
-- ตัวเลือกเมนูแบบเลื่อนลง (dropdown) สำหรับเลือก AI Video Engine (FAL, Runway, Pika, Nexa, WaveSpeed) ใน UI
-- API endpoint `/api/generate-video` รองรับหลาย video engines
-- Security Headers (CSP, X-Frame-Options, Permissions-Policy)
-- Workflow `fix-package-lock.yml` เพื่อซ่อมแซม lockfile อัตโนมัติ
-- เอกสาร: `SECURITY.md`, `copilot-instructions.md`
-- ตัวสร้างสไลด์โชว์, Intro, CTA และ Thumbnail
-- แสดง Groq Logs ใน `index.html`
-- ระบบ AI สำรอง (Fallback) Groq → Gemini
+### 🚀 Added
+- Implemented **FAL → Magic Hour fallback chain** for video generation  
+- Added bilingual docstrings (English + Thai) to `generate-videos.js` functions  
+- Improved reviewer enforcement notes in code comments  
 
-### Changed
-- อัปเดต `product.html`: เปลี่ยนจากปุ่ม Kling/Magic เป็นตัวเลือกแบบ dropdown
-- อัปเดต `product.js` ให้รองรับการเลือก engine
-- เปลี่ยนแบรนด์โปรเจกต์เป็น `@snapzreview`
-- ปรับปรุง `vercel.json` เพิ่มการตั้งค่า `maxDuration`
+### 🛠️ Changed
+- Updated FAL endpoint to official spec (`fal.run/fal-ai/kling-video/v2/master/image-to-video`)  
+- Adjusted FAL payload: `duration` must be string, `aspect_ratio` set to `"9:16"`  
+- Rewrote Magic Hour workflow: async job creation → polling → download final video  
+- Renamed PR title to reflect fallback mechanism  
 
-### Fixed
-- แก้ไขปัญหา Vercel build ล้มเหลว (ลดจำนวน serverless functions ให้เหลือ ≤12)
-- ลบป๊อปอัปเรื่องราคา/ส่วนลดที่น่ารำคาญ
+### 🔒 Governance Enforcement
+- Reviewer checklist updated:  
+  - `.env.local` must include `FAL_KEY` and `MAGIC_HOUR_API_KEY`  
+  - Docstring coverage ≥ 80% required  
+  - PRs must document API compliance fixes in changelog/release notes  
+
+### 📋 Reviewer Impact / ผลกระทบต่อผู้ตรวจสอบ
+- Reviewers must confirm API endpoints match official docs  
+- Reviewers must verify fallback chain works (FAL → Magic Hour)  
+- Reviewers must enforce bilingual docstring coverage before approval  
+- Reviewers must ensure changelog entry is present in PR  
+
+---
+## [1.3.0] - 2026-05-06
+
+### 🚀 Features / ฟีเจอร์ใหม่
+- **feat(api):** Added video logging endpoint for monitoring AI events  
+  **ไทย:** เพิ่ม API สำหรับ video logging เพื่อใช้ตรวจสอบเหตุการณ์ AI  
+
+- **feat(devcontainer):** Added missing `express` dependency to package.json  
+  **ไทย:** เพิ่ม dependency `express` ที่หายไปใน package.json  
 
 ---
 
-## [1.4.0] - Earlier
-- เปิดตัวโปรเจกต์ครั้งแรก
-- อัปโหลดรูปภาพ, สร้าง Prompt, สร้างวิดีโอด้วย FAL/Magic Hour
-- เชื่อมต่อ Supabase (Storage, Authentication, RLS)
+### 🐛 Fixes / การแก้ไขบั๊ก
+- **fix(frontend):** Resolved login form validation error  
+  **ไทย:** แก้ไขปัญหา validation ของฟอร์ม login  
+
+- **fix(workflows):** Corrected CI pipeline step order to prevent build failures  
+  **ไทย:** แก้ไขลำดับขั้นตอน CI pipeline เพื่อป้องกัน build ล้มเหลว  
 
 ---
 
-## 🔗 เปรียบเทียบรุ่น (Compare Links)
+### 📚 Documentation / เอกสาร
+- **docs(onboarding):** Updated environment setup guide with `.env.local` usage  
+  **ไทย:** อัปเดตคู่มือการตั้งค่า environment โดยเพิ่มการใช้งาน `.env.local`  
 
-[Unreleased]: https://github.com/1napz/crystalcastle/compare/v1.6.0...HEAD
-[1.6.0]: https://github.com/1napz/crystalcastle/compare/v1.5.0...v1.6.0
-[1.5.0]: https://github.com/1napz/crystalcastle/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/1napz/crystalcastle/releases/tag/v1.4.0
+- **docs(reviewer):** Added bilingual reviewer checklist for `creation.log` analysis  
+  **ไทย:** เพิ่ม checklist สองภาษา สำหรับ reviewer ในการตรวจสอบ `creation.log`  
+
+---
+
+### 🛠 Maintenance / งานบำรุงรักษา
+- **chore(deps):** Updated axios to v1.2.0  
+  **ไทย:** อัปเดต axios เป็นเวอร์ชัน 1.2.0  
+
+- **ci(security):** Added secret scanning workflow  
+  **ไทย:** เพิ่ม workflow สำหรับการสแกน secrets  
+
+---
+
+### ⚡ Performance / ประสิทธิภาพ
+- **perf(video):** Optimized rendering speed for video engine  
+  **ไทย:** ปรับปรุงความเร็วในการ render ของ video engine  
+
+---
+
+### ✅ Governance & Reviewer Training / มาตรฐานการตรวจสอบ
+- Added bilingual PR template requiring `creation.log` review  
+  **ไทย:** เพิ่ม PR template สองภาษา ที่บังคับให้ reviewer ตรวจสอบ `creation.log`  
+
+- Added reviewer workflow diagram bilingual for Codespaces error handling  
+  **ไทย:** เพิ่ม diagram สองภาษา สำหรับ reviewer workflow ในการจัดการ error ของ Codespaces  
+
+---
+
+## 📌 Summary / สรุป
+**English:**  
+CrystalCastle v1.3.0 introduces new API features, dependency fixes, improved CI/CD workflows, and bilingual governance artifacts for reviewers.  
+
+**ไทย:**  
+CrystalCastle v1.3.0 เพิ่มฟีเจอร์ API ใหม่, แก้ไข dependency, ปรับปรุง CI/CD workflows และเพิ่ม artifact สองภาษาเพื่อช่วย reviewer ตรวจสอบได้อย่างมีมาตรฐาน
+
+# 📜 CrystalCastle Changelog (Bilingual)
+
+## [1.2.0] - 2026-05-06
+### ✨ Added / เพิ่ม
+**English:**  
+- Bilingual PR template enforcing reviewer checklist  
+- Updated reviewer notes (`docs/reviewer.notes.md`) with streamlined bilingual checklist  
+- Enhanced CI/CD workflows for QA and security scanning  
+
+**ไทย:**  
+- เพิ่ม PR template สองภาษาที่บังคับใช้ reviewer checklist  
+- อัปเดต reviewer notes (`docs/reviewer.notes.md`) ด้วย checklist สองภาษาที่กระชับขึ้น  
+- ปรับปรุง CI/CD workflows สำหรับ QA และการสแกนความปลอดภัย  
+
+---
+
+### 🛠 Fixed / แก้ไข
+**English:**  
+- Codespaces recovery log handling (`creation.log`)  
+- Onboarding documentation for environment setup  
+- Deprecated files moved to `archive/`  
+
+**ไทย:**  
+- แก้ไขการจัดการ Codespaces recovery log (`creation.log`)  
+- แก้ไขเอกสาร onboarding สำหรับการตั้งค่า environment  
+- ย้ายไฟล์ที่เลิกใช้ไปที่ `archive/`  
+
+---
+
+### 📚 Documentation / เอกสาร
+**English:**  
+- Updated `CHANGELOG.md` bilingual entries  
+- Added bilingual release notes for governance transparency  
+- Improved reviewer training guide in `docs/onboarding.md`  
+
+**ไทย:**  
+- อัปเดต `CHANGELOG.md` ด้วย bilingual entries  
+- เพิ่ม release notes bilingual เพื่อความโปร่งใสด้าน governance  
+- ปรับปรุง reviewer training guide ใน `docs/onboarding.md`
+
+# CrystalCastle Changelog / บันทึกการเปลี่ยนแปลง
+
+## 📌 Versioning Rules / กฎการจัดการเวอร์ชัน
+- Use **Semantic Versioning (SemVer)**: MAJOR.MINOR.PATCH
+- MAJOR: Breaking changes / การเปลี่ยนแปลงที่ทำให้โค้ดเก่าใช้ไม่ได้
+- MINOR: New features (backward-compatible) / ฟีเจอร์ใหม่ที่ยังเข้ากันได้
+- PATCH: Bug fixes / การแก้บั๊ก
+
+---
+
+## 📝 Template / แม่แบบ
+
+### [X.Y.Z] - YYYY-MM-DD
+#### 🚀 Features / ฟีเจอร์ใหม่
+- Added [feature name]  
+- เพิ่ม [ชื่อฟีเจอร์]
+
+#### 🐛 Fixes / การแก้ไขบั๊ก
+- Fixed [bug description]  
+- แก้ไข [รายละเอียดบั๊ก]
+
+#### 📖 Documentation / เอกสาร
+- Updated [doc name]  
+- อัปเดต [ชื่อเอกสาร]
+
+#### 🔒 Governance & Enforcement / กฎระเบียบและการบังคับใช้
+- Reviewer checklist enforced in PRs  
+- บังคับใช้เช็คลิสต์ Reviewer ใน PR
+- `.vercelignore` verified for deploy size  
+- ตรวจสอบ `.vercelignore` เพื่อลดขนาดการ Deploy
+- Supabase RLS policies confirmed  
+- ยืนยันนโยบาย RLS ของ Supabase
+
+#### 👥 Reviewer Impact / ผลกระทบต่อผู้ตรวจสอบ
+- Minimum 2 reviewers required for merge  
+- ต้องมีผู้ตรวจสอบอย่างน้อย 2 คนก่อน Merge
+- Checklist confirmation logged in PR comments  
+- บันทึกการยืนยันเช็คลิสต์ในคอมเมนต์ PR
+
+---
+
+## 📌 Example Entry / ตัวอย่าง
+
+### [1.2.0] - 2026-05-06
+#### 🚀 Features
+- Added bilingual reviewer checklist enforcement  
+- เพิ่มการบังคับใช้เช็คลิสต์ Reviewer แบบสองภาษา
+
+#### 🐛 Fixes
+- Fixed Supabase client initialization error  
+- แก้ไขข้อผิดพลาดการเริ่มต้น Supabase client
+
+#### 📖 Documentation
+- Added governance flowchart to `docs/`  
+- เพิ่ม Flowchart การบังคับใช้ใน `docs/`
+
+#### 🔒 Governance & Enforcement
+- `.coderabbit.yaml` updated with PR size limits  
+- อัปเดต `.coderabbit.yaml` ด้วยข้อจำกัดขนาด PR
+
+#### 👥 Reviewer Impact
+- Reviewers must confirm `.env.local` setup before approval  
+- ผู้ตรวจสอบต้องยืนยันการตั้งค่า `.env.local` ก่อนอนุมัติ

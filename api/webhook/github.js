@@ -17,7 +17,12 @@ export default async function handler(req, res) {
   
   const event = req.headers['x-github-event'];
   const body = req.body;
-
+// api/webhook/github.js
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
   const important = ['secret_scanning_alert', 'deployment_status', 'workflow_run'];
   if (!important.includes(event)) return res.status(200).end();
   

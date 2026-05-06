@@ -1,10 +1,5 @@
-#.coderabbit.yaml
 reviews:
-  profile: chill
-  high_level_summary: true
-  poem: false
-  review_status: false
-  review_details: false
+  summary: true
   auto_review:
     enabled: true
     drafts: false
@@ -25,7 +20,6 @@ reviews:
     - "!**/*.spec.{js,ts,tsx}"
     - "!**/__mocks__/**"
     - "!**/migrations/**"
-    - "!**/*.md"
 
   path_instructions:
     - path: "api/**/*.js"
@@ -61,6 +55,17 @@ reviews:
         - ตรวจสอบ MD047: ไฟล์ต้องจบด้วย single newline
         - [Unreleased] ต้องมี link เทียบ version: [Unreleased]: https://github.com/ORG/REPO/compare/v1.6.0...HEAD
         - Added/Changed/Deprecated/Removed/Fixed/Security ต้องใช้ตาม spec
+
+    - path: "docs/**/*.md"
+      instructions: |
+        - ต้อง bilingual (Thai/English)
+        - ต้องมี reviewer checklist หรือ policy ตามมาตรฐาน
+        - ห้าม commit secrets หรือข้อมูลส่วนตัว
+
+commit_message:
+  rules:
+    - ต้องใช้ conventional commit format เช่น feat:, fix:, chore:, docs:
+    - ต้อง bilingual (English + Thai)
 
 knowledge_base:
   instructions: |

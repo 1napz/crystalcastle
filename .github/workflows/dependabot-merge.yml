@@ -4,6 +4,7 @@ name: dependentbot[bot]
 on:
   pull_request:
     types: dependentbot[bot]
+workflow_dispatch:
 
 permissions:
   pull-requests: write
