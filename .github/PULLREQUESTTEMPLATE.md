@@ -1,52 +1,50 @@
 `markdown
 
-📋 Pull Request Description
+📝 Pull Request Template (Bilingual)
 
-🔹 Purpose
-<!-- อธิบายว่าทำไมถึงต้องเพิ่ม workflow นี้ -->
+📌 Description / รายละเอียด
+English:  
+Please describe the changes clearly. Include purpose, scope, and impact.  
 
-🔹 Changes
-<!-- สรุปการเปลี่ยนแปลง เช่น เพิ่มไฟล์ .yml, ปรับ CI/CD -->
-
-🔹 Impact
-<!-- อธิบายผลกระทบต่อระบบ เช่น auto-merge, deploy, security -->
-
-🔹 Testing
-<!-- วิธีทดสอบ workflow เช่น run บน branch, ตรวจ logs -->
-
-🔹 Linked Issues
-Closes #ISSUE_ID
+ไทย:  
+กรุณาอธิบายการเปลี่ยนแปลงอย่างชัดเจน รวมถึงวัตถุประสงค์ ขอบเขต และผลกระทบ  
 
 ---
 
-👀 Reviewer Checklist – CrystalCastle (PR เพิ่ม Workflow ใหม่)
+🔎 Checklist / รายการตรวจสอบ
+Contributor must complete before submission / Contributor ต้องทำก่อนส่ง PR
 
-🔹 Governance
-- [ ] มี PR Description ครบถ้วน (Purpose, Changes, Impact, Testing, Linked Issues)
-- [ ] มีการเชื่อมโยงกับ Issue (Closes #...)
-- [ ] Reviewer ถูก assign ตาม CODEOWNERS
-- [ ] มีการอธิบายว่า workflow ใหม่ใช้ทำอะไร
+- [ ] Commit messages follow bilingual Conventional Commits  
+- [ ] Branch name follows repo convention (e.g., feature/..., fix/...)  
+- [ ] creation.log attached if Codespaces build failed  
+- [ ] Documentation updated (README.md, CHANGELOG.md, release-notes.md)  
+- [ ] Unit tests added/updated for new features  
+- [ ] Deprecated files moved to archive/  
 
-🔹 File & Repo Hygiene
-- [ ] Workflow ถูกเพิ่มใน .github/workflows/ เท่านั้น
-- [ ] ไม่มีการ commit ไฟล์ที่ไม่เกี่ยวข้อง เช่น .env.local, package-lock.json
-- [ ] มีการอัปเดต docs/ หรือ README.md เพื่ออธิบาย workflow ใหม่
+---
 
-🔹 Workflow Quality
-- [ ] ใช้ชื่อไฟล์และชื่อ workflow ที่สื่อความหมาย
-- [ ] มีการกำหนด on: trigger ที่ถูกต้อง
-- [ ] มีการกำหนด jobs: และ steps: ครบถ้วน
-- [ ] ไม่มี hard-coded secrets → ใช้ GitHub Secrets แทน
+🧩 Reviewer Notes / หมายเหตุสำหรับผู้รีวิว
+Reviewer must validate before approval / Reviewer ต้องตรวจสอบก่อนอนุมัติ
 
-🔹 Testing & Validation
-- [ ] Workflow รันผ่านใน GitHub Actions (ไม่มี error)
-- [ ] มีการทดสอบ workflow บน branch ก่อน merge เข้าสู่ main
-- [ ] Reviewer ตรวจสอบว่า workflow ไม่กระทบ CI/CD pipeline เดิม
+- [ ] PR template bilingual used correctly  
+- [ ] CI/CD checks passed (build, test, security scan)  
+- [ ] Reviewer checklist (docs/reviewer.notes.md) completed  
+- [ ] Actionable comments provided if changes required  
+- [ ] Governance rules enforced (branch protection, secret scanning)  
 
-🔹 CI/CD & Deployment
-- [ ] Workflow ใหม่ไม่ทำให้ Vercel deploy ล้มเหลว
-- [ ] ถ้า quota Vercel เกิน → reviewer ต้องแจ้ง contributor ว่าต้องรอ reset หรือ upgrade plan
-- [ ] Artifact checks ผ่านครบ
+---
+
+📚 Related Issues / เรื่องที่เกี่ยวข้อง
+Link to issues or discussions / ลิงก์ไปยัง issues หรือ discussions  
+
+---
+
+✅ Summary / สรุป
+English:  
+This PR template ensures contributors and reviewers follow governance rules, CI/CD checks, and bilingual documentation standards.  
+
+ไทย:  
+PR template นี้ช่วยให้ contributor และ reviewer ปฏิบัติตามกฎ governance, ตรวจสอบ CI/CD และมาตรฐานเอกสารสองภาษา  
 `
 
 ---
