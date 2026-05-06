@@ -8,11 +8,11 @@ jobs:
   coderabbit-review:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-      - name: Run CodeRabbit Review
-        uses: coderabbitai/github-action@v1
+      - name: Run CodeRabbitAI Review
+        uses: coderabbitai/action@v1
         with:
-          config: .coderabbit.yaml   # points to your config file
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          config_path: .coderabbit.yaml
