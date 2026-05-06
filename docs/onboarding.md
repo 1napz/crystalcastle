@@ -65,7 +65,7 @@
 - CI/CD fail → ตรวจสอบ logs ใน GitHub Actions  
 - Coverage < 80% → เพิ่ม unit tests ให้ครอบคลุมมากขึ้น
 
-- # CodeRabbitAI Referral Program / โปรแกรมแนะนำ CodeRabbitAI
+## 6. CodeRabbitAI Referral Program / โปรแกรมแนะนำ CodeRabbitAI
 
 ## English
 The CodeRabbitAI Referral Program allows you to invite new contributors or reviewers to join our organization.  
