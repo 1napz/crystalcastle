@@ -1,68 +1,61 @@
-# 📜 Changelog – Crystal Castle
+# 📜 CrystalCastle Changelog
 
-รูปแบบอ้างอิงจาก [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) และ [Semantic Versioning](https://semver.org/).
+## [1.3.0] - 2026-05-06
 
----
+### 🚀 Features / ฟีเจอร์ใหม่
+- **feat(api):** Added video logging endpoint for monitoring AI events  
+  **ไทย:** เพิ่ม API สำหรับ video logging เพื่อใช้ตรวจสอบเหตุการณ์ AI  
 
-## [Unreleased]
-
-### Added
-- ยังไม่มีการเพิ่มฟีเจอร์ใหม่ในเวอร์ชันนี้
-
-### Changed
-- ยังไม่มีการเปลี่ยนแปลงในเวอร์ชันนี้
-
-### Fixed
-- ยังไม่มีการแก้ไขข้อบกพร่องในเวอร์ชันนี้
-
-### Removed
-- ยังไม่มีการลบฟีเจอร์ใด ๆ ในเวอร์ชันนี้
+- **feat(devcontainer):** Added missing `express` dependency to package.json  
+  **ไทย:** เพิ่ม dependency `express` ที่หายไปใน package.json  
 
 ---
 
-## [1.1.0] - 2026-05-05
-### 🚀 Added
-- ปรับปรุง Studio UI ให้รองรับการ preview video แบบ real-time
-- เพิ่มระบบ notification ผ่าน Telegram integration
-- ปรับปรุง Agent Dashboard ให้แสดงสถานะ engines และ Supabase logs
+### 🐛 Fixes / การแก้ไขบั๊ก
+- **fix(frontend):** Resolved login form validation error  
+  **ไทย:** แก้ไขปัญหา validation ของฟอร์ม login  
 
-### 🔒 Security & Privacy
-- เพิ่มการตรวจสอบ API key validity ใน CI/CD
-- ปรับปรุง `privacy.yml` ให้รองรับ mock mode
-- เพิ่มการตรวจสอบ secret leakage ใน workflow
-
-### 🛠 Developer Experience
-- เพิ่ม unit tests สำหรับ `engines.js` และ `supabase.js`
-- ปรับปรุง README.md → เพิ่ม badges สำหรับ Build, Privacy Check, Security Scan
-- เพิ่มตัวอย่าง `.env.local` ที่ชัดเจนขึ้นสำหรับ contributor
-
-### 🐛 Fixed
-- แก้ไข bug ในการเลือก video engine ที่ไม่ sync กับ UI
-- แก้ไข error ของ Supabase logging ที่เกิดจาก key mismatch
+- **fix(workflows):** Corrected CI pipeline step order to prevent build failures  
+  **ไทย:** แก้ไขลำดับขั้นตอน CI pipeline เพื่อป้องกัน build ล้มเหลว  
 
 ---
 
-## [1.0.0] - 2026-05-05
-### 🚀 Added
-- เปิดตัว **Studio UI** (`index.html`) เป็นหน้าแรกของ GitHub Pages
-- ย้ายเนื้อหา `product.html` → `index.html`
-- เพิ่มโครงสร้างโค้ดแบบ **modular** (`engines.js`, `supabase.js`, `ui.js`)
-- เชื่อมโยงกับ **Supabase** สำหรับการบันทึก logs และ action
-- รองรับหลาย video engines (FAL, Magic Hour, RunwayML, Pika, Nexa, Wavespeed)
-- เพิ่ม **Documentation Hub (`doc/index.md`)**
+### 📚 Documentation / เอกสาร
+- **docs(onboarding):** Updated environment setup guide with `.env.local` usage  
+  **ไทย:** อัปเดตคู่มือการตั้งค่า environment โดยเพิ่มการใช้งาน `.env.local`  
 
-### 🔒 Security & Privacy
-- เพิ่ม **privacy.yml** และ **security.yml** สำหรับ CI/CD enforcement
-- ห้าม commit `.env.local` หรือ API keys จริงลง GitHub
-- ใช้ GitHub Secrets / Vercel Dashboard สำหรับ environment variables
-
-### 🛠 Developer Experience
-- เพิ่ม **Mock Mode** สำหรับการทดสอบใน dev environment
-- เพิ่ม CI/CD workflow (`ci.yml`) → lint, test, build, privacy-check, security-scan
+- **docs(reviewer):** Added bilingual reviewer checklist for `creation.log` analysis  
+  **ไทย:** เพิ่ม checklist สองภาษา สำหรับ reviewer ในการตรวจสอบ `creation.log`  
 
 ---
 
-## 🔗 Compare Links
-[Unreleased]: https://github.com/1napz/crystalcastle/compare/v1.1.0...HEAD  
-[1.1.0]: https://github.com/1napz/crystalcastle/compare/v1.0.0...v1.1.0  
-[1.0.0]: https://github.com/1napz/crystalcastle/releases/tag/v1.0.0
+### 🛠 Maintenance / งานบำรุงรักษา
+- **chore(deps):** Updated axios to v1.2.0  
+  **ไทย:** อัปเดต axios เป็นเวอร์ชัน 1.2.0  
+
+- **ci(security):** Added secret scanning workflow  
+  **ไทย:** เพิ่ม workflow สำหรับการสแกน secrets  
+
+---
+
+### ⚡ Performance / ประสิทธิภาพ
+- **perf(video):** Optimized rendering speed for video engine  
+  **ไทย:** ปรับปรุงความเร็วในการ render ของ video engine  
+
+---
+
+### ✅ Governance & Reviewer Training / มาตรฐานการตรวจสอบ
+- Added bilingual PR template requiring `creation.log` review  
+  **ไทย:** เพิ่ม PR template สองภาษา ที่บังคับให้ reviewer ตรวจสอบ `creation.log`  
+
+- Added reviewer workflow diagram bilingual for Codespaces error handling  
+  **ไทย:** เพิ่ม diagram สองภาษา สำหรับ reviewer workflow ในการจัดการ error ของ Codespaces  
+
+---
+
+## 📌 Summary / สรุป
+**English:**  
+CrystalCastle v1.3.0 introduces new API features, dependency fixes, improved CI/CD workflows, and bilingual governance artifacts for reviewers.  
+
+**ไทย:**  
+CrystalCastle v1.3.0 เพิ่มฟีเจอร์ API ใหม่, แก้ไข dependency, ปรับปรุง CI/CD workflows และเพิ่ม artifact สองภาษาเพื่อช่วย reviewer ตรวจสอบได้อย่างมีมาตรฐาน
