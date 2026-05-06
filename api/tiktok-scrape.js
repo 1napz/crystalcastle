@@ -1,4 +1,11 @@
-// /api/tiktok-scrape.js - v3 แก้ vt.tiktok.com
+/**
+ * Extracts image URLs from a TikTok page URL provided in req.query.url and responds with the normalized unique list and metadata.
+ *
+ * Attempts to resolve short TikTok links (vt.tiktok.com, vm.tiktok.com) before fetching the page with mobile-like headers, then extracts images using embedded page state, Next.js runtime data, and an oEmbed fallback. Results are deduplicated and normalized (query strings removed). If configured via environment variables, sends a best-effort Telegram notification about the scrape.
+ *
+ * @param {import('next').NextApiRequest} req - HTTP request; must include `url` in `req.query`.
+ * @param {import('next').NextApiResponse} res - HTTP response used to send JSON result or error.
+ */
 export default async function handler(req, res) {
   let { url } = req.query;
   if (!url) return res.status(400).json({ error: 'no url' });
