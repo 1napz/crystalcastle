@@ -1,39 +1,53 @@
-# CrystalCastle Governance Config
-# เปิด Early Access เพื่อทดลอง Slack Agent ฟรี
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CrystalCastle Governance Config (Schema v2)
 
-early_access: true
-
-review:
+settings:
   reject_on_error: true
-  rules:
-    - id: bilingual-docs
-      description: Require bilingual (ไทย/English) documentation updates
-      severity: error
-      match:
-        files: ["docs/**/*.md"]
-      checks:
-        must_include: ["English:", "ไทย:"]
-    - id: changelog-update
-      description: Require changelog entry for each PR
-      severity: error
-      match:
-        files: ["CHANGELOG.md"]
-      checks:
-        regex: "v[0-9]+\\.[0-9]+\\.[0-9]+"
-    - id: release-notes-update
-      description: Require release notes with highlights and bug fixes
-      severity: error
-      match:
-        files: ["docs/release-notes*.md"]
-      checks:
-        must_include: ["Feature Highlights", "Bug Fixes"]
+  min_reviewers: 2
+  auto_comment:
+    enabled: true
+    message: |
+      👋 Reviewer Reminder / ข้อควรจำสำหรับผู้ตรวจสอบ
 
-slack_agent:
-  scopes:
-    - name: crystalcastle-pr-review
-      repos: ["1napz/crystalcastle"]
-      spend_limit: 100 # agent minutes quota
-      connections:
-        - jira
-        - notion
-        - github
+      Please follow the **CrystalCastle Reviewer Enforcement Flow** before approving this PR:
+
+      ✅ Checklist / เช็คลิสต์
+      - `.vercelignore` exists and excludes unnecessary files
+      - `.env.local` keys are set (Supabase, Groq, Gemini, Video)
+      - `npm run dev:mock` tested locally
+      - `/api/` routes are lightweight (shared logic in `/lib/`)
+      - Supabase RLS policies + `groq_logs` table verified
+      - Vercel plan quota checked (Hobby vs Pro)
+
+      ⚠️ PRs missing these confirmations must be requested for changes.
+      ❌ Do not approve until all steps pass.
+
+      ---
+      สำหรับ Reviewer: โปรดตรวจสอบ Flowchart การบังคับใช้ก่อนอนุมัติ PR
+      ✅ อนุมัติได้เมื่อทุกข้อผ่านแล้ว
+
+rules:
+  - id: vercelignore-check
+    description: "Require .vercelignore file"
+    severity: error
+    match:
+      files: [".vercelignore"]
+
+  - id: env-check
+    description: "Require .env.local keys"
+    severity: error
+    match:
+      files: [".env.local"]
+
+  - id: api-lightweight
+    description: "Ensure /api/ routes are lightweight"
+    severity: warning
+    match:
+      files: ["api/**/*.ts"]
+
+branch:
+  naming_convention:
+    - feature/*
+    - fix/*
+    - docs/*
+    - chore/*

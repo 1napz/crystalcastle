@@ -1,24 +1,22 @@
-# 📂 Vercel Ignore File (Bilingual)
-
-# English: Exclude unnecessary files from deployment
-# ไทย: ตัดไฟล์ที่ไม่จำเป็นออกจากการ deploy
-
-# Tests / ไฟล์ทดสอบ
-test/
-__tests__/
-
-# Logs / ไฟล์ log
-logs/
+# ─── Logs & OS files / ไฟล์ Log และไฟล์ระบบ ───
 *.log
+.DS_Store
 
-# Documentation / เอกสาร
-docs/
-README.md
+# ─── Tests & coverage / ไฟล์ทดสอบและ Coverage ───
+tests/
+coverage/
 
-# Local configs / การตั้งค่าเฉพาะเครื่อง
+# ─── Local configs / การตั้งค่าท้องถิ่น ───
 .env.local
-.env.example.json
+.env.development
 
-# Backup & Archive / ไฟล์สำรองและไฟล์ที่เลิกใช้
-Backup/
-archive/
+# ─── Build artifacts / ไฟล์ที่สร้างจาก Build ───
+.next/cache/
+node_modules/
+
+# ─── Documentation / เอกสารที่ไม่จำเป็นต้อง Deploy ───
+docs/
+*.md
+
+# ─── Temporary files / ไฟล์ชั่วคราว ───
+tmp/
