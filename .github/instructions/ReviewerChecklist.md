@@ -25,7 +25,12 @@
 - [ ] Environment variables mirrored in Vercel project settings
 - [ ] Functions logs checked for errors post-deploy
 - [ ] Dark mode persistence verified via localStorage
-
+## ⚙️ GitHub Actions / การทำงานของ GitHub Actions
+- [ ] `.vercelignore` exists and excludes unnecessary files
+- [ ] Workflow uses `--archive=tgz` for deploy
+- [ ] Node modules cached in workflow
+- [ ] CI/CD split (tests vs deploy)
+- [ ] Secrets (`VERCEL_TOKEN`) configured in repo settings
 ---
 
 ✅ **Reviewers must confirm all items before approving PRs.**  
