@@ -59,3 +59,43 @@ CrystalCastle v1.3.0 introduces new API features, dependency fixes, improved CI/
 
 **ไทย:**  
 CrystalCastle v1.3.0 เพิ่มฟีเจอร์ API ใหม่, แก้ไข dependency, ปรับปรุง CI/CD workflows และเพิ่ม artifact สองภาษาเพื่อช่วย reviewer ตรวจสอบได้อย่างมีมาตรฐาน
+
+# 📜 CrystalCastle Changelog (Bilingual)
+
+## [1.2.0] - 2026-05-06
+### ✨ Added / เพิ่ม
+**English:**  
+- Bilingual PR template enforcing reviewer checklist  
+- Updated reviewer notes (`docs/reviewer.notes.md`) with streamlined bilingual checklist  
+- Enhanced CI/CD workflows for QA and security scanning  
+
+**ไทย:**  
+- เพิ่ม PR template สองภาษาที่บังคับใช้ reviewer checklist  
+- อัปเดต reviewer notes (`docs/reviewer.notes.md`) ด้วย checklist สองภาษาที่กระชับขึ้น  
+- ปรับปรุง CI/CD workflows สำหรับ QA และการสแกนความปลอดภัย  
+
+---
+
+### 🛠 Fixed / แก้ไข
+**English:**  
+- Codespaces recovery log handling (`creation.log`)  
+- Onboarding documentation for environment setup  
+- Deprecated files moved to `archive/`  
+
+**ไทย:**  
+- แก้ไขการจัดการ Codespaces recovery log (`creation.log`)  
+- แก้ไขเอกสาร onboarding สำหรับการตั้งค่า environment  
+- ย้ายไฟล์ที่เลิกใช้ไปที่ `archive/`  
+
+---
+
+### 📚 Documentation / เอกสาร
+**English:**  
+- Updated `CHANGELOG.md` bilingual entries  
+- Added bilingual release notes for governance transparency  
+- Improved reviewer training guide in `docs/onboarding.md`  
+
+**ไทย:**  
+- อัปเดต `CHANGELOG.md` ด้วย bilingual entries  
+- เพิ่ม release notes bilingual เพื่อความโปร่งใสด้าน governance  
+- ปรับปรุง reviewer training guide ใน `docs/onboarding.md`
