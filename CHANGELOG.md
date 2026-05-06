@@ -1,5 +1,30 @@
 # 📜 CrystalCastle Changelog
+## [1.4.0] – 2026-05-06
 
+### 🚀 Added
+- Implemented **FAL → Magic Hour fallback chain** for video generation  
+- Added bilingual docstrings (English + Thai) to `generate-videos.js` functions  
+- Improved reviewer enforcement notes in code comments  
+
+### 🛠️ Changed
+- Updated FAL endpoint to official spec (`fal.run/fal-ai/kling-video/v2/master/image-to-video`)  
+- Adjusted FAL payload: `duration` must be string, `aspect_ratio` set to `"9:16"`  
+- Rewrote Magic Hour workflow: async job creation → polling → download final video  
+- Renamed PR title to reflect fallback mechanism  
+
+### 🔒 Governance Enforcement
+- Reviewer checklist updated:  
+  - `.env.local` must include `FAL_KEY` and `MAGIC_HOUR_API_KEY`  
+  - Docstring coverage ≥ 80% required  
+  - PRs must document API compliance fixes in changelog/release notes  
+
+### 📋 Reviewer Impact / ผลกระทบต่อผู้ตรวจสอบ
+- Reviewers must confirm API endpoints match official docs  
+- Reviewers must verify fallback chain works (FAL → Magic Hour)  
+- Reviewers must enforce bilingual docstring coverage before approval  
+- Reviewers must ensure changelog entry is present in PR  
+
+---
 ## [1.3.0] - 2026-05-06
 
 ### 🚀 Features / ฟีเจอร์ใหม่
