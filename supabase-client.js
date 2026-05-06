@@ -1,49 +1,41 @@
-// supabase-client.js = สายโทรศัพท์หา DB เวอร์ชัน HTML ธรรมดา
+// supabase-client.js — Client-side Supabase helper
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-// 1. ที่อยู่ฐานข้อมูล - ก็อปมาจาก Supabase > Settings > API > Project URL
-const SUPABASE_URL = 'https://1napzfwrdmsgnwpmctzv.supabase.co'
+// ✅ กำหนดค่า Supabase โดยตรง (Public values — เปิดเผยได้)
+const SUPABASE_URL = 'https://wqkreaoqkunjhlzzdimd.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_F1WgU32_YKoD...' // ใส่ anon key จริงของคุณ
 
-// 2. กุญแจคนทั่วไป - ก็อปมาจาก Supabase > Settings > API > anon public
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' 
-
-// 3. สร้างตัวเชื่อม DB ให้ไฟล์ app.js ใช้
+// สร้าง Supabase client
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-// --- ฟังก์ชันที่เหลือใช้เหมือนเดิมได้เลย ---
-export async function uploadImageToStorage(file) {
-  const filePath = `pika/${Date.now()}-${file.name}`;
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/vaulted/${filePath}`, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': file.type },
-    body: file
-  });
-  if (!res.ok) throw new Error('Upload failed');
-  return `${SUPABASE_URL}/storage/v1/object/public/vaulted/${filePath}`;
+// อัปโหลดรูปไป Storage bucket 'videos'
+export async function uploadImageToStorage(file, customFilename) {
+  const fileExt = file.name.split('.').pop()
+  const fileName = customFilename ? `${customFilename}.${fileExt}` : `uploads/${Date.now()}-${file.name}`
+  const { error } = await supabase.storage.from('videos').upload(fileName, file)
+  if (error) throw error
+  const { data } = supabase.storage.from('videos').getPublicUrl(fileName)
+  return data.publicUrl
 }
 
-export async function generatePikaVideo(prompt, imageUrl) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/pika-generate`, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, image_url: imageUrl })
-  });
-  return await res.json();
+// ดึง Logs จากตาราง groq_logs
+export async function fetchLogs(limit = 20) {
+  const { data, error } = await supabase
+    .from('groq_logs')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  if (error) throw error
+  return data || []
 }
 
-export async function checkPikaStatus(jobId) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/pika-status?job_id=${jobId}`, {
-    headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-  });
-  return await res.json();
-}
-
-export async function getPikaCredits() {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/pika-status`, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'get_credits' })
-  });
-  const data = await res.json();
-  return data.credits || '-';
+// ดึง Artifacts ทั้งหมด
+export async function fetchArtifacts(limit = 50) {
+  const { data, error } = await supabase
+    .from('artifacts')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  if (error) throw error
+  return data || []
 }

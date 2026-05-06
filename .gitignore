@@ -1,29 +1,57 @@
-# config with secrets
-config.js
+# =========================
+# Dependencies
+# =========================
+node_modules/
+.pnpm-store/
 
-# env - ห้ามหลุดเด็ดขาด
+# =========================
+# Build outputs
+# =========================
+.next/
+out/
+dist/
+build/
+.vercel/
+
+# =========================
+# Environment variables
+# =========================
 .env
 .env.*
 !.env.example
+.env.local
 
-# dependencies
-node_modules/
-
-# Vercel
-.vercel
-.now
-
-# logs
-npm-debug.log*
-yarn-*
-pnpm-debug.log*
-
-# OS
+# =========================
+# IDE / OS
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
-Thumbs.db
 
-# build output
-dist/
-build/
-.next/
-out/
+# =========================
+# Logs
+# =========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# =========================
+# Coverage / Reports
+# =========================
+coverage/
+.nyc_output
+
+# =========================
+# Temp files
+# =========================
+tmp/
+temp/
+*.tmp
+
+# =========================
+# Local mocks only
+# =========================
+mocks/local/
+mocks/tmp/
