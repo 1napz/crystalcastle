@@ -1,20 +1,24 @@
-# Logs
+# 📂 Vercel Ignore File (Bilingual)
+
+# English: Exclude unnecessary files from deployment
+# ไทย: ตัดไฟล์ที่ไม่จำเป็นออกจากการ deploy
+
+# Tests / ไฟล์ทดสอบ
+test/
+__tests__/
+
+# Logs / ไฟล์ log
+logs/
 *.log
 
-# Tests & coverage
-tests/
-__tests__/
-coverage/
-
-# Documentation (keep README)
+# Documentation / เอกสาร
 docs/
-*.md
-!README.md
+README.md
 
-# Local env files
-.env
+# Local configs / การตั้งค่าเฉพาะเครื่อง
 .env.local
-.env.*.local
+.env.example.json
 
-# Build cache (Vercel builds fresh)
-.next/cache
+# Backup & Archive / ไฟล์สำรองและไฟล์ที่เลิกใช้
+Backup/
+archive/
