@@ -1,45 +1,20 @@
-# ✅ Reviewer Checklist (Bilingual)
+# Reviewer Enforcement Notes  
+# บันทึกการบังคับใช้สำหรับผู้รีวิว
 
-## 🔎 General Review / การตรวจสอบทั่วไป
-- [ ] PR uses bilingual template (ไทย/English)  
-- [ ] Commit messages follow Conventional Commits (feat, fix, docs, chore, etc.)  
-- [ ] Branch name follows repo convention (e.g., `feature/...`, `fix/...`)  
+...
 
----
+## 🔗 Agent Integration / การเชื่อมต่อ Agent
 
-## 📂 Documentation / เอกสาร
-- [ ] `README.md` updated if feature impacts usage  
-- [ ] `CHANGELOG.md` updated with bilingual entry  
-- [ ] `docs/release-notes.md` updated if version bump required  
-- [ ] Onboarding guide (`docs/onboarding.md`) updated if environment setup changes  
+### English
+- [ ] Confirm agent config file is placed under `/agents/` folder  
+- [ ] Validate `.yaml` workflow includes agent trigger rules  
+- [ ] Ensure reviewer comments auto-forward to agent dashboard  
+- [ ] Verify `governance.md` updated with agent responsibilities  
+- [ ] Test Slack/Telegram alerts for agent activity logs  
 
----
-
-## ⚙️ CI/CD Workflow / ระบบ CI/CD
-- [ ] CI checks (build, test, lint) pass successfully  
-- [ ] Security workflow (secret scanning, branch protection) passes  
-- [ ] `creation.log` attached if Codespaces build failed  
-
----
-
-## 🧩 Code Quality / คุณภาพโค้ด
-- [ ] Code follows repo style guidelines  
-- [ ] No hardcoded secrets or API keys  
-- [ ] Unit tests added/updated for new features  
-- [ ] Deprecated files moved to `archive/`  
-
----
-
-## 💬 Reviewer Feedback / ความเห็นจากผู้รีวิว
-- [ ] Actionable comments provided (clear, enforceable)  
-- [ ] Checklist completed before approval  
-- [ ] CI/CD status confirmed before merge  
-
----
-
-## 📌 Summary / สรุป
-**English:**  
-This checklist ensures reviewers enforce governance, repo hygiene, and CI/CD compliance with bilingual artifacts.  
-
-**ไทย:**  
-Checklist นี้ช่วยให้ reviewer บังคับใช้ governance, repo hygiene และ CI/CD compliance โดยมี artifact สองภาษา
+### ภาษาไทย
+- [ ] ตรวจสอบว่าไฟล์การตั้งค่า Agent ถูกวางไว้ในโฟลเดอร์ `/agents/`  
+- [ ] ยืนยันว่าไฟล์ `.yaml` ของ workflow มีการกำหนดกฎการทำงานของ Agent  
+- [ ] ตรวจสอบให้แน่ใจว่าคอมเมนต์ของ Reviewer ถูกส่งต่อไปยังแดชบอร์ดของ Agent  
+- [ ] อัปเดตไฟล์ `governance.md` ให้รวมความรับผิดชอบของ Agent  
+- [ ] ทดสอบการแจ้งเตือน Slack/Telegram สำหรับบันทึกกิจกรรมของ Agent
