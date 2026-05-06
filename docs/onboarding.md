@@ -64,3 +64,33 @@
 - Merge conflict → ใช้คำสั่ง `git fetch origin main && git rebase origin/main`  
 - CI/CD fail → ตรวจสอบ logs ใน GitHub Actions  
 - Coverage < 80% → เพิ่ม unit tests ให้ครอบคลุมมากขึ้น
+
+- # CodeRabbitAI Referral Program / โปรแกรมแนะนำ CodeRabbitAI
+
+## English
+The CodeRabbitAI Referral Program allows you to invite new contributors or reviewers to join our organization.  
+By sharing your personal referral link, you can:
+- Invite teammates to use CodeRabbitAI
+- Track who signed up through your link
+- Earn credits or special benefits when referrals are active
+
+**Steps:**
+1. Go to [CodeRabbitAI Referrals](https://app.coderabbit.ai/referrals)  
+2. Copy your referral link  
+3. Share it with your teammates (e.g., via Telegram, GitHub README, or email)  
+4. Monitor referral activity and benefits in the dashboard  
+
+---
+
+## ไทย
+โปรแกรมแนะนำ CodeRabbitAI ช่วยให้คุณเชิญ contributor หรือ reviewer ใหม่เข้ามาในองค์กรได้  
+โดยการแชร์ referral link ส่วนตัว คุณสามารถ:
+- เชิญทีมงานให้ใช้ CodeRabbitAI
+- ติดตามว่าใครสมัครผ่านลิงก์ของคุณ
+- รับเครดิตหรือสิทธิพิเศษเมื่อ referral มีการใช้งานจริง
+
+**ขั้นตอน:**
+1. ไปที่ [CodeRabbitAI Referrals](https://app.coderabbit.ai/referrals)  
+2. คัดลอก referral link ของคุณ  
+3. แชร์ให้ทีมงาน (เช่น ผ่าน Telegram, GitHub README หรือ email)  
+4. ติดตามผลการสมัครและสิทธิพิเศษจาก referral dashboard
